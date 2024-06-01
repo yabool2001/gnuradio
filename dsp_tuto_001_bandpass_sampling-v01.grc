@@ -4,7 +4,7 @@ options:
     catch_exceptions: 'True'
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
-    comment: 'Repository on github: https://github.com/yabool2001/gnuradio'
+    comment: 'Repository on github: https://github.com/yabool2001/gnuradio/blob/main/dsp_tuto_001_bandpass_sampling-v01.grc'
     copyright: "Maciej Zem\u0142o"
     description: ''
     gen_cmake: 'On'
