@@ -75,7 +75,7 @@ class Cos_2_Audio_001(gr.top_block, Qt.QWidget):
         # Blocks
         ##################################################
 
-        self._tone_f_range = qtgui.Range(-2e3, 2e3, 100, 500, 200)
+        self._tone_f_range = qtgui.Range(20, 20e3, 100, 500, 200)
         self._tone_f_win = qtgui.RangeWidget(self._tone_f_range, self.set_tone_f, "'tone_f'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._tone_f_win)
         self._audio_gain_range = qtgui.Range(0, 100, 1, 1, 200)
