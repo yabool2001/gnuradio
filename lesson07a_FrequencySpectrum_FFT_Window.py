@@ -73,7 +73,7 @@ class lesson07a_FrequencySpectrum_FFT_Window(gr.top_block, Qt.QWidget):
         self._freq_win = qtgui.RangeWidget(self._freq_range, self.set_freq, "'freq'", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._freq_win)
         self.qtgui_time_sink_x_0 = qtgui.time_sink_c(
-            100, #size
+            128, #size
             samp_rate, #samp_rate
             "", #name
             1, #number of inputs
