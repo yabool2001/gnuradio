@@ -44,7 +44,7 @@ blocks:
     bus_structure: null
     coordinate: [448, 160.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: f
   id: variable_qtgui_range
   parameters:
@@ -95,7 +95,7 @@ blocks:
     bus_structure: null
     coordinate: [448, 8.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: n
   id: variable
   parameters:
@@ -146,7 +146,7 @@ blocks:
     phase: '0'
     samp_rate: samp_rate
     showports: 'False'
-    type: complex
+    type: float
     waveform: analog.GR_COS_WAVE
   states:
     bus_sink: false
@@ -187,8 +187,8 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     samp_rate: samp_rate
-    taps: low_pass_filter_taps
-    type: ccc
+    taps: boxcar_filter
+    type: fcc
   states:
     bus_sink: false
     bus_source: false
