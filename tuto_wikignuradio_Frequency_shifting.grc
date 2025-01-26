@@ -6,12 +6,12 @@ options:
     cmake_opt: ''
     comment: ''
     copyright: maciej.zemlo@gmail.pl
-    description: https://wiki.gnuradio.org/index.php?title=Sample_Rate_Change
+    description: https://wiki.gnuradio.org/index.php?title=Frequency_Shifting
     gen_cmake: 'On'
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: tuto_wikignuradio_Sample_rate_change
+    id: tuto_wikignuradio_Frequency_shifting
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -22,7 +22,7 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: Wiki Tuto GNU Radio Sample rate change Example
+    title: Wiki Tuto GNU Radio Frequency shifting Example
     window_size: (1000,1000)
   states:
     bus_sink: false
@@ -51,19 +51,31 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [616, 8.0]
+    coordinate: [672, 8.0]
+    rotation: 0
+    state: enabled
+- name: f_c
+  id: variable
+  parameters:
+    comment: ''
+    value: '1000000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 8.0]
     rotation: 0
     state: enabled
 - name: f_cutoff
   id: variable
   parameters:
     comment: ''
-    value: '1000'
+    value: samp_rate/8
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [312, 8.0]
+    coordinate: [400, 8.0]
     rotation: 0
     state: enabled
 - name: interpolation_rate
@@ -83,17 +95,17 @@ blocks:
   parameters:
     beta: '6.76'
     comment: ''
-    cutoff_freq: samp_rate_interpolated/(interpolation_rate*2)
+    cutoff_freq: f_cutoff
     gain: '1.0'
     samp_rate: samp_rate_interpolated
     value: ''
-    width: samp_rate_interpolated/(interpolation_rate*4)
+    width: trans_width
     win: window.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [448, 8.0]
+    coordinate: [512, 8.0]
     rotation: 0
     state: enabled
 - name: n
@@ -112,7 +124,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '32000'
+    value: '10000000'
   states:
     bus_sink: false
     bus_source: false
@@ -136,12 +148,32 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '200'
+    value: samp_rate/16
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [312, 80.0]
+    coordinate: [400, 80.0]
+    rotation: 0
+    state: enabled
+- name: analog_fastnoise_source_x_0
+  id: analog_fastnoise_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: '1'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    noise_type: analog.GR_GAUSSIAN
+    samples: '8192'
+    seed: '0'
+    type: complex
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 296.0]
     rotation: 0
     state: enabled
 - name: analog_sig_source_x_0_0
@@ -151,7 +183,7 @@ blocks:
     alias: ''
     amp: '1'
     comment: ''
-    freq: f
+    freq: f_c
     maxoutbuf: '0'
     minoutbuf: '0'
     offset: '0'
@@ -164,7 +196,25 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [8, 272.0]
+    coordinate: [504, 728.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_xx_0
+  id: blocks_multiply_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [664, 512.0]
     rotation: 0
     state: enabled
 - name: blocks_throttle2_0
@@ -185,7 +235,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [424, 304.0]
+    coordinate: [224, 312.0]
     rotation: 0
     state: enabled
 - name: freq_xlating_fir_filter_xxx_0
@@ -208,25 +258,28 @@ blocks:
     coordinate: [880, 40.0]
     rotation: 0
     state: disabled
-- name: interp_fir_filter_xxx_0
-  id: interp_fir_filter_xxx
+- name: low_pass_filter_0
+  id: low_pass_filter
   parameters:
     affinity: ''
     alias: ''
-    comment: 'Input Samp Rate: 32 kHz
-
-      Output Samp Rate: 128 kHz'
-    interp: interpolation_rate
+    beta: '6.76'
+    comment: ''
+    cutoff_freq: f_cutoff
+    decim: '1'
+    gain: '1'
+    interp: '1'
     maxoutbuf: '0'
     minoutbuf: '0'
-    samp_delay: '0'
-    taps: low_pass_filter_taps
-    type: ccc
+    samp_rate: samp_rate
+    type: fir_filter_ccf
+    width: trans_width
+    win: window.WIN_HAMMING
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [216, 304.0]
+    coordinate: [456, 352.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -280,7 +333,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     name: '""'
-    nconnections: '1'
+    nconnections: '4'
     norm_window: 'False'
     showports: 'False'
     tr_chan: '0'
@@ -307,14 +360,19 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [616, 296.0]
+    coordinate: [912, 272.0]
     rotation: 0
     state: enabled
 
 connections:
-- [analog_sig_source_x_0_0, '0', interp_fir_filter_xxx_0, '0']
+- [analog_fastnoise_source_x_0, '0', blocks_throttle2_0, '0']
+- [analog_sig_source_x_0_0, '0', blocks_multiply_xx_0, '1']
+- [analog_sig_source_x_0_0, '0', qtgui_freq_sink_x_0, '3']
+- [blocks_multiply_xx_0, '0', qtgui_freq_sink_x_0, '2']
+- [blocks_throttle2_0, '0', low_pass_filter_0, '0']
 - [blocks_throttle2_0, '0', qtgui_freq_sink_x_0, '0']
-- [interp_fir_filter_xxx_0, '0', blocks_throttle2_0, '0']
+- [low_pass_filter_0, '0', blocks_multiply_xx_0, '0']
+- [low_pass_filter_0, '0', qtgui_freq_sink_x_0, '1']
 
 metadata:
   file_format: 1
