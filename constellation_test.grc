@@ -11,7 +11,7 @@ options:
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: tone_test
+    id: constellation_test
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -22,7 +22,7 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: tone test
+    title: constellation test
     window_size: (1000,1000)
   states:
     bus_sink: false
@@ -112,52 +112,6 @@ blocks:
     coordinate: [16, 532.0]
     rotation: 0
     state: disabled
-- name: analog_sig_source_x_0_0_0
-  id: analog_sig_source_x
-  parameters:
-    affinity: ''
-    alias: ''
-    amp: '1'
-    comment: ''
-    freq: f_c
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    offset: '0'
-    phase: '0'
-    samp_rate: samp_rate
-    showports: 'False'
-    type: complex
-    waveform: analog.GR_SIN_WAVE
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [16, 748.0]
-    rotation: 0
-    state: enabled
-- name: analog_sig_source_x_0_0_0_0
-  id: analog_sig_source_x
-  parameters:
-    affinity: ''
-    alias: ''
-    amp: '1'
-    comment: ''
-    freq: f_c
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    offset: '0'
-    phase: '0'
-    samp_rate: samp_rate
-    showports: 'False'
-    type: complex
-    waveform: analog.GR_COS_WAVE
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [16, 964.0]
-    rotation: 0
-    state: enabled
 - name: blocks_throttle2_0
   id: blocks_throttle2
   parameters:
@@ -540,8 +494,6 @@ blocks:
 connections:
 - [analog_sig_source_x_0, '0', blocks_throttle2_0, '0']
 - [analog_sig_source_x_0_0, '0', blocks_throttle2_0_0, '0']
-- [analog_sig_source_x_0_0_0, '0', blocks_throttle2_0_1, '0']
-- [analog_sig_source_x_0_0_0_0, '0', blocks_throttle2_0_1_0, '0']
 - [blocks_throttle2_0, '0', qtgui_sink_x_0, '0']
 - [blocks_throttle2_0_1, '0', qtgui_const_sink_x_0_0, '0']
 - [blocks_throttle2_0_1_0, '0', qtgui_const_sink_x_0, '0']
