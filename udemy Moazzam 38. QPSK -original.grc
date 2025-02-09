@@ -50,7 +50,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    amp: '1'
+    amp: '0.05'
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
