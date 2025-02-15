@@ -712,7 +712,7 @@ blocks:
     bus_structure: null
     coordinate: [1008, 400.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_eye_sink_x_0_0
   id: qtgui_eye_sink_x
   parameters:
@@ -808,7 +808,7 @@ blocks:
     bus_structure: null
     coordinate: [232, 744.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_time_sink_x_0
   id: qtgui_time_sink_x
   parameters:
@@ -1002,7 +1002,7 @@ blocks:
     bus_structure: null
     coordinate: [1008, 512.0]
     rotation: 0
-    state: disabled
+    state: enabled
 
 connections:
 - [blocks_repeat_0, '0', digital_constellation_modulator_0, '0']
