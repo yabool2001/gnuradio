@@ -61,7 +61,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: int(124*1e6)
+    value: int(820*1e6)
   states:
     bus_sink: false
     bus_source: false

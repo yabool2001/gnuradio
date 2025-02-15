@@ -64,7 +64,7 @@ class yabool2001_QPSK_mod_nice_visual_w_Pluto(gr.top_block, Qt.QWidget):
         ##################################################
         self.samp_rate_Pluto = samp_rate_Pluto = 65105*8
         self.samp_rate = samp_rate = 32000
-        self.f_c = f_c = int(124*1e6)
+        self.f_c = f_c = int(820*1e6)
         self.bw = bw = 20000000
         self.Pluto_iio_context_uri_ip = Pluto_iio_context_uri_ip = "ip:192.168.2.1"
 
