@@ -73,7 +73,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '2017000000'
+    value: int(124*1e6)
   states:
     bus_sink: false
     bus_source: false
@@ -121,7 +121,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: 65105*8
+    value: 65105*2
   states:
     bus_sink: false
     bus_source: false

@@ -69,10 +69,10 @@ class yabool2001_BPSK_w_Pluto(gr.top_block, Qt.QWidget):
         self.n_filters = n_filters = 32
         self.variable_constellation_0 = variable_constellation_0 = digital.constellation_qpsk().base()
         self.variable_constellation_0.set_npwr(1.0)
-        self.samp_rate_Pluto = samp_rate_Pluto = 65105*8
+        self.samp_rate_Pluto = samp_rate_Pluto = 65105*2
         self.samp_rate = samp_rate = 32000
         self.rrc_taps = rrc_taps = firdes.root_raised_cosine(n_filters, n_filters, 1.0/float(sps), 0.35, 11*sps*n_filters)
-        self.f_c = f_c = 2017000000
+        self.f_c = f_c = int(124*1e6)
         self.bw = bw = 20000000
         self.Pluto_iio_context_uri_usb = Pluto_iio_context_uri_usb = "usb:2.4.5"
         self.Pluto_iio_context_uri_ip = Pluto_iio_context_uri_ip = "ip:192.168.2.1"
