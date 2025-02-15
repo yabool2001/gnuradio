@@ -33,6 +33,30 @@ options:
     state: enabled
 
 blocks:
+- name: Pluto_iio_context_uri_ip
+  id: variable
+  parameters:
+    comment: ''
+    value: '"ip:192.168.2.1"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [312, 80.0]
+    rotation: 0
+    state: enabled
+- name: Pluto_iio_context_uri_usb
+  id: variable
+  parameters:
+    comment: ''
+    value: '"usb:2.3.5"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [312, 152.0]
+    rotation: 0
+    state: enabled
 - name: f_c
   id: variable
   parameters:
@@ -86,7 +110,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 8.0]
+    coordinate: [552, 8.0]
     rotation: 0
     state: enabled
 - name: blocks_repeat_0
@@ -104,28 +128,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [328, 312.0]
-    rotation: 0
-    state: enabled
-- name: blocks_throttle2_0_0
-  id: blocks_throttle2
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    ignoretag: 'True'
-    limit: auto
-    maximum: '0.1'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    samples_per_second: samp_rate_Pluto
-    type: byte
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [152, 304.0]
+    coordinate: [160, 312.0]
     rotation: 0
     state: enabled
 - name: blocks_vector_source_x_0_1
@@ -148,6 +151,22 @@ blocks:
     coordinate: [8, 296.0]
     rotation: 0
     state: enabled
+- name: digital_constellation_decoder_cb_0
+  id: digital_constellation_decoder_cb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    constellation: variable_constellation_0
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [280, 624.0]
+    rotation: 0
+    state: disabled
 - name: digital_constellation_modulator_0
   id: digital_constellation_modulator
   parameters:
@@ -167,7 +186,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [512, 288.0]
+    coordinate: [344, 288.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_sink_0
@@ -188,14 +207,45 @@ blocks:
     len_tag_key: ''
     samplerate: samp_rate_Pluto
     type: fc32
-    uri: usb:2.3.5
+    uri: Pluto_iio_context_uri_ip
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [760, 256.0]
+    coordinate: [592, 256.0]
     rotation: 0
     state: enabled
+- name: iio_pluto_source_0
+  id: iio_pluto_source
+  parameters:
+    affinity: ''
+    alias: ''
+    bandwidth: '20000000'
+    bbdc: 'True'
+    buffer_size: '32768'
+    comment: ''
+    filter: ''
+    filter_source: '''Auto'''
+    fpass: '0'
+    frequency: f_c
+    fstop: '0'
+    gain1: '''slow_attack'''
+    len_tag_key: packet_len
+    manual_gain1: '64'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quadrature: 'True'
+    rfdc: 'True'
+    samplerate: samp_rate_Pluto
+    type: fc32
+    uri: Pluto_iio_context_uri_ip
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [8, 548.0]
+    rotation: 0
+    state: disabled
 - name: qtgui_const_sink_x_0_0_0
   id: qtgui_const_sink_x
   parameters:
@@ -285,7 +335,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [760, 424.0]
+    coordinate: [592, 424.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0
@@ -382,17 +432,17 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [760, 168.0]
+    coordinate: [592, 168.0]
     rotation: 0
     state: enabled
 
 connections:
 - [blocks_repeat_0, '0', digital_constellation_modulator_0, '0']
-- [blocks_throttle2_0_0, '0', blocks_repeat_0, '0']
-- [blocks_vector_source_x_0_1, '0', blocks_throttle2_0_0, '0']
+- [blocks_vector_source_x_0_1, '0', blocks_repeat_0, '0']
 - [digital_constellation_modulator_0, '0', iio_pluto_sink_0, '0']
 - [digital_constellation_modulator_0, '0', qtgui_const_sink_x_0_0_0, '0']
 - [digital_constellation_modulator_0, '0', qtgui_time_sink_x_0, '0']
+- [iio_pluto_source_0, '0', digital_constellation_decoder_cb_0, '0']
 
 metadata:
   file_format: 1
