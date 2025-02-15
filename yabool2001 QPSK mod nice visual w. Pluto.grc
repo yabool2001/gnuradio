@@ -6,12 +6,12 @@ options:
     cmake_opt: ''
     comment: ''
     copyright: mzemlo.pl@gmail.com
-    description: QPSK test1
+    description: QPSK modulation nice visualisation with Pluto
     gen_cmake: 'On'
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: yabool2001_QPSK_nice_visualisation_test1
+    id: yabool2001_QPSK_mod_nice_visual_w_Pluto
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -22,7 +22,7 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: QPSK nice visualisation test1
+    title: QPSK modulation nice visualisation with Pluto
     window_size: (1000,1000)
   states:
     bus_sink: false
@@ -81,7 +81,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [856, 432.0]
+    coordinate: [528, 400.0]
     rotation: 0
     state: enabled
 - name: blocks_add_xx_0_0
@@ -99,7 +99,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1224, 324.0]
+    coordinate: [744, 368.0]
     rotation: 0
     state: enabled
 - name: blocks_repeat_0
@@ -117,7 +117,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [584, 176.0]
+    coordinate: [312, 312.0]
     rotation: 0
     state: enabled
 - name: blocks_throttle2_0_0
@@ -138,7 +138,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [328, 244.0]
+    coordinate: [152, 304.0]
     rotation: 0
     state: enabled
 - name: blocks_vector_source_x_0_1
@@ -158,7 +158,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [56, 360.0]
+    coordinate: [8, 296.0]
     rotation: 0
     state: enabled
 - name: digital_constellation_modulator_0
@@ -180,7 +180,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [824, 140.0]
+    coordinate: [480, 288.0]
     rotation: 0
     state: enabled
 - name: qtgui_const_sink_x_0_0_0
@@ -272,7 +272,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1432, 252.0]
+    coordinate: [880, 320.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0
@@ -369,7 +369,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1424, 96.0]
+    coordinate: [880, 224.0]
     rotation: 0
     state: enabled
 
