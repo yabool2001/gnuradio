@@ -15,8 +15,9 @@ from PyQt5 import Qt
 from gnuradio import qtgui
 from gnuradio import blocks
 from gnuradio import digital
-from gnuradio import gr
+from gnuradio import filter
 from gnuradio.filter import firdes
+from gnuradio import gr
 from gnuradio.fft import window
 import sys
 import signal
@@ -66,9 +67,11 @@ class yabool2001_QPSK_mod_nice_visual_w_Pluto(gr.top_block, Qt.QWidget):
         ##################################################
         self.variable_constellation_0 = variable_constellation_0 = digital.constellation_qpsk().base()
         self.variable_constellation_0.set_npwr(1.0)
-        self.samp_rate_Pluto = samp_rate_Pluto = 65105
+        self.sps = sps = 2
+        self.samp_rate_Pluto = samp_rate_Pluto = 65105*10
         self.samp_rate = samp_rate = 32000
-        self.f_c = f_c = 145000000
+        self.f_c = f_c = 2700000000
+        self.bw = bw = 20000000
         self.Pluto_iio_context_uri_ip = Pluto_iio_context_uri_ip = "ip:192.168.2.1"
 
         ##################################################
@@ -177,6 +180,56 @@ class yabool2001_QPSK_mod_nice_visual_w_Pluto(gr.top_block, Qt.QWidget):
 
         self._qtgui_time_sink_x_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_time_sink_x_0_win)
+        self.qtgui_eye_sink_x_0 = qtgui.eye_sink_c(
+            1024, #size
+            samp_rate_Pluto, #samp_rate
+            1, #number of inputs
+            None
+        )
+        self.qtgui_eye_sink_x_0.set_update_time(0.10)
+        self.qtgui_eye_sink_x_0.set_samp_per_symbol(sps)
+        self.qtgui_eye_sink_x_0.set_y_axis(-1, 1)
+
+        self.qtgui_eye_sink_x_0.set_y_label('Amplitude', "")
+
+        self.qtgui_eye_sink_x_0.enable_tags(True)
+        self.qtgui_eye_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, 0, "")
+        self.qtgui_eye_sink_x_0.enable_autoscale(False)
+        self.qtgui_eye_sink_x_0.enable_grid(False)
+        self.qtgui_eye_sink_x_0.enable_axis_labels(True)
+        self.qtgui_eye_sink_x_0.enable_control_panel(False)
+
+
+        labels = ['Signal 1', 'Signal 2', 'Signal 3', 'Signal 4', 'Signal 5',
+            'Signal 6', 'Signal 7', 'Signal 8', 'Signal 9', 'Signal 10']
+        widths = [1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1]
+        colors = ['blue', 'blue', 'blue', 'blue', 'blue',
+            'blue', 'blue', 'blue', 'blue', 'blue']
+        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0, 1.0]
+        styles = [1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1]
+        markers = [-1, -1, -1, -1, -1,
+            -1, -1, -1, -1, -1]
+
+
+        for i in range(2):
+            if len(labels[i]) == 0:
+                if (i % 2 == 0):
+                    self.qtgui_eye_sink_x_0.set_line_label(i, "Eye [Re{{Data {0}}}]".format(round(i/2)))
+                else:
+                    self.qtgui_eye_sink_x_0.set_line_label(i, "Eye [Im{{Data {0}}}]".format(round((i-1)/2)))
+            else:
+                self.qtgui_eye_sink_x_0.set_line_label(i, labels[i])
+            self.qtgui_eye_sink_x_0.set_line_width(i, widths[i])
+            self.qtgui_eye_sink_x_0.set_line_color(i, colors[i])
+            self.qtgui_eye_sink_x_0.set_line_style(i, styles[i])
+            self.qtgui_eye_sink_x_0.set_line_marker(i, markers[i])
+            self.qtgui_eye_sink_x_0.set_line_alpha(i, alphas[i])
+
+        self._qtgui_eye_sink_x_0_win = sip.wrapinstance(self.qtgui_eye_sink_x_0.qwidget(), Qt.QWidget)
+        self.top_layout.addWidget(self._qtgui_eye_sink_x_0_win)
         self.qtgui_const_sink_x_0_0_0_0 = qtgui.const_sink_c(
             1, #size
             "Output Constellation", #name
@@ -259,6 +312,15 @@ class yabool2001_QPSK_mod_nice_visual_w_Pluto(gr.top_block, Qt.QWidget):
 
         self._qtgui_const_sink_x_0_0_0_win = sip.wrapinstance(self.qtgui_const_sink_x_0_0_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_const_sink_x_0_0_0_win)
+        self.low_pass_filter_0 = filter.fir_filter_ccf(
+            1,
+            firdes.low_pass(
+                1,
+                samp_rate_Pluto,
+                (samp_rate_Pluto/2),
+                100000,
+                window.WIN_HAMMING,
+                6.76))
         self.iio_pluto_source_0 = iio.fmcomms2_source_fc32(Pluto_iio_context_uri_ip if Pluto_iio_context_uri_ip else iio.get_pluto_uri(), [True, True], 32768)
         self.iio_pluto_source_0.set_len_tag_key('packet_len')
         self.iio_pluto_source_0.set_frequency(f_c)
@@ -271,15 +333,15 @@ class yabool2001_QPSK_mod_nice_visual_w_Pluto(gr.top_block, Qt.QWidget):
         self.iio_pluto_source_0.set_filter_params('Auto', '', 0, 0)
         self.iio_pluto_sink_0 = iio.fmcomms2_sink_fc32(Pluto_iio_context_uri_ip if Pluto_iio_context_uri_ip else iio.get_pluto_uri(), [True, True], 32768, False)
         self.iio_pluto_sink_0.set_len_tag_key('')
-        self.iio_pluto_sink_0.set_bandwidth(20000000)
+        self.iio_pluto_sink_0.set_bandwidth(bw)
         self.iio_pluto_sink_0.set_frequency(f_c)
         self.iio_pluto_sink_0.set_samplerate(samp_rate_Pluto)
-        self.iio_pluto_sink_0.set_attenuation(0, 10.0)
+        self.iio_pluto_sink_0.set_attenuation(0, 0.0)
         self.iio_pluto_sink_0.set_filter_params('Auto', '', 0, 0)
         self.digital_constellation_modulator_0 = digital.generic_mod(
             constellation=variable_constellation_0,
             differential=True,
-            samples_per_symbol=2,
+            samples_per_symbol=sps,
             pre_diff_code=True,
             excess_bw=0.35,
             verbose=False,
@@ -297,8 +359,10 @@ class yabool2001_QPSK_mod_nice_visual_w_Pluto(gr.top_block, Qt.QWidget):
         self.connect((self.digital_constellation_modulator_0, 0), (self.iio_pluto_sink_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.qtgui_const_sink_x_0_0_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.qtgui_time_sink_x_0, 0))
-        self.connect((self.iio_pluto_source_0, 0), (self.qtgui_const_sink_x_0_0_0_0, 0))
-        self.connect((self.iio_pluto_source_0, 0), (self.qtgui_time_sink_x_0_0, 0))
+        self.connect((self.iio_pluto_source_0, 0), (self.low_pass_filter_0, 0))
+        self.connect((self.low_pass_filter_0, 0), (self.qtgui_const_sink_x_0_0_0_0, 0))
+        self.connect((self.low_pass_filter_0, 0), (self.qtgui_eye_sink_x_0, 0))
+        self.connect((self.low_pass_filter_0, 0), (self.qtgui_time_sink_x_0_0, 0))
 
 
     def closeEvent(self, event):
@@ -315,6 +379,13 @@ class yabool2001_QPSK_mod_nice_visual_w_Pluto(gr.top_block, Qt.QWidget):
     def set_variable_constellation_0(self, variable_constellation_0):
         self.variable_constellation_0 = variable_constellation_0
 
+    def get_sps(self):
+        return self.sps
+
+    def set_sps(self, sps):
+        self.sps = sps
+        self.qtgui_eye_sink_x_0.set_samp_per_symbol(self.sps)
+
     def get_samp_rate_Pluto(self):
         return self.samp_rate_Pluto
 
@@ -323,6 +394,8 @@ class yabool2001_QPSK_mod_nice_visual_w_Pluto(gr.top_block, Qt.QWidget):
         self.blocks_repeat_0.set_interpolation(self.samp_rate_Pluto)
         self.iio_pluto_sink_0.set_samplerate(self.samp_rate_Pluto)
         self.iio_pluto_source_0.set_samplerate(self.samp_rate_Pluto)
+        self.low_pass_filter_0.set_taps(firdes.low_pass(1, self.samp_rate_Pluto, (self.samp_rate_Pluto/2), 100000, window.WIN_HAMMING, 6.76))
+        self.qtgui_eye_sink_x_0.set_samp_rate(self.samp_rate_Pluto)
         self.qtgui_time_sink_x_0_0.set_samp_rate(self.samp_rate_Pluto)
 
     def get_samp_rate(self):
@@ -339,6 +412,13 @@ class yabool2001_QPSK_mod_nice_visual_w_Pluto(gr.top_block, Qt.QWidget):
         self.f_c = f_c
         self.iio_pluto_sink_0.set_frequency(self.f_c)
         self.iio_pluto_source_0.set_frequency(self.f_c)
+
+    def get_bw(self):
+        return self.bw
+
+    def set_bw(self, bw):
+        self.bw = bw
+        self.iio_pluto_sink_0.set_bandwidth(self.bw)
 
     def get_Pluto_iio_context_uri_ip(self):
         return self.Pluto_iio_context_uri_ip
