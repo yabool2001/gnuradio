@@ -68,7 +68,7 @@ class yabool2001_QPSK_mod_nice_visual_w_Pluto(gr.top_block, Qt.QWidget):
         self.variable_constellation_0 = variable_constellation_0 = digital.constellation_qpsk().base()
         self.variable_constellation_0.set_npwr(1.0)
         self.sps = sps = 2
-        self.samp_rate_Pluto = samp_rate_Pluto = 65105*10
+        self.samp_rate_Pluto = samp_rate_Pluto = 65105*8
         self.samp_rate = samp_rate = 32000
         self.f_c = f_c = 2700000000
         self.bw = bw = 20000000
@@ -338,6 +338,7 @@ class yabool2001_QPSK_mod_nice_visual_w_Pluto(gr.top_block, Qt.QWidget):
         self.iio_pluto_sink_0.set_samplerate(samp_rate_Pluto)
         self.iio_pluto_sink_0.set_attenuation(0, 0.0)
         self.iio_pluto_sink_0.set_filter_params('Auto', '', 0, 0)
+        self.digital_pfb_clock_sync_xxx_0 = digital.pfb_clock_sync_ccf(sps, 0.0628, [sps*32], 32, 16, 1, 1)
         self.digital_constellation_modulator_0 = digital.generic_mod(
             constellation=variable_constellation_0,
             differential=True,
@@ -359,10 +360,11 @@ class yabool2001_QPSK_mod_nice_visual_w_Pluto(gr.top_block, Qt.QWidget):
         self.connect((self.digital_constellation_modulator_0, 0), (self.iio_pluto_sink_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.qtgui_const_sink_x_0_0_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.qtgui_time_sink_x_0, 0))
+        self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.qtgui_const_sink_x_0_0_0_0, 0))
+        self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.qtgui_eye_sink_x_0, 0))
+        self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.qtgui_time_sink_x_0_0, 0))
         self.connect((self.iio_pluto_source_0, 0), (self.low_pass_filter_0, 0))
-        self.connect((self.low_pass_filter_0, 0), (self.qtgui_const_sink_x_0_0_0_0, 0))
-        self.connect((self.low_pass_filter_0, 0), (self.qtgui_eye_sink_x_0, 0))
-        self.connect((self.low_pass_filter_0, 0), (self.qtgui_time_sink_x_0_0, 0))
+        self.connect((self.low_pass_filter_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
 
 
     def closeEvent(self, event):
@@ -384,6 +386,7 @@ class yabool2001_QPSK_mod_nice_visual_w_Pluto(gr.top_block, Qt.QWidget):
 
     def set_sps(self, sps):
         self.sps = sps
+        self.digital_pfb_clock_sync_xxx_0.update_taps([self.sps*32])
         self.qtgui_eye_sink_x_0.set_samp_per_symbol(self.sps)
 
     def get_samp_rate_Pluto(self):
