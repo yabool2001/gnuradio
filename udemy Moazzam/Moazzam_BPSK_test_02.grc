@@ -161,7 +161,7 @@ blocks:
     alias: ''
     append: 'False'
     comment: ''
-    file: /home/moazzam/Downloads/out.txt
+    file: C:\Users\mzeml\gnuradio\udemy Moazzam\output_text.txt
     type: byte
     unbuffered: 'False'
     vlen: '1'
@@ -179,7 +179,7 @@ blocks:
     alias: ''
     begin_tag: pmt.PMT_NIL
     comment: ''
-    file: /home/moazzam/Downloads/test.txt
+    file: C:\Users\mzeml\gnuradio\udemy Moazzam\input_text.txt
     length: '0'
     maxoutbuf: '0'
     minoutbuf: '0'
