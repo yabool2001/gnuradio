@@ -449,7 +449,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    attenuation1: '10.0'
+    attenuation1: '0'
     bandwidth: bw
     buffer_size: '32768'
     comment: ''
@@ -484,7 +484,7 @@ blocks:
     fpass: '0'
     frequency: f_c
     fstop: '0'
-    gain1: '''slow_attack'''
+    gain1: '''manual'''
     len_tag_key: packet_len
     manual_gain1: '64'
     maxoutbuf: '0'
