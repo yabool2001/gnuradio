@@ -194,6 +194,24 @@ blocks:
     coordinate: [8, 304.0]
     rotation: 0
     state: enabled
+- name: blocks_multiply_const_vxx_0
+  id: blocks_multiply_const_vxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: '0.5'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [944, 320.0]
+    rotation: 0
+    state: enabled
 - name: blocks_repack_bits_bb_0_0_0
   id: blocks_repack_bits_bb
   parameters:
@@ -449,7 +467,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    attenuation1: '0'
+    attenuation1: '70'
     bandwidth: bw
     buffer_size: '32768'
     comment: ''
@@ -467,7 +485,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [944, 264.0]
+    coordinate: [1104, 264.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_source_0
@@ -688,6 +706,7 @@ blocks:
 
 connections:
 - [blocks_file_source_0, '0', blocks_stream_to_tagged_stream_0, '0']
+- [blocks_multiply_const_vxx_0, '0', iio_pluto_sink_0, '0']
 - [blocks_repack_bits_bb_0_0_0, '0', blocks_file_sink_0_0_0, '0']
 - [blocks_stream_to_tagged_stream_0, '0', blocks_tagged_stream_mux_0, '1']
 - [blocks_stream_to_tagged_stream_0, '0', digital_protocol_formatter_bb_0, '0']
@@ -695,8 +714,8 @@ connections:
 - [blocks_unpack_k_bits_bb_0_0_0, '0', digital_correlate_access_code_xx_ts_1, '0']
 - [channels_channel_model_0, '0', qtgui_const_sink_x_0_0, '0']
 - [digital_constellation_decoder_cb_1_0, '0', blocks_unpack_k_bits_bb_0_0_0, '0']
+- [digital_constellation_modulator_0_0, '0', blocks_multiply_const_vxx_0, '0']
 - [digital_constellation_modulator_0_0, '0', channels_channel_model_0, '0']
-- [digital_constellation_modulator_0_0, '0', iio_pluto_sink_0, '0']
 - [digital_correlate_access_code_xx_ts_1, '0', blocks_repack_bits_bb_0_0_0, '0']
 - [digital_costas_loop_cc_2_0, '0', digital_linear_equalizer_0, '0']
 - [digital_linear_equalizer_0, '0', digital_constellation_decoder_cb_1_0, '0']
