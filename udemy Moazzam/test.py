@@ -13,10 +13,9 @@ from PyQt5 import Qt
 from gnuradio import qtgui
 from gnuradio import blocks
 import pmt
-from gnuradio import channels
-from gnuradio.filter import firdes
 from gnuradio import digital
 from gnuradio import gr
+from gnuradio.filter import firdes
 from gnuradio.fft import window
 import sys
 import signal
@@ -84,47 +83,6 @@ class test(gr.top_block, Qt.QWidget):
         # Blocks
         ##################################################
 
-        self.qtgui_const_sink_x_0_0 = qtgui.const_sink_c(
-            1024, #size
-            "", #name
-            1, #number of inputs
-            None # parent
-        )
-        self.qtgui_const_sink_x_0_0.set_update_time(0.10)
-        self.qtgui_const_sink_x_0_0.set_y_axis((-2), 2)
-        self.qtgui_const_sink_x_0_0.set_x_axis((-2), 2)
-        self.qtgui_const_sink_x_0_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, "")
-        self.qtgui_const_sink_x_0_0.enable_autoscale(False)
-        self.qtgui_const_sink_x_0_0.enable_grid(False)
-        self.qtgui_const_sink_x_0_0.enable_axis_labels(True)
-
-
-        labels = ['', '', '', '', '',
-            '', '', '', '', '']
-        widths = [1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1]
-        colors = ["blue", "red", "red", "red", "red",
-            "red", "red", "red", "red", "red"]
-        styles = [0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0]
-        markers = [0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0]
-        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
-            1.0, 1.0, 1.0, 1.0, 1.0]
-
-        for i in range(1):
-            if len(labels[i]) == 0:
-                self.qtgui_const_sink_x_0_0.set_line_label(i, "Data {0}".format(i))
-            else:
-                self.qtgui_const_sink_x_0_0.set_line_label(i, labels[i])
-            self.qtgui_const_sink_x_0_0.set_line_width(i, widths[i])
-            self.qtgui_const_sink_x_0_0.set_line_color(i, colors[i])
-            self.qtgui_const_sink_x_0_0.set_line_style(i, styles[i])
-            self.qtgui_const_sink_x_0_0.set_line_marker(i, markers[i])
-            self.qtgui_const_sink_x_0_0.set_line_alpha(i, alphas[i])
-
-        self._qtgui_const_sink_x_0_0_win = sip.wrapinstance(self.qtgui_const_sink_x_0_0.qwidget(), Qt.QWidget)
-        self.top_layout.addWidget(self._qtgui_const_sink_x_0_0_win)
         self.qtgui_const_sink_x_0 = qtgui.const_sink_c(
             1024, #size
             "", #name
@@ -181,11 +139,10 @@ class test(gr.top_block, Qt.QWidget):
         self.iio_pluto_sink_0.set_bandwidth(bw)
         self.iio_pluto_sink_0.set_frequency(f_c)
         self.iio_pluto_sink_0.set_samplerate(samp_rate)
-        self.iio_pluto_sink_0.set_attenuation(0, 70)
+        self.iio_pluto_sink_0.set_attenuation(0, 1)
         self.iio_pluto_sink_0.set_filter_params('Auto', '', 0, 0)
         self.digital_protocol_formatter_bb_0 = digital.protocol_formatter_bb(hdr_format, "packet_len")
         self.digital_pfb_clock_sync_xxx_0 = digital.pfb_clock_sync_ccf(4, 0.0628, firdes.root_raised_cosine(nfilts, nfilts, 1.0/float(sps), 0.35, 11*sps*nfilts), 32, 16, 1.5, 1)
-        self.digital_linear_equalizer_0 = digital.linear_equalizer(15, 1, variable_adaptive_algorithm_0, 1, [], '')
         self.digital_costas_loop_cc_2_0 = digital.costas_loop_cc(0.0628, 2, True)
         self.digital_correlate_access_code_xx_ts_1 = digital.correlate_access_code_bb_ts(digital.packet_utils.default_access_code,
           0, "packet_len")
@@ -199,13 +156,6 @@ class test(gr.top_block, Qt.QWidget):
             log=False,
             truncate=False)
         self.digital_constellation_decoder_cb_1_0 = digital.constellation_decoder_cb(variable_constellation_1)
-        self.channels_channel_model_0 = channels.channel_model(
-            noise_voltage=(1*1000*0.000100),
-            frequency_offset=(1*20*0.000000005),
-            epsilon=1,
-            taps=taps,
-            noise_seed=0,
-            block_tags=False)
         self.blocks_unpack_k_bits_bb_0_0_0 = blocks.unpack_k_bits_bb(1)
         self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_char*1, "packet_len", 0)
         self.blocks_stream_to_tagged_stream_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 1, "packet_len")
@@ -227,14 +177,11 @@ class test(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_stream_to_tagged_stream_0, 0), (self.digital_protocol_formatter_bb_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_constellation_modulator_0_0, 0))
         self.connect((self.blocks_unpack_k_bits_bb_0_0_0, 0), (self.digital_correlate_access_code_xx_ts_1, 0))
-        self.connect((self.channels_channel_model_0, 0), (self.qtgui_const_sink_x_0_0, 0))
         self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.blocks_unpack_k_bits_bb_0_0_0, 0))
         self.connect((self.digital_constellation_modulator_0_0, 0), (self.blocks_multiply_const_vxx_0, 0))
-        self.connect((self.digital_constellation_modulator_0_0, 0), (self.channels_channel_model_0, 0))
         self.connect((self.digital_correlate_access_code_xx_ts_1, 0), (self.blocks_repack_bits_bb_0_0_0, 0))
-        self.connect((self.digital_costas_loop_cc_2_0, 0), (self.digital_linear_equalizer_0, 0))
-        self.connect((self.digital_linear_equalizer_0, 0), (self.digital_constellation_decoder_cb_1_0, 0))
-        self.connect((self.digital_linear_equalizer_0, 0), (self.qtgui_const_sink_x_0, 0))
+        self.connect((self.digital_costas_loop_cc_2_0, 0), (self.digital_constellation_decoder_cb_1_0, 0))
+        self.connect((self.digital_costas_loop_cc_2_0, 0), (self.qtgui_const_sink_x_0, 0))
         self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.digital_costas_loop_cc_2_0, 0))
         self.connect((self.digital_protocol_formatter_bb_0, 0), (self.blocks_tagged_stream_mux_0, 0))
         self.connect((self.iio_pluto_source_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
@@ -281,7 +228,6 @@ class test(gr.top_block, Qt.QWidget):
 
     def set_taps(self, taps):
         self.taps = taps
-        self.channels_channel_model_0.set_taps(self.taps)
 
     def get_sps(self):
         return self.sps
