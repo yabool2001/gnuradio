@@ -344,24 +344,6 @@ blocks:
     coordinate: [912, 728.0]
     rotation: 180
     state: enabled
-- name: digital_costas_loop_cc_2_0
-  id: digital_costas_loop_cc
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    order: '2'
-    use_snr: 'True'
-    w: '0.0628'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [472, 576.0]
-    rotation: 0
-    state: enabled
 - name: digital_pfb_clock_sync_xxx_0
   id: digital_pfb_clock_sync_xxx
   parameters:
@@ -581,9 +563,8 @@ connections:
 - [digital_constellation_decoder_cb_1_0, '0', blocks_unpack_k_bits_bb_0_0_0, '0']
 - [digital_constellation_modulator_0_0, '0', blocks_multiply_const_vxx_0, '0']
 - [digital_correlate_access_code_xx_ts_1, '0', blocks_repack_bits_bb_0_0_0, '0']
-- [digital_costas_loop_cc_2_0, '0', digital_constellation_decoder_cb_1_0, '0']
-- [digital_costas_loop_cc_2_0, '0', qtgui_const_sink_x_0, '0']
-- [digital_pfb_clock_sync_xxx_0, '0', digital_costas_loop_cc_2_0, '0']
+- [digital_pfb_clock_sync_xxx_0, '0', digital_constellation_decoder_cb_1_0, '0']
+- [digital_pfb_clock_sync_xxx_0, '0', qtgui_const_sink_x_0, '0']
 - [digital_protocol_formatter_bb_0, '0', blocks_tagged_stream_mux_0, '0']
 - [iio_pluto_source_0, '0', digital_pfb_clock_sync_xxx_0, '0']
 
