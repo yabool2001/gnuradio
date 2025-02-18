@@ -105,35 +105,6 @@ blocks:
     coordinate: [712, 8.0]
     rotation: 0
     state: enabled
-- name: taps
-  id: variable
-  parameters:
-    comment: ''
-    value: '[1.0, 0.25-0.25j, 0.50 + 0.10j, -0.3 + 0.2j]'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [536, 8.0]
-    rotation: 0
-    state: enabled
-- name: variable_adaptive_algorithm_0
-  id: variable_adaptive_algorithm
-  parameters:
-    comment: ''
-    cons: variable_constellation_1
-    delta: '10.0'
-    ffactor: '0.99'
-    modulus: '2'
-    step_size: '.0001'
-    type: cma
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [224, 760.0]
-    rotation: 0
-    state: enabled
 - name: variable_constellation_1
   id: variable_constellation
   parameters:

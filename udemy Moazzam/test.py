@@ -68,11 +68,9 @@ class test(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
+        self.bw = bw = 20000000
         self.variable_constellation_1 = variable_constellation_1 = digital.constellation_bpsk().base()
         self.variable_constellation_1.set_npwr(1.0)
-        self.bw = bw = 20000000
-        self.variable_adaptive_algorithm_0 = variable_adaptive_algorithm_0 = digital.adaptive_algorithm_cma( variable_constellation_1, .0001, 2).base()
-        self.taps = taps = [1.0, 0.25-0.25j, 0.50 + 0.10j, -0.3 + 0.2j]
         self.sps = sps = 4
         self.samp_rate = samp_rate = int(bw*3)
         self.pluto_context = pluto_context = "ip:192.168.2.1"
@@ -198,13 +196,6 @@ class test(gr.top_block, Qt.QWidget):
         self.hdr_format = hdr_format
         self.digital_protocol_formatter_bb_0.set_header_format(self.hdr_format)
 
-    def get_variable_constellation_1(self):
-        return self.variable_constellation_1
-
-    def set_variable_constellation_1(self, variable_constellation_1):
-        self.variable_constellation_1 = variable_constellation_1
-        self.digital_constellation_decoder_cb_1_0.set_constellation(self.variable_constellation_1)
-
     def get_bw(self):
         return self.bw
 
@@ -213,17 +204,12 @@ class test(gr.top_block, Qt.QWidget):
         self.set_samp_rate(int(self.bw*3))
         self.iio_pluto_sink_0.set_bandwidth(self.bw)
 
-    def get_variable_adaptive_algorithm_0(self):
-        return self.variable_adaptive_algorithm_0
+    def get_variable_constellation_1(self):
+        return self.variable_constellation_1
 
-    def set_variable_adaptive_algorithm_0(self, variable_adaptive_algorithm_0):
-        self.variable_adaptive_algorithm_0 = variable_adaptive_algorithm_0
-
-    def get_taps(self):
-        return self.taps
-
-    def set_taps(self, taps):
-        self.taps = taps
+    def set_variable_constellation_1(self, variable_constellation_1):
+        self.variable_constellation_1 = variable_constellation_1
+        self.digital_constellation_decoder_cb_1_0.set_constellation(self.variable_constellation_1)
 
     def get_sps(self):
         return self.sps
