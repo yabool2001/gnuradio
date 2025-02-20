@@ -197,7 +197,7 @@ class test(gr.top_block, Qt.QWidget):
         self.digital_constellation_decoder_cb_1_0 = digital.constellation_decoder_cb(variable_constellation_1)
         self.blocks_unpack_k_bits_bb_0_0_0 = blocks.unpack_k_bits_bb(1)
         self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_char*1, "packet_len", 0)
-        self.blocks_stream_to_tagged_stream_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 21, "packet_len")
+        self.blocks_stream_to_tagged_stream_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 24, "packet_len")
         self.blocks_repack_bits_bb_0_0_0 = blocks.repack_bits_bb(1, 8, "packet_len", False, gr.GR_MSB_FIRST)
         self.blocks_file_source_0 = blocks.file_source(gr.sizeof_char*1, 'C:\\Users\\mzeml\\gnuradio\\udemy Moazzam\\input_text.txt', False, 0, 0)
         self.blocks_file_source_0.set_begin_tag(pmt.PMT_NIL)

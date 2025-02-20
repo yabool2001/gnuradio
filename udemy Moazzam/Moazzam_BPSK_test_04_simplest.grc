@@ -232,7 +232,7 @@ blocks:
     len_tag_key: '"packet_len"'
     maxoutbuf: '0'
     minoutbuf: '0'
-    packet_len: '21'
+    packet_len: '24'
     type: byte
     vlen: '1'
   states:
