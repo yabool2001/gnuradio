@@ -13,9 +13,10 @@ from PyQt5 import Qt
 from gnuradio import qtgui
 from gnuradio import blocks
 import pmt
+from gnuradio import channels
+from gnuradio.filter import firdes
 from gnuradio import digital
 from gnuradio import gr
-from gnuradio.filter import firdes
 from gnuradio.fft import window
 import sys
 import signal
@@ -68,9 +69,11 @@ class test(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.bw = bw = 20000000
         self.variable_constellation_1 = variable_constellation_1 = digital.constellation_bpsk().base()
         self.variable_constellation_1.set_npwr(1.0)
+        self.bw = bw = 20000000
+        self.variable_adaptive_algorithm_0 = variable_adaptive_algorithm_0 = digital.adaptive_algorithm_cma( variable_constellation_1, .0001, 2).base()
+        self.taps = taps = [1.0, 0.25-0.25j, 0.50 + 0.10j, -0.3 + 0.2j]
         self.sps = sps = 4
         self.samp_rate = samp_rate = int(bw*3)
         self.pluto_context = pluto_context = "ip:192.168.2.1"
@@ -81,48 +84,47 @@ class test(gr.top_block, Qt.QWidget):
         # Blocks
         ##################################################
 
-        self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
+        self.qtgui_const_sink_x_0_0 = qtgui.const_sink_c(
             1024, #size
-            window.WIN_BLACKMAN_hARRIS, #wintype
-            f_c, #fc
-            samp_rate, #bw
             "", #name
-            1,
+            1, #number of inputs
             None # parent
         )
-        self.qtgui_freq_sink_x_0.set_update_time(0.10)
-        self.qtgui_freq_sink_x_0.set_y_axis((-140), 10)
-        self.qtgui_freq_sink_x_0.set_y_label('Relative Gain', 'dB')
-        self.qtgui_freq_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
-        self.qtgui_freq_sink_x_0.enable_autoscale(False)
-        self.qtgui_freq_sink_x_0.enable_grid(False)
-        self.qtgui_freq_sink_x_0.set_fft_average(1.0)
-        self.qtgui_freq_sink_x_0.enable_axis_labels(True)
-        self.qtgui_freq_sink_x_0.enable_control_panel(False)
-        self.qtgui_freq_sink_x_0.set_fft_window_normalized(False)
-
+        self.qtgui_const_sink_x_0_0.set_update_time(0.10)
+        self.qtgui_const_sink_x_0_0.set_y_axis((-2), 2)
+        self.qtgui_const_sink_x_0_0.set_x_axis((-2), 2)
+        self.qtgui_const_sink_x_0_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, "")
+        self.qtgui_const_sink_x_0_0.enable_autoscale(False)
+        self.qtgui_const_sink_x_0_0.enable_grid(False)
+        self.qtgui_const_sink_x_0_0.enable_axis_labels(True)
 
 
         labels = ['', '', '', '', '',
             '', '', '', '', '']
         widths = [1, 1, 1, 1, 1,
             1, 1, 1, 1, 1]
-        colors = ["blue", "red", "green", "black", "cyan",
-            "magenta", "yellow", "dark red", "dark green", "dark blue"]
+        colors = ["blue", "red", "red", "red", "red",
+            "red", "red", "red", "red", "red"]
+        styles = [0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0]
+        markers = [0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0]
         alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
             1.0, 1.0, 1.0, 1.0, 1.0]
 
         for i in range(1):
             if len(labels[i]) == 0:
-                self.qtgui_freq_sink_x_0.set_line_label(i, "Data {0}".format(i))
+                self.qtgui_const_sink_x_0_0.set_line_label(i, "Data {0}".format(i))
             else:
-                self.qtgui_freq_sink_x_0.set_line_label(i, labels[i])
-            self.qtgui_freq_sink_x_0.set_line_width(i, widths[i])
-            self.qtgui_freq_sink_x_0.set_line_color(i, colors[i])
-            self.qtgui_freq_sink_x_0.set_line_alpha(i, alphas[i])
+                self.qtgui_const_sink_x_0_0.set_line_label(i, labels[i])
+            self.qtgui_const_sink_x_0_0.set_line_width(i, widths[i])
+            self.qtgui_const_sink_x_0_0.set_line_color(i, colors[i])
+            self.qtgui_const_sink_x_0_0.set_line_style(i, styles[i])
+            self.qtgui_const_sink_x_0_0.set_line_marker(i, markers[i])
+            self.qtgui_const_sink_x_0_0.set_line_alpha(i, alphas[i])
 
-        self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.qwidget(), Qt.QWidget)
-        self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
+        self._qtgui_const_sink_x_0_0_win = sip.wrapinstance(self.qtgui_const_sink_x_0_0.qwidget(), Qt.QWidget)
+        self.top_layout.addWidget(self._qtgui_const_sink_x_0_0_win)
         self.qtgui_const_sink_x_0 = qtgui.const_sink_c(
             1024, #size
             "", #name
@@ -195,11 +197,19 @@ class test(gr.top_block, Qt.QWidget):
             log=False,
             truncate=False)
         self.digital_constellation_decoder_cb_1_0 = digital.constellation_decoder_cb(variable_constellation_1)
+        self.channels_channel_model_0 = channels.channel_model(
+            noise_voltage=(1*1000*0.000100),
+            frequency_offset=(1*20*0.000000005),
+            epsilon=1,
+            taps=taps,
+            noise_seed=0,
+            block_tags=False)
         self.blocks_unpack_k_bits_bb_0_0_0 = blocks.unpack_k_bits_bb(1)
         self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_char*1, "packet_len", 0)
         self.blocks_stream_to_tagged_stream_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 24, "packet_len")
         self.blocks_repack_bits_bb_0_0_0 = blocks.repack_bits_bb(1, 8, "packet_len", False, gr.GR_MSB_FIRST)
-        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_char*1, 'C:\\Users\\mzeml\\gnuradio\\udemy Moazzam\\input_text.txt', False, 0, 0)
+        self.blocks_multiply_const_vxx_0 = blocks.multiply_const_cc(0.5)
+        self.blocks_file_source_0 = blocks.file_source(gr.sizeof_char*1, 'C:\\Users\\mzeml\\gnuradio\\udemy Moazzam\\input_text.txt', True, 0, 0)
         self.blocks_file_source_0.set_begin_tag(pmt.PMT_NIL)
         self.blocks_file_sink_0_0_0 = blocks.file_sink(gr.sizeof_char*1, 'C:\\Users\\mzeml\\gnuradio\\udemy Moazzam\\output_text.txt', False)
         self.blocks_file_sink_0_0_0.set_unbuffered(False)
@@ -209,17 +219,19 @@ class test(gr.top_block, Qt.QWidget):
         # Connections
         ##################################################
         self.connect((self.blocks_file_source_0, 0), (self.blocks_stream_to_tagged_stream_0, 0))
+        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.iio_pluto_sink_0, 0))
         self.connect((self.blocks_repack_bits_bb_0_0_0, 0), (self.blocks_file_sink_0_0_0, 0))
         self.connect((self.blocks_stream_to_tagged_stream_0, 0), (self.blocks_tagged_stream_mux_0, 1))
         self.connect((self.blocks_stream_to_tagged_stream_0, 0), (self.digital_protocol_formatter_bb_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_constellation_modulator_0_0, 0))
         self.connect((self.blocks_unpack_k_bits_bb_0_0_0, 0), (self.digital_correlate_access_code_xx_ts_1, 0))
+        self.connect((self.channels_channel_model_0, 0), (self.qtgui_const_sink_x_0_0, 0))
         self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.blocks_unpack_k_bits_bb_0_0_0, 0))
-        self.connect((self.digital_constellation_modulator_0_0, 0), (self.iio_pluto_sink_0, 0))
+        self.connect((self.digital_constellation_modulator_0_0, 0), (self.blocks_multiply_const_vxx_0, 0))
+        self.connect((self.digital_constellation_modulator_0_0, 0), (self.channels_channel_model_0, 0))
         self.connect((self.digital_correlate_access_code_xx_ts_1, 0), (self.blocks_repack_bits_bb_0_0_0, 0))
         self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.digital_constellation_decoder_cb_1_0, 0))
         self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.qtgui_const_sink_x_0, 0))
-        self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.digital_protocol_formatter_bb_0, 0), (self.blocks_tagged_stream_mux_0, 0))
         self.connect((self.iio_pluto_source_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
 
@@ -239,6 +251,13 @@ class test(gr.top_block, Qt.QWidget):
         self.hdr_format = hdr_format
         self.digital_protocol_formatter_bb_0.set_header_format(self.hdr_format)
 
+    def get_variable_constellation_1(self):
+        return self.variable_constellation_1
+
+    def set_variable_constellation_1(self, variable_constellation_1):
+        self.variable_constellation_1 = variable_constellation_1
+        self.digital_constellation_decoder_cb_1_0.set_constellation(self.variable_constellation_1)
+
     def get_bw(self):
         return self.bw
 
@@ -247,12 +266,18 @@ class test(gr.top_block, Qt.QWidget):
         self.set_samp_rate(int(self.bw*3))
         self.iio_pluto_sink_0.set_bandwidth(self.bw)
 
-    def get_variable_constellation_1(self):
-        return self.variable_constellation_1
+    def get_variable_adaptive_algorithm_0(self):
+        return self.variable_adaptive_algorithm_0
 
-    def set_variable_constellation_1(self, variable_constellation_1):
-        self.variable_constellation_1 = variable_constellation_1
-        self.digital_constellation_decoder_cb_1_0.set_constellation(self.variable_constellation_1)
+    def set_variable_adaptive_algorithm_0(self, variable_adaptive_algorithm_0):
+        self.variable_adaptive_algorithm_0 = variable_adaptive_algorithm_0
+
+    def get_taps(self):
+        return self.taps
+
+    def set_taps(self, taps):
+        self.taps = taps
+        self.channels_channel_model_0.set_taps(self.taps)
 
     def get_sps(self):
         return self.sps
@@ -268,7 +293,6 @@ class test(gr.top_block, Qt.QWidget):
         self.samp_rate = samp_rate
         self.iio_pluto_sink_0.set_samplerate(self.samp_rate)
         self.iio_pluto_source_0.set_samplerate(self.samp_rate)
-        self.qtgui_freq_sink_x_0.set_frequency_range(self.f_c, self.samp_rate)
 
     def get_pluto_context(self):
         return self.pluto_context
@@ -290,7 +314,6 @@ class test(gr.top_block, Qt.QWidget):
         self.f_c = f_c
         self.iio_pluto_sink_0.set_frequency(self.f_c)
         self.iio_pluto_source_0.set_frequency(self.f_c)
-        self.qtgui_freq_sink_x_0.set_frequency_range(self.f_c, self.samp_rate)
 
 
 
