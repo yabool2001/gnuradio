@@ -1,17 +1,17 @@
 options:
   parameters:
-    author: moazzam
+    author: yabool2001
     catch_exceptions: 'True'
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
     comment: ''
-    copyright: ''
-    description: ''
+    copyright: mzemlo.pl@gmail.com
+    description: ' BPSK demonstration over ADALM-PLuto'
     gen_cmake: 'On'
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: test
+    id: Moazzam_BPSK_test_04_simplest_packet_len_24
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -22,7 +22,7 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: Not titled yet
+    title: Moazzam BPSK test 04 simplest packet len 24
     window_size: ''
   states:
     bus_sink: false
@@ -131,7 +131,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [40, 1092.0]
+    coordinate: [8, 704.0]
     rotation: 0
     state: enabled
 - name: variable_constellation_1
@@ -169,7 +169,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [368, 1016.0]
+    coordinate: [8, 824.0]
     rotation: 180
     state: enabled
 - name: blocks_file_source_0
@@ -191,7 +191,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [8, 304.0]
+    coordinate: [8, 168.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_0
@@ -209,7 +209,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1640, 624.0]
+    coordinate: [920, 328.0]
     rotation: 0
     state: enabled
 - name: blocks_repack_bits_bb_0_0_0
@@ -229,7 +229,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [720, 1092.0]
+    coordinate: [232, 832.0]
     rotation: 180
     state: enabled
 - name: blocks_stream_to_tagged_stream_0
@@ -248,7 +248,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [328, 340.0]
+    coordinate: [216, 192.0]
     rotation: 0
     state: enabled
 - name: blocks_tagged_stream_mux_0
@@ -268,7 +268,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [736, 336.0]
+    coordinate: [608, 320.0]
     rotation: 0
     state: enabled
 - name: blocks_unpack_k_bits_bb_0_0_0
@@ -284,29 +284,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1480.0, 872]
+    coordinate: [704.0, 584]
     rotation: 270
-    state: enabled
-- name: channels_channel_model_0
-  id: channels_channel_model
-  parameters:
-    affinity: ''
-    alias: ''
-    block_tags: 'False'
-    comment: ''
-    epsilon: '1'
-    freq_offset: 1*20*0.000000005
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    noise_voltage: 1*1000*0.000100
-    seed: '0'
-    taps: taps
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1528, 172.0]
-    rotation: 0
     state: enabled
 - name: digital_constellation_decoder_cb_1_0
   id: digital_constellation_decoder_cb
@@ -321,7 +300,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1032, 792.0]
+    coordinate: [496, 488.0]
     rotation: 0
     state: enabled
 - name: digital_constellation_modulator_0_0
@@ -343,7 +322,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1096, 300.0]
+    coordinate: [768, 176.0]
     rotation: 0
     state: enabled
 - name: digital_correlate_access_code_xx_ts_1
@@ -362,7 +341,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1040, 1016.0]
+    coordinate: [472, 760.0]
     rotation: 180
     state: enabled
 - name: digital_pfb_clock_sync_xxx_0
@@ -385,7 +364,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [360, 768.0]
+    coordinate: [224, 488.0]
     rotation: 0
     state: enabled
 - name: digital_protocol_formatter_bb_0
@@ -402,7 +381,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [464, 188.0]
+    coordinate: [472, 192.0]
     rotation: 0
     state: enabled
 - name: hdr_format
@@ -430,7 +409,7 @@ blocks:
     alias: ''
     attenuation1: '1'
     bandwidth: bw
-    buffer_size: '32768'
+    buffer_size: int(samp_rate/24)
     comment: ''
     cyclic: 'False'
     filter: ''
@@ -446,7 +425,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1904, 536.0]
+    coordinate: [1088, 272.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_source_0
@@ -463,7 +442,7 @@ blocks:
     fpass: '0'
     frequency: f_c
     fstop: '0'
-    gain1: '''manual'''
+    gain1: '''fast_attack'''
     len_tag_key: packet_len
     manual_gain1: '64'
     maxoutbuf: '0'
@@ -477,7 +456,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [16, 716.0]
+    coordinate: [8, 460.0]
     rotation: 0
     state: enabled
 - name: qtgui_const_sink_x_0
@@ -495,7 +474,7 @@ blocks:
     alpha7: '1.0'
     alpha8: '1.0'
     alpha9: '1.0'
-    autoscale: 'False'
+    autoscale: 'True'
     axislabels: 'True'
     color1: '"blue"'
     color10: '"red"'
@@ -569,11 +548,11 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1032, 884.0]
+    coordinate: [496, 560.0]
     rotation: 0
-    state: enabled
-- name: qtgui_const_sink_x_0_0
-  id: qtgui_const_sink_x
+    state: disabled
+- name: qtgui_freq_sink_x_0
+  id: qtgui_freq_sink_x
   parameters:
     affinity: ''
     alias: ''
@@ -587,61 +566,51 @@ blocks:
     alpha7: '1.0'
     alpha8: '1.0'
     alpha9: '1.0'
-    autoscale: 'False'
+    autoscale: 'True'
+    average: '1.0'
     axislabels: 'True'
+    bw: samp_rate
     color1: '"blue"'
-    color10: '"red"'
+    color10: '"dark blue"'
     color2: '"red"'
-    color3: '"red"'
-    color4: '"red"'
-    color5: '"red"'
-    color6: '"red"'
-    color7: '"red"'
-    color8: '"red"'
-    color9: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
     comment: ''
+    ctrlpanel: 'False'
+    fc: f_c
+    fftsize: '1024'
+    freqhalf: 'True'
     grid: 'False'
     gui_hint: ''
+    label: Relative Gain
     label1: ''
-    label10: ''
-    label2: ''
-    label3: ''
-    label4: ''
-    label5: ''
-    label6: ''
-    label7: ''
-    label8: ''
-    label9: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
     legend: 'True'
-    marker1: '0'
-    marker10: '0'
-    marker2: '0'
-    marker3: '0'
-    marker4: '0'
-    marker5: '0'
-    marker6: '0'
-    marker7: '0'
-    marker8: '0'
-    marker9: '0'
+    maxoutbuf: '0'
+    minoutbuf: '0'
     name: '""'
     nconnections: '1'
-    size: '1024'
-    style1: '0'
-    style10: '0'
-    style2: '0'
-    style3: '0'
-    style4: '0'
-    style5: '0'
-    style6: '0'
-    style7: '0'
-    style8: '0'
-    style9: '0'
+    norm_window: 'False'
+    showports: 'False'
     tr_chan: '0'
     tr_level: '0.0'
     tr_mode: qtgui.TRIG_MODE_FREE
-    tr_slope: qtgui.TRIG_SLOPE_POS
     tr_tag: '""'
     type: complex
+    units: dB
     update_time: '0.10'
     width1: '1'
     width10: '1'
@@ -653,15 +622,14 @@ blocks:
     width7: '1'
     width8: '1'
     width9: '1'
-    xmax: '2'
-    xmin: '-2'
-    ymax: '2'
-    ymin: '-2'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1936, 124.0]
+    coordinate: [1088, 184.0]
     rotation: 0
     state: enabled
 
@@ -673,10 +641,9 @@ connections:
 - [blocks_stream_to_tagged_stream_0, '0', digital_protocol_formatter_bb_0, '0']
 - [blocks_tagged_stream_mux_0, '0', digital_constellation_modulator_0_0, '0']
 - [blocks_unpack_k_bits_bb_0_0_0, '0', digital_correlate_access_code_xx_ts_1, '0']
-- [channels_channel_model_0, '0', qtgui_const_sink_x_0_0, '0']
 - [digital_constellation_decoder_cb_1_0, '0', blocks_unpack_k_bits_bb_0_0_0, '0']
 - [digital_constellation_modulator_0_0, '0', blocks_multiply_const_vxx_0, '0']
-- [digital_constellation_modulator_0_0, '0', channels_channel_model_0, '0']
+- [digital_constellation_modulator_0_0, '0', qtgui_freq_sink_x_0, '0']
 - [digital_correlate_access_code_xx_ts_1, '0', blocks_repack_bits_bb_0_0_0, '0']
 - [digital_pfb_clock_sync_xxx_0, '0', digital_constellation_decoder_cb_1_0, '0']
 - [digital_pfb_clock_sync_xxx_0, '0', qtgui_const_sink_x_0, '0']

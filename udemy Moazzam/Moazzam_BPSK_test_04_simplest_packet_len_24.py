@@ -5,8 +5,10 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: Not titled yet
-# Author: moazzam
+# Title: Moazzam BPSK test 04 simplest packet len 24
+# Author: yabool2001
+# Copyright: mzemlo.pl@gmail.com
+# Description:  BPSK demonstration over ADALM-PLuto
 # GNU Radio version: 3.10.10.0
 
 from PyQt5 import Qt
@@ -28,12 +30,12 @@ import sip
 
 
 
-class test(gr.top_block, Qt.QWidget):
+class Moazzam_BPSK_test_04_simplest_packet_len_24(gr.top_block, Qt.QWidget):
 
     def __init__(self, hdr_format=digital.header_format_default(digital.packet_utils.default_access_code, 0)):
-        gr.top_block.__init__(self, "Not titled yet", catch_exceptions=True)
+        gr.top_block.__init__(self, "Moazzam BPSK test 04 simplest packet len 24", catch_exceptions=True)
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("Not titled yet")
+        self.setWindowTitle("Moazzam BPSK test 04 simplest packet len 24")
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
@@ -51,7 +53,7 @@ class test(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("GNU Radio", "test")
+        self.settings = Qt.QSettings("GNU Radio", "Moazzam_BPSK_test_04_simplest_packet_len_24")
 
         try:
             geometry = self.settings.value("geometry")
@@ -125,58 +127,17 @@ class test(gr.top_block, Qt.QWidget):
 
         self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
-        self.qtgui_const_sink_x_0 = qtgui.const_sink_c(
-            1024, #size
-            "", #name
-            1, #number of inputs
-            None # parent
-        )
-        self.qtgui_const_sink_x_0.set_update_time(0.10)
-        self.qtgui_const_sink_x_0.set_y_axis((-2), 2)
-        self.qtgui_const_sink_x_0.set_x_axis((-2), 2)
-        self.qtgui_const_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, "")
-        self.qtgui_const_sink_x_0.enable_autoscale(False)
-        self.qtgui_const_sink_x_0.enable_grid(False)
-        self.qtgui_const_sink_x_0.enable_axis_labels(True)
-
-
-        labels = ['', '', '', '', '',
-            '', '', '', '', '']
-        widths = [1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1]
-        colors = ["blue", "red", "red", "red", "red",
-            "red", "red", "red", "red", "red"]
-        styles = [0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0]
-        markers = [0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0]
-        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
-            1.0, 1.0, 1.0, 1.0, 1.0]
-
-        for i in range(1):
-            if len(labels[i]) == 0:
-                self.qtgui_const_sink_x_0.set_line_label(i, "Data {0}".format(i))
-            else:
-                self.qtgui_const_sink_x_0.set_line_label(i, labels[i])
-            self.qtgui_const_sink_x_0.set_line_width(i, widths[i])
-            self.qtgui_const_sink_x_0.set_line_color(i, colors[i])
-            self.qtgui_const_sink_x_0.set_line_style(i, styles[i])
-            self.qtgui_const_sink_x_0.set_line_marker(i, markers[i])
-            self.qtgui_const_sink_x_0.set_line_alpha(i, alphas[i])
-
-        self._qtgui_const_sink_x_0_win = sip.wrapinstance(self.qtgui_const_sink_x_0.qwidget(), Qt.QWidget)
-        self.top_layout.addWidget(self._qtgui_const_sink_x_0_win)
         self.iio_pluto_source_0 = iio.fmcomms2_source_fc32(pluto_context if pluto_context else iio.get_pluto_uri(), [True, True], 32768)
         self.iio_pluto_source_0.set_len_tag_key('packet_len')
         self.iio_pluto_source_0.set_frequency(f_c)
         self.iio_pluto_source_0.set_samplerate(samp_rate)
-        self.iio_pluto_source_0.set_gain_mode(0, 'manual')
+        self.iio_pluto_source_0.set_gain_mode(0, 'fast_attack')
         self.iio_pluto_source_0.set_gain(0, 64)
         self.iio_pluto_source_0.set_quadrature(True)
         self.iio_pluto_source_0.set_rfdc(True)
         self.iio_pluto_source_0.set_bbdc(True)
         self.iio_pluto_source_0.set_filter_params('Auto', '', 0, 0)
-        self.iio_pluto_sink_0 = iio.fmcomms2_sink_fc32(pluto_context if pluto_context else iio.get_pluto_uri(), [True, True], 32768, False)
+        self.iio_pluto_sink_0 = iio.fmcomms2_sink_fc32(pluto_context if pluto_context else iio.get_pluto_uri(), [True, True], (int(samp_rate/24)), False)
         self.iio_pluto_sink_0.set_len_tag_key('')
         self.iio_pluto_sink_0.set_bandwidth(bw)
         self.iio_pluto_sink_0.set_frequency(f_c)
@@ -223,13 +184,12 @@ class test(gr.top_block, Qt.QWidget):
         self.connect((self.digital_constellation_modulator_0_0, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.digital_correlate_access_code_xx_ts_1, 0), (self.blocks_repack_bits_bb_0_0_0, 0))
         self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.digital_constellation_decoder_cb_1_0, 0))
-        self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.qtgui_const_sink_x_0, 0))
         self.connect((self.digital_protocol_formatter_bb_0, 0), (self.blocks_tagged_stream_mux_0, 0))
         self.connect((self.iio_pluto_source_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("GNU Radio", "test")
+        self.settings = Qt.QSettings("GNU Radio", "Moazzam_BPSK_test_04_simplest_packet_len_24")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -311,11 +271,12 @@ class test(gr.top_block, Qt.QWidget):
 
 
 def argument_parser():
-    parser = ArgumentParser()
+    description = ' BPSK demonstration over ADALM-PLuto'
+    parser = ArgumentParser(description=description)
     return parser
 
 
-def main(top_block_cls=test, options=None):
+def main(top_block_cls=Moazzam_BPSK_test_04_simplest_packet_len_24, options=None):
     if options is None:
         options = argument_parser().parse_args()
 
