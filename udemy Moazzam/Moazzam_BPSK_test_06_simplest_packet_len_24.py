@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: Moazzam BPSK test 04 simplest packet len 24
+# Title: Moazzam BPSK test 06 simplest packet len 24
 # Author: yabool2001
 # Copyright: mzemlo.pl@gmail.com
 # Description:  BPSK demonstration over ADALM-PLuto
@@ -30,12 +30,12 @@ import sip
 
 
 
-class Moazzam_BPSK_test_04_simplest_packet_len_24(gr.top_block, Qt.QWidget):
+class Moazzam_BPSK_test_06_simplest_packet_len_24(gr.top_block, Qt.QWidget):
 
     def __init__(self, hdr_format=digital.header_format_default(digital.packet_utils.default_access_code, 0)):
-        gr.top_block.__init__(self, "Moazzam BPSK test 04 simplest packet len 24", catch_exceptions=True)
+        gr.top_block.__init__(self, "Moazzam BPSK test 06 simplest packet len 24", catch_exceptions=True)
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("Moazzam BPSK test 04 simplest packet len 24")
+        self.setWindowTitle("Moazzam BPSK test 06 simplest packet len 24")
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
@@ -53,7 +53,7 @@ class Moazzam_BPSK_test_04_simplest_packet_len_24(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("GNU Radio", "Moazzam_BPSK_test_04_simplest_packet_len_24")
+        self.settings = Qt.QSettings("GNU Radio", "Moazzam_BPSK_test_06_simplest_packet_len_24")
 
         try:
             geometry = self.settings.value("geometry")
@@ -70,10 +70,9 @@ class Moazzam_BPSK_test_04_simplest_packet_len_24(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
+        self.bw = bw = 20000000
         self.variable_constellation_1 = variable_constellation_1 = digital.constellation_bpsk().base()
         self.variable_constellation_1.set_npwr(1.0)
-        self.bw = bw = 20000000
-        self.variable_adaptive_algorithm_0 = variable_adaptive_algorithm_0 = digital.adaptive_algorithm_cma( variable_constellation_1, .0001, 2).base()
         self.taps = taps = [1.0, 0.25-0.25j, 0.50 + 0.10j, -0.3 + 0.2j]
         self.sps = sps = 4
         self.samp_rate = samp_rate = int(bw*3)
@@ -184,7 +183,7 @@ class Moazzam_BPSK_test_04_simplest_packet_len_24(gr.top_block, Qt.QWidget):
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("GNU Radio", "Moazzam_BPSK_test_04_simplest_packet_len_24")
+        self.settings = Qt.QSettings("GNU Radio", "Moazzam_BPSK_test_06_simplest_packet_len_24")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -198,13 +197,6 @@ class Moazzam_BPSK_test_04_simplest_packet_len_24(gr.top_block, Qt.QWidget):
         self.hdr_format = hdr_format
         self.digital_protocol_formatter_bb_0.set_header_format(self.hdr_format)
 
-    def get_variable_constellation_1(self):
-        return self.variable_constellation_1
-
-    def set_variable_constellation_1(self, variable_constellation_1):
-        self.variable_constellation_1 = variable_constellation_1
-        self.digital_constellation_decoder_cb_1_0.set_constellation(self.variable_constellation_1)
-
     def get_bw(self):
         return self.bw
 
@@ -213,11 +205,12 @@ class Moazzam_BPSK_test_04_simplest_packet_len_24(gr.top_block, Qt.QWidget):
         self.set_samp_rate(int(self.bw*3))
         self.iio_pluto_sink_0.set_bandwidth(self.bw)
 
-    def get_variable_adaptive_algorithm_0(self):
-        return self.variable_adaptive_algorithm_0
+    def get_variable_constellation_1(self):
+        return self.variable_constellation_1
 
-    def set_variable_adaptive_algorithm_0(self, variable_adaptive_algorithm_0):
-        self.variable_adaptive_algorithm_0 = variable_adaptive_algorithm_0
+    def set_variable_constellation_1(self, variable_constellation_1):
+        self.variable_constellation_1 = variable_constellation_1
+        self.digital_constellation_decoder_cb_1_0.set_constellation(self.variable_constellation_1)
 
     def get_taps(self):
         return self.taps
@@ -269,7 +262,7 @@ def argument_parser():
     return parser
 
 
-def main(top_block_cls=Moazzam_BPSK_test_04_simplest_packet_len_24, options=None):
+def main(top_block_cls=Moazzam_BPSK_test_06_simplest_packet_len_24, options=None):
     if options is None:
         options = argument_parser().parse_args()
 

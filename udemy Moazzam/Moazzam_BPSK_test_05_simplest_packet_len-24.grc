@@ -11,7 +11,7 @@ options:
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: Moazzam_BPSK_test_04_simplest_packet_len_24
+    id: Moazzam_BPSK_test_05_simplest_packet_len_24
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -22,7 +22,7 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: Moazzam BPSK test 04 simplest packet len 24
+    title: Moazzam BPSK test 05 simplest packet len 24
     window_size: ''
   states:
     bus_sink: false
@@ -117,23 +117,6 @@ blocks:
     coordinate: [536, 16.0]
     rotation: 0
     state: enabled
-- name: variable_adaptive_algorithm_0
-  id: variable_adaptive_algorithm
-  parameters:
-    comment: ''
-    cons: variable_constellation_1
-    delta: '10.0'
-    ffactor: '0.99'
-    modulus: '2'
-    step_size: '.0001'
-    type: cma
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [8, 704.0]
-    rotation: 0
-    state: enabled
 - name: variable_constellation_1
   id: variable_constellation
   parameters:
@@ -169,7 +152,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [8, 824.0]
+    coordinate: [976, 584.0]
     rotation: 180
     state: enabled
 - name: blocks_file_sink_0_0_0_0
@@ -187,7 +170,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [328, 336.0]
+    coordinate: [712, 584.0]
     rotation: 0
     state: disabled
 - name: blocks_file_source_0
@@ -212,24 +195,6 @@ blocks:
     coordinate: [8, 168.0]
     rotation: 0
     state: enabled
-- name: blocks_multiply_const_vxx_0
-  id: blocks_multiply_const_vxx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    const: '0.5'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: complex
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [920, 328.0]
-    rotation: 0
-    state: disabled
 - name: blocks_repack_bits_bb_0_0_0
   id: blocks_repack_bits_bb
   parameters:
@@ -247,8 +212,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [232, 832.0]
-    rotation: 180
+    coordinate: [976, 480.0]
+    rotation: 0
     state: enabled
 - name: blocks_stream_to_tagged_stream_0
   id: blocks_stream_to_tagged_stream
@@ -288,22 +253,6 @@ blocks:
     bus_structure: null
     coordinate: [608, 320.0]
     rotation: 0
-    state: enabled
-- name: blocks_unpack_k_bits_bb_0_0_0
-  id: blocks_unpack_k_bits_bb
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    k: '1'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [704.0, 584]
-    rotation: 270
     state: enabled
 - name: digital_constellation_decoder_cb_1_0
   id: digital_constellation_decoder_cb
@@ -359,8 +308,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [472, 760.0]
-    rotation: 180
+    coordinate: [712, 472.0]
+    rotation: 0
     state: enabled
 - name: digital_pfb_clock_sync_xxx_0
   id: digital_pfb_clock_sync_xxx
@@ -443,7 +392,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1088, 272.0]
+    coordinate: [1016, 216.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_source_0
@@ -739,19 +688,19 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1088, 184.0]
+    coordinate: [1016, 112.0]
     rotation: 0
     state: disabled
 
 connections:
 - [blocks_file_source_0, '0', blocks_stream_to_tagged_stream_0, '0']
 - [blocks_repack_bits_bb_0_0_0, '0', blocks_file_sink_0_0_0, '0']
-- [blocks_stream_to_tagged_stream_0, '0', blocks_file_sink_0_0_0_0, '0']
 - [blocks_stream_to_tagged_stream_0, '0', blocks_tagged_stream_mux_0, '1']
 - [blocks_stream_to_tagged_stream_0, '0', digital_protocol_formatter_bb_0, '0']
 - [blocks_tagged_stream_mux_0, '0', digital_constellation_modulator_0_0, '0']
-- [blocks_unpack_k_bits_bb_0_0_0, '0', digital_correlate_access_code_xx_ts_1, '0']
-- [digital_constellation_decoder_cb_1_0, '0', blocks_unpack_k_bits_bb_0_0_0, '0']
+- [digital_constellation_decoder_cb_1_0, '0', blocks_file_sink_0_0_0_0, '0']
+- [digital_constellation_decoder_cb_1_0, '0', digital_correlate_access_code_xx_ts_1,
+  '0']
 - [digital_constellation_modulator_0_0, '0', iio_pluto_sink_0, '0']
 - [digital_constellation_modulator_0_0, '0', qtgui_freq_sink_x_0, '0']
 - [digital_correlate_access_code_xx_ts_1, '0', blocks_repack_bits_bb_0_0_0, '0']
