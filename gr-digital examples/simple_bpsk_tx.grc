@@ -1,6 +1,7 @@
 options:
   parameters:
     author: ''
+    catch_exceptions: 'True'
     category: Custom
     cmake_opt: ''
     comment: ''
@@ -24,6 +25,9 @@ options:
     title: ''
     window_size: ''
   states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
     coordinate: [8, 8]
     rotation: 0
     state: enabled
@@ -36,7 +40,7 @@ blocks:
     gui_hint: 1,1,1,1
     label: Amplitude
     min_len: '200'
-    orient: Qt.Horizontal
+    orient: QtCore.Qt.Horizontal
     rangeType: float
     start: '0'
     step: '0.005'
@@ -44,7 +48,10 @@ blocks:
     value: '0.7'
     widget: counter_slider
   states:
-    coordinate: [136, 547]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [128, 768.0]
     rotation: 0
     state: enabled
 - name: eb
@@ -53,6 +60,9 @@ blocks:
     comment: ''
     value: '0.22'
   states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
     coordinate: [80, 75]
     rotation: 0
     state: enabled
@@ -63,7 +73,7 @@ blocks:
     gui_hint: 0,1,1,1
     label: Frequency
     min_len: '200'
-    orient: Qt.Horizontal
+    orient: QtCore.Qt.Horizontal
     rangeType: float
     start: 50e6
     step: 500e3
@@ -71,7 +81,10 @@ blocks:
     value: 483e6-300
     widget: counter_slider
   states:
-    coordinate: [136, 419]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [136, 632.0]
     rotation: 0
     state: enabled
 - name: gain
@@ -81,7 +94,7 @@ blocks:
     gui_hint: 1,0,1,1
     label: Gain
     min_len: '200'
-    orient: Qt.Horizontal
+    orient: QtCore.Qt.Horizontal
     rangeType: float
     start: '0'
     step: '1'
@@ -89,7 +102,10 @@ blocks:
     value: '56'
     widget: counter_slider
   states:
-    coordinate: [8, 547]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 768.0]
     rotation: 0
     state: enabled
 - name: pkt_len
@@ -98,6 +114,9 @@ blocks:
     comment: ''
     value: '1000'
   states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
     coordinate: [496, 11]
     rotation: 0
     state: enabled
@@ -110,8 +129,12 @@ blocks:
     ntaps: 15*sps
     samp_rate: sps
     sym_rate: '1.0'
+    value: ''
   states:
-    coordinate: [880, 396.0]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [288, 760.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -121,7 +144,7 @@ blocks:
     gui_hint: 0,0,1,1
     label: Sample Rate
     min_len: '200'
-    orient: Qt.Horizontal
+    orient: QtCore.Qt.Horizontal
     rangeType: float
     start: 200e3
     step: 200e3
@@ -129,7 +152,10 @@ blocks:
     value: 200e3
     widget: counter_slider
   states:
-    coordinate: [8, 419]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 632.0]
     rotation: 0
     state: enabled
 - name: sps
@@ -138,6 +164,9 @@ blocks:
     comment: ''
     value: '2'
   states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
     coordinate: [8, 75]
     rotation: 0
     state: enabled
@@ -150,7 +179,11 @@ blocks:
     ntaps: 15*sps
     samp_rate: sps
     sym_rate: '1.0'
+    value: ''
   states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
     coordinate: [184, 11]
     rotation: 0
     state: enabled
@@ -160,8 +193,13 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
+    en_uvec: 'True'
+    log_level: info
   states:
-    coordinate: [472, 112.0]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 160.0]
     rotation: 0
     state: enabled
 - name: blocks_message_strobe_0
@@ -175,7 +213,10 @@ blocks:
     msg: pmt.intern("TEST")
     period: '4000'
   states:
-    coordinate: [16, 163]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [64, 240.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_0
@@ -190,37 +231,10 @@ blocks:
     type: complex
     vlen: '1'
   states:
-    coordinate: [1072, 332.0]
-    rotation: 0
-    state: enabled
-- name: pdu_pdu_to_tagged_stream_0
-  id: pdu_pdu_to_tagged_stream
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    tag: packet_len
-    type: byte
-  states:
-    coordinate: [192, 244.0]
-    rotation: 180
-    state: enabled
-- name: pdu_random_pdu_0
-  id: pdu_random_pdu
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    length_modulo: '1'
-    mask: '0x0F'
-    maxoutbuf: '0'
-    maxsize: '6'
-    minoutbuf: '0'
-    minsize: '6'
-  states:
-    coordinate: [200, 147]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1056, 480.0]
     rotation: 0
     state: enabled
 - name: blocks_tag_debug_0
@@ -236,7 +250,10 @@ blocks:
     type: complex
     vlen: '1'
   states:
-    coordinate: [1328, 460.0]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [928, 712.0]
     rotation: 0
     state: disabled
 - name: blocks_tagged_stream_multiply_length_0
@@ -252,7 +269,10 @@ blocks:
     type: complex
     vlen: '1'
   states:
-    coordinate: [584, 320.0]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [592, 472.0]
     rotation: 0
     state: enabled
 - name: blocks_unpack_k_bits_bb_0
@@ -265,8 +285,11 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
-    coordinate: [72, 316.0]
-    rotation: 0
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [112, 368.0]
+    rotation: 180
     state: enabled
 - name: digital_chunks_to_symbols_xx_0
   id: digital_chunks_to_symbols_xx
@@ -282,7 +305,10 @@ blocks:
     out_type: complex
     symbol_table: '[-1,1]'
   states:
-    coordinate: [208, 320.0]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [176, 456.0]
     rotation: 0
     state: enabled
 - name: fir_filter_xxx_0
@@ -298,9 +324,38 @@ blocks:
     taps: rx_rrc_taps
     type: ccc
   states:
-    coordinate: [880, 324.0]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [864, 472.0]
     rotation: 0
     state: bypassed
+- name: iio_pluto_sink_0
+  id: iio_pluto_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    attenuation1: '10.0'
+    bandwidth: '20000000'
+    buffer_size: '32768'
+    comment: ''
+    cyclic: 'False'
+    filter: ''
+    filter_source: '''Auto'''
+    fpass: '0'
+    frequency: '820000000'
+    fstop: '0'
+    len_tag_key: ''
+    samplerate: int(samp_rate)
+    type: fc32
+    uri: ip:192.168.2.1
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1248, 224.0]
+    rotation: 0
+    state: enabled
 - name: interp_fir_filter_xxx_0
   id: interp_fir_filter_xxx
   parameters:
@@ -314,7 +369,46 @@ blocks:
     taps: tx_rrc_taps
     type: ccc
   states:
-    coordinate: [384, 308.0]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [352, 456.0]
+    rotation: 0
+    state: enabled
+- name: pdu_pdu_to_tagged_stream_0
+  id: pdu_pdu_to_tagged_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag: packet_len
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [304, 368.0]
+    rotation: 180
+    state: enabled
+- name: pdu_random_pdu_0
+  id: pdu_random_pdu
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    length_modulo: '1'
+    mask: '0x0F'
+    maxoutbuf: '0'
+    maxsize: '6'
+    minoutbuf: '0'
+    minsize: '6'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [312, 224.0]
     rotation: 0
     state: enabled
 - name: qtgui_const_sink_x_0
@@ -403,7 +497,10 @@ blocks:
     ymax: '2'
     ymin: '-2'
   states:
-    coordinate: [1328, 388.0]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1144, 632.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -458,6 +555,7 @@ blocks:
     minoutbuf: '0'
     name: '""'
     nconnections: '1'
+    norm_window: 'False'
     showports: 'True'
     tr_chan: '0'
     tr_level: '0.0'
@@ -480,7 +578,10 @@ blocks:
     ymax: '10'
     ymin: '-140'
   states:
-    coordinate: [1328, 316.0]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1248, 488.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_1
@@ -500,16 +601,16 @@ blocks:
     alpha9: '1.0'
     autoscale: 'False'
     axislabels: 'True'
-    color1: '"blue"'
-    color10: '"blue"'
-    color2: '"red"'
-    color3: '"green"'
-    color4: '"black"'
-    color5: '"cyan"'
-    color6: '"magenta"'
-    color7: '"yellow"'
-    color8: '"dark red"'
-    color9: '"dark green"'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
     comment: ''
     ctrlpanel: 'False'
     entags: 'True'
@@ -574,7 +675,10 @@ blocks:
     ymin: '-2'
     yunit: '""'
   states:
-    coordinate: [1328, 236.0]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1248, 400.0]
     rotation: 0
     state: enabled
 - name: tab0
@@ -605,6 +709,9 @@ blocks:
     label9: Tab 9
     num_tabs: '3'
   states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
     coordinate: [336, 11]
     rotation: 0
     state: enabled
@@ -677,7 +784,7 @@ blocks:
     bw7: '0'
     bw8: '0'
     bw9: '0'
-    center_freq0: uhd.tune_request(freq, samp_rate/2.0)
+    center_freq0: '820000000'
     center_freq1: '0'
     center_freq10: '0'
     center_freq11: '0'
@@ -753,6 +860,38 @@ blocks:
     gain7: '0'
     gain8: '0'
     gain9: '0'
+    gain_type0: default
+    gain_type1: default
+    gain_type10: default
+    gain_type11: default
+    gain_type12: default
+    gain_type13: default
+    gain_type14: default
+    gain_type15: default
+    gain_type16: default
+    gain_type17: default
+    gain_type18: default
+    gain_type19: default
+    gain_type2: default
+    gain_type20: default
+    gain_type21: default
+    gain_type22: default
+    gain_type23: default
+    gain_type24: default
+    gain_type25: default
+    gain_type26: default
+    gain_type27: default
+    gain_type28: default
+    gain_type29: default
+    gain_type3: default
+    gain_type30: default
+    gain_type31: default
+    gain_type4: default
+    gain_type5: default
+    gain_type6: default
+    gain_type7: default
+    gain_type8: default
+    gain_type9: default
     len_tag_name: packet_len
     lo_export0: 'False'
     lo_export1: 'False'
@@ -821,38 +960,6 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     nchan: '1'
-    norm_gain0: 'False'
-    norm_gain1: 'False'
-    norm_gain10: 'False'
-    norm_gain11: 'False'
-    norm_gain12: 'False'
-    norm_gain13: 'False'
-    norm_gain14: 'False'
-    norm_gain15: 'False'
-    norm_gain16: 'False'
-    norm_gain17: 'False'
-    norm_gain18: 'False'
-    norm_gain19: 'False'
-    norm_gain2: 'False'
-    norm_gain20: 'False'
-    norm_gain21: 'False'
-    norm_gain22: 'False'
-    norm_gain23: 'False'
-    norm_gain24: 'False'
-    norm_gain25: 'False'
-    norm_gain26: 'False'
-    norm_gain27: 'False'
-    norm_gain28: 'False'
-    norm_gain29: 'False'
-    norm_gain3: 'False'
-    norm_gain30: 'False'
-    norm_gain31: 'False'
-    norm_gain4: 'False'
-    norm_gain5: 'False'
-    norm_gain6: 'False'
-    norm_gain7: 'False'
-    norm_gain8: 'False'
-    norm_gain9: 'False'
     num_mboards: '1'
     otw: ''
     samp_rate: samp_rate
@@ -865,6 +972,7 @@ blocks:
     sd_spec6: ''
     sd_spec7: ''
     show_lo_controls: 'False'
+    start_time: '-1.0'
     stream_args: ''
     stream_chans: '[]'
     sync: sync
@@ -878,25 +986,29 @@ blocks:
     time_source7: ''
     type: fc32
   states:
-    coordinate: [1248, 28.0]
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [992, 48.0]
     rotation: 0
     state: disabled
 
 connections:
 - [blocks_message_strobe_0, strobe, pdu_random_pdu_0, generate]
 - [blocks_multiply_const_vxx_0, '0', blocks_tag_debug_0, '0']
+- [blocks_multiply_const_vxx_0, '0', iio_pluto_sink_0, '0']
 - [blocks_multiply_const_vxx_0, '0', qtgui_const_sink_x_0, '0']
 - [blocks_multiply_const_vxx_0, '0', qtgui_freq_sink_x_0, '0']
 - [blocks_multiply_const_vxx_0, '0', qtgui_time_sink_x_1, '0']
-- [blocks_multiply_const_vxx_0, '0', uhd_usrp_sink_0, '0']
-- [pdu_pdu_to_tagged_stream_0, '0', blocks_unpack_k_bits_bb_0, '0']
-- [pdu_random_pdu_0, pdus, blocks_message_debug_0, print_pdu]
-- [pdu_random_pdu_0, pdus, pdu_pdu_to_tagged_stream_0, pdus]
 - [blocks_tagged_stream_multiply_length_0, '0', fir_filter_xxx_0, '0']
 - [blocks_unpack_k_bits_bb_0, '0', digital_chunks_to_symbols_xx_0, '0']
 - [digital_chunks_to_symbols_xx_0, '0', interp_fir_filter_xxx_0, '0']
 - [fir_filter_xxx_0, '0', blocks_multiply_const_vxx_0, '0']
 - [interp_fir_filter_xxx_0, '0', blocks_tagged_stream_multiply_length_0, '0']
+- [pdu_pdu_to_tagged_stream_0, '0', blocks_unpack_k_bits_bb_0, '0']
+- [pdu_random_pdu_0, pdus, blocks_message_debug_0, print_pdu]
+- [pdu_random_pdu_0, pdus, pdu_pdu_to_tagged_stream_0, pdus]
 
 metadata:
   file_format: 1
+  grc_version: 3.10.10.0
