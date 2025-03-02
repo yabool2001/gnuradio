@@ -207,7 +207,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [592, 760.0]
+    coordinate: [488, 864.0]
     rotation: 0
     state: enabled
 - name: blocks_message_strobe_0
@@ -456,25 +456,6 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [8, 460.0]
-    rotation: 0
-    state: enabled
-- name: pdu_random_pdu_0
-  id: pdu_random_pdu
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    length_modulo: '2'
-    mask: '0xFF'
-    maxoutbuf: '0'
-    maxsize: '26'
-    minoutbuf: '0'
-    minsize: '24'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [328, 824.0]
     rotation: 0
     state: enabled
 - name: qtgui_const_sink_x_0
@@ -745,7 +726,7 @@ blocks:
 
 connections:
 - [blocks_file_source_0, '0', blocks_stream_to_tagged_stream_0, '0']
-- [blocks_message_strobe_0, strobe, pdu_random_pdu_0, generate]
+- [blocks_message_strobe_0, strobe, blocks_message_debug_0, print]
 - [blocks_repack_bits_bb_0_0_0, '0', blocks_file_sink_0_0_0, '0']
 - [blocks_stream_to_tagged_stream_0, '0', blocks_tagged_stream_mux_0, '1']
 - [blocks_stream_to_tagged_stream_0, '0', digital_protocol_formatter_bb_0, '0']
@@ -761,7 +742,6 @@ connections:
 - [digital_pfb_clock_sync_xxx_0, '0', qtgui_const_sink_x_1, '0']
 - [digital_protocol_formatter_bb_0, '0', blocks_tagged_stream_mux_0, '0']
 - [iio_pluto_source_0, '0', digital_pfb_clock_sync_xxx_0, '0']
-- [pdu_random_pdu_0, pdus, blocks_message_debug_0, print_pdu]
 
 metadata:
   file_format: 1

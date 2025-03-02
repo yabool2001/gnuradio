@@ -199,7 +199,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [608, 160.0]
+    coordinate: [592, 176.0]
     rotation: 0
     state: enabled
 - name: blocks_message_strobe_0
@@ -216,7 +216,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [64, 240.0]
+    coordinate: [56, 256.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_0
@@ -234,7 +234,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1056, 480.0]
+    coordinate: [904, 480.0]
     rotation: 0
     state: enabled
 - name: blocks_tag_debug_0
@@ -253,7 +253,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [928, 712.0]
+    coordinate: [1096, 664.0]
     rotation: 0
     state: disabled
 - name: blocks_tagged_stream_multiply_length_0
@@ -272,7 +272,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [592, 472.0]
+    coordinate: [560, 472.0]
     rotation: 0
     state: enabled
 - name: blocks_unpack_k_bits_bb_0
@@ -288,7 +288,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [112, 368.0]
+    coordinate: [72, 368.0]
     rotation: 180
     state: enabled
 - name: digital_chunks_to_symbols_xx_0
@@ -308,7 +308,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [176, 456.0]
+    coordinate: [144, 456.0]
     rotation: 0
     state: enabled
 - name: fir_filter_xxx_0
@@ -327,7 +327,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [864, 472.0]
+    coordinate: [808, 328.0]
     rotation: 0
     state: bypassed
 - name: iio_pluto_sink_0
@@ -343,7 +343,7 @@ blocks:
     filter: ''
     filter_source: '''Auto'''
     fpass: '0'
-    frequency: '820000000'
+    frequency: int(freq)
     fstop: '0'
     len_tag_key: ''
     samplerate: int(samp_rate)
@@ -353,7 +353,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1248, 224.0]
+    coordinate: [1096, 232.0]
     rotation: 0
     state: enabled
 - name: interp_fir_filter_xxx_0
@@ -372,7 +372,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [352, 456.0]
+    coordinate: [328, 456.0]
     rotation: 0
     state: enabled
 - name: pdu_pdu_to_tagged_stream_0
@@ -408,7 +408,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [312, 224.0]
+    coordinate: [296, 240.0]
     rotation: 0
     state: enabled
 - name: qtgui_const_sink_x_0
@@ -500,7 +500,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1144, 632.0]
+    coordinate: [1096, 592.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -521,7 +521,7 @@ blocks:
     autoscale: 'False'
     average: '1.0'
     axislabels: 'True'
-    bw: '1'
+    bw: '20000000'
     color1: '"blue"'
     color10: '"dark blue"'
     color2: '"red"'
@@ -534,7 +534,7 @@ blocks:
     color9: '"dark green"'
     comment: ''
     ctrlpanel: 'False'
-    fc: '0'
+    fc: freq
     fftsize: '1024'
     freqhalf: 'True'
     grid: 'False'
@@ -581,7 +581,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1248, 488.0]
+    coordinate: [1096, 488.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_1
@@ -599,7 +599,7 @@ blocks:
     alpha7: '1.0'
     alpha8: '1.0'
     alpha9: '1.0'
-    autoscale: 'False'
+    autoscale: 'True'
     axislabels: 'True'
     color1: blue
     color10: dark blue
@@ -640,7 +640,7 @@ blocks:
     name: '""'
     nconnections: '1'
     size: '600'
-    srate: '1'
+    srate: samp_rate
     stemplot: 'False'
     style1: '1'
     style10: '1'
@@ -678,7 +678,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1248, 400.0]
+    coordinate: [1096, 400.0]
     rotation: 0
     state: enabled
 - name: tab0
