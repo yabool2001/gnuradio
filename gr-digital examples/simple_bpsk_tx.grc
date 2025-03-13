@@ -51,7 +51,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [128, 768.0]
+    coordinate: [240, 1044.0]
     rotation: 0
     state: enabled
 - name: eb
@@ -84,7 +84,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [136, 632.0]
+    coordinate: [456, 1052.0]
     rotation: 0
     state: enabled
 - name: gain
@@ -105,7 +105,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [16, 768.0]
+    coordinate: [48, 1052.0]
     rotation: 0
     state: enabled
 - name: pkt_len
@@ -134,7 +134,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [288, 760.0]
+    coordinate: [672, 1052.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -155,7 +155,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [16, 632.0]
+    coordinate: [912, 1060.0]
     rotation: 0
     state: enabled
 - name: sps
@@ -199,7 +199,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [592, 176.0]
+    coordinate: [968, 132.0]
     rotation: 0
     state: enabled
 - name: blocks_message_strobe_0
@@ -216,7 +216,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [56, 256.0]
+    coordinate: [104, 268.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_0
@@ -234,7 +234,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [904, 480.0]
+    coordinate: [1288, 368.0]
     rotation: 0
     state: enabled
 - name: blocks_tag_debug_0
@@ -253,7 +253,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1096, 664.0]
+    coordinate: [1360, 848.0]
     rotation: 0
     state: disabled
 - name: blocks_tagged_stream_multiply_length_0
@@ -272,7 +272,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [560, 472.0]
+    coordinate: [944, 660.0]
     rotation: 0
     state: enabled
 - name: blocks_unpack_k_bits_bb_0
@@ -288,7 +288,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [72, 368.0]
+    coordinate: [200, 456.0]
     rotation: 180
     state: enabled
 - name: digital_chunks_to_symbols_xx_0
@@ -308,7 +308,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [144, 456.0]
+    coordinate: [216, 644.0]
     rotation: 0
     state: enabled
 - name: fir_filter_xxx_0
@@ -327,7 +327,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [808, 328.0]
+    coordinate: [1056, 476.0]
     rotation: 0
     state: bypassed
 - name: iio_pluto_sink_0
@@ -353,7 +353,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1096, 232.0]
+    coordinate: [1776, 80.0]
     rotation: 0
     state: enabled
 - name: interp_fir_filter_xxx_0
@@ -372,7 +372,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [328, 456.0]
+    coordinate: [528, 644.0]
     rotation: 0
     state: enabled
 - name: pdu_pdu_to_tagged_stream_0
@@ -389,7 +389,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [304, 368.0]
+    coordinate: [488, 456.0]
     rotation: 180
     state: enabled
 - name: pdu_random_pdu_0
@@ -408,7 +408,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [296, 240.0]
+    coordinate: [496, 244.0]
     rotation: 0
     state: enabled
 - name: qtgui_const_sink_x_0
@@ -500,7 +500,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1096, 592.0]
+    coordinate: [1800, 764.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -581,7 +581,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1096, 488.0]
+    coordinate: [1792, 552.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_1
@@ -678,7 +678,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1096, 400.0]
+    coordinate: [1784, 376.0]
     rotation: 0
     state: enabled
 - name: tab0
@@ -989,7 +989,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [992, 48.0]
+    coordinate: [1224, 1048.0]
     rotation: 0
     state: disabled
 
