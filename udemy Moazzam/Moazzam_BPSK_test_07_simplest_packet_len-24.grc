@@ -283,7 +283,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [608, 320.0]
+    coordinate: [608, 328.0]
     rotation: 0
     state: enabled
 - name: digital_constellation_decoder_cb_1_0
@@ -745,4 +745,4 @@ connections:
 
 metadata:
   file_format: 1
-  grc_version: 3.10.10.0
+  grc_version: 3.10.12.0

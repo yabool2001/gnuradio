@@ -6,7 +6,7 @@
 #
 # GNU Radio Python Flow Graph
 # Title: Simple Bpsk Tx
-# GNU Radio version: 3.10.10.0
+# GNU Radio version: 3.10.12.0
 
 from PyQt5 import Qt
 from gnuradio import qtgui
@@ -29,6 +29,7 @@ from gnuradio import gr, pdu
 from gnuradio import iio
 from gnuradio import pdu
 import sip
+import threading
 
 
 
@@ -55,7 +56,7 @@ class simple_bpsk_tx(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("GNU Radio", "simple_bpsk_tx")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "simple_bpsk_tx")
 
         try:
             geometry = self.settings.value("geometry")
@@ -63,6 +64,7 @@ class simple_bpsk_tx(gr.top_block, Qt.QWidget):
                 self.restoreGeometry(geometry)
         except BaseException as exc:
             print(f"Qt GUI: Could not restore geometry: {str(exc)}", file=sys.stderr)
+        self.flowgraph_started = threading.Event()
 
         ##################################################
         # Variables
@@ -304,7 +306,7 @@ class simple_bpsk_tx(gr.top_block, Qt.QWidget):
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("GNU Radio", "simple_bpsk_tx")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "simple_bpsk_tx")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -387,6 +389,7 @@ def main(top_block_cls=simple_bpsk_tx, options=None):
     tb = top_block_cls()
 
     tb.start()
+    tb.flowgraph_started.set()
 
     tb.show()
 
