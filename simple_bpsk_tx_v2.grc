@@ -199,7 +199,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [744, 128.0]
+    coordinate: [328, 168.0]
     rotation: 0
     state: enabled
 - name: blocks_message_strobe_0
@@ -210,13 +210,13 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    msg: pmt.intern("TEST")
+    msg: pmt.intern("test")
     period: '4000'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [64, 208.0]
+    coordinate: [72, 184.0]
     rotation: 0
     state: enabled
 - name: blocks_multiply_const_vxx_0
@@ -234,7 +234,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1288, 368.0]
+    coordinate: [208, 808.0]
     rotation: 0
     state: enabled
 - name: blocks_tag_debug_0
@@ -253,7 +253,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1360, 848.0]
+    coordinate: [424, 848.0]
     rotation: 0
     state: disabled
 - name: blocks_tagged_stream_multiply_length_0
@@ -272,8 +272,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [720, 680.0]
-    rotation: 0
+    coordinate: [80, 480.0]
+    rotation: 180
     state: enabled
 - name: blocks_unpack_k_bits_bb_0
   id: blocks_unpack_k_bits_bb
@@ -288,8 +288,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [72, 408.0]
-    rotation: 180
+    coordinate: [384, 344.0]
+    rotation: 0
     state: enabled
 - name: digital_chunks_to_symbols_xx_0
   id: digital_chunks_to_symbols_xx
@@ -308,7 +308,39 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [144, 664.0]
+    coordinate: [632, 320.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_0
+  id: epy_block
+  parameters:
+    _source_code: "import numpy as np\nfrom gnuradio import gr\nimport pmt\n\nclass\
+      \ pmt_to_stream(gr.sync_block):\n    def __init__(self):\n        gr.sync_block.__init__(self,\n\
+      \            name=\"pmt_to_stream\",\n            in_sig=None,\n           \
+      \ out_sig=[np.byte])  # Wyj\u015Bcie jako strumie\u0144 bajt\xF3w\n        self.message_port_register_in(pmt.intern(\"\
+      in\"))\n        self.set_msg_handler(pmt.intern(\"in\"), self.handle_msg)\n\n\
+      \    def handle_msg(self, msg):\n        # Przekszta\u0142\u0107 wiadomo\u015B\
+      \u0107 (PMT) na bajty\n        self.message = pmt.to_python(msg)\n        if\
+      \ isinstance(self.message, str):\n            self.message = bytearray(self.message,\
+      \ 'utf-8')\n        elif isinstance(self.message, bytes):\n            self.message\
+      \ = bytearray(self.message)\n        else:\n            self.message = bytearray()\n\
+      \n    def work(self, input_items, output_items):\n        if hasattr(self, 'message')\
+      \ and self.message:\n            # Skopiuj dane do wyj\u015Bcia\n          \
+      \  output_items[0][:len(self.message)] = self.message\n            self.message\
+      \ = bytearray()  # Wyczy\u015B\u0107 wiadomo\u015B\u0107 po wys\u0142aniu\n\
+      \            return len(output_items[0])\n        return 0"
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('pmt_to_stream', 'pmt_to_stream', [], [('in', 'message', 1)], [('0',
+      'byte', 1)], '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [200, 352.0]
     rotation: 0
     state: enabled
 - name: fir_filter_xxx_0
@@ -327,7 +359,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [808, 504.0]
+    coordinate: [128, 672.0]
     rotation: 0
     state: bypassed
 - name: iio_pluto_sink_0
@@ -353,7 +385,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1776, 80.0]
+    coordinate: [792, 440.0]
     rotation: 0
     state: enabled
 - name: interp_fir_filter_xxx_0
@@ -372,44 +404,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [360, 664.0]
-    rotation: 0
-    state: enabled
-- name: pdu_pdu_to_tagged_stream_0
-  id: pdu_pdu_to_tagged_stream
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    tag: packet_len
-    type: byte
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [392, 416.0]
+    coordinate: [432, 464.0]
     rotation: 180
-    state: enabled
-- name: pdu_random_pdu_0
-  id: pdu_random_pdu
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    length_modulo: '1'
-    mask: '0x0F'
-    maxoutbuf: '0'
-    maxsize: '6'
-    minoutbuf: '0'
-    minsize: '6'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [336, 192.0]
-    rotation: 0
     state: enabled
 - name: qtgui_const_sink_x_0
   id: qtgui_const_sink_x
@@ -500,7 +496,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1800, 764.0]
+    coordinate: [592, 792.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -581,7 +577,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1792, 552.0]
+    coordinate: [792, 720.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_1
@@ -678,7 +674,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1784, 376.0]
+    coordinate: [800, 624.0]
     rotation: 0
     state: enabled
 - name: tab0
@@ -994,7 +990,8 @@ blocks:
     state: disabled
 
 connections:
-- [blocks_message_strobe_0, strobe, pdu_random_pdu_0, generate]
+- [blocks_message_strobe_0, strobe, blocks_message_debug_0, print]
+- [blocks_message_strobe_0, strobe, epy_block_0, in]
 - [blocks_multiply_const_vxx_0, '0', blocks_tag_debug_0, '0']
 - [blocks_multiply_const_vxx_0, '0', iio_pluto_sink_0, '0']
 - [blocks_multiply_const_vxx_0, '0', qtgui_const_sink_x_0, '0']
@@ -1003,11 +1000,9 @@ connections:
 - [blocks_tagged_stream_multiply_length_0, '0', fir_filter_xxx_0, '0']
 - [blocks_unpack_k_bits_bb_0, '0', digital_chunks_to_symbols_xx_0, '0']
 - [digital_chunks_to_symbols_xx_0, '0', interp_fir_filter_xxx_0, '0']
+- [epy_block_0, '0', blocks_unpack_k_bits_bb_0, '0']
 - [fir_filter_xxx_0, '0', blocks_multiply_const_vxx_0, '0']
 - [interp_fir_filter_xxx_0, '0', blocks_tagged_stream_multiply_length_0, '0']
-- [pdu_pdu_to_tagged_stream_0, '0', blocks_unpack_k_bits_bb_0, '0']
-- [pdu_random_pdu_0, pdus, blocks_message_debug_0, print]
-- [pdu_random_pdu_0, pdus, pdu_pdu_to_tagged_stream_0, pdus]
 
 metadata:
   file_format: 1
