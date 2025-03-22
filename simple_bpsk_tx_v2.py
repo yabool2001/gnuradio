@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: Simple Bpsk Tx
+# Title: Simple Bpsk Tx V2
 # GNU Radio version: 3.10.12.0
 
 from PyQt5 import Qt
@@ -26,18 +26,18 @@ from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import iio
-import simple_bpsk_tx_epy_block_0 as epy_block_0  # embedded python block
+import simple_bpsk_tx_v2_epy_block_0 as epy_block_0  # embedded python block
 import sip
 import threading
 
 
 
-class simple_bpsk_tx(gr.top_block, Qt.QWidget):
+class simple_bpsk_tx_v2(gr.top_block, Qt.QWidget):
 
     def __init__(self):
-        gr.top_block.__init__(self, "Simple Bpsk Tx", catch_exceptions=True)
+        gr.top_block.__init__(self, "Simple Bpsk Tx V2", catch_exceptions=True)
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("Simple Bpsk Tx")
+        self.setWindowTitle("Simple Bpsk Tx V2")
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
@@ -55,7 +55,7 @@ class simple_bpsk_tx(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "simple_bpsk_tx")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "simple_bpsk_tx_v2")
 
         try:
             geometry = self.settings.value("geometry")
@@ -303,7 +303,7 @@ class simple_bpsk_tx(gr.top_block, Qt.QWidget):
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "simple_bpsk_tx")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "simple_bpsk_tx_v2")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -379,7 +379,7 @@ class simple_bpsk_tx(gr.top_block, Qt.QWidget):
 
 
 
-def main(top_block_cls=simple_bpsk_tx, options=None):
+def main(top_block_cls=simple_bpsk_tx_v2, options=None):
 
     qapp = Qt.QApplication(sys.argv)
 
