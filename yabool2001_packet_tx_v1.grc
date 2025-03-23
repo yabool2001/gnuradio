@@ -101,7 +101,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [336, 224.0]
+    coordinate: [344, 500.0]
     rotation: 0
     state: enabled
 - name: blocks_message_strobe_0
@@ -118,23 +118,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [64, 168.0]
-    rotation: 0
-    state: enabled
-- name: blocks_unpack_k_bits_bb_0
-  id: blocks_unpack_k_bits_bb
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    k: '8'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [456, 152.0]
+    coordinate: [64, 308.0]
     rotation: 0
     state: enabled
 - name: digital_constellation_modulator_0
@@ -156,7 +140,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [608, 128.0]
+    coordinate: [672, 276.0]
     rotation: 0
     state: enabled
 - name: epy_block_0
@@ -188,7 +172,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [296, 160.0]
+    coordinate: [408, 340.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_sink_0
@@ -214,9 +198,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [840, 96.0]
+    coordinate: [1152, 152.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_time_sink_x_1
   id: qtgui_time_sink_x
   parameters:
@@ -311,17 +295,16 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [840, 272.0]
+    coordinate: [1176, 464.0]
     rotation: 0
     state: enabled
 
 connections:
 - [blocks_message_strobe_0, strobe, blocks_message_debug_0, print]
 - [blocks_message_strobe_0, strobe, epy_block_0, in]
-- [blocks_unpack_k_bits_bb_0, '0', digital_constellation_modulator_0, '0']
 - [digital_constellation_modulator_0, '0', iio_pluto_sink_0, '0']
 - [digital_constellation_modulator_0, '0', qtgui_time_sink_x_1, '0']
-- [epy_block_0, '0', blocks_unpack_k_bits_bb_0, '0']
+- [epy_block_0, '0', digital_constellation_modulator_0, '0']
 
 metadata:
   file_format: 1

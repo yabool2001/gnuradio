@@ -26,7 +26,6 @@ from PyQt5 import Qt
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
-from gnuradio import iio
 import sip
 import threading
 import yabool2001_packet_tx_v1_epy_block_0 as epy_block_0  # embedded python block
@@ -131,13 +130,6 @@ class yabool2001_packet_tx_v1(gr.top_block, Qt.QWidget):
 
         self._qtgui_time_sink_x_1_win = sip.wrapinstance(self.qtgui_time_sink_x_1.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_time_sink_x_1_win)
-        self.iio_pluto_sink_0 = iio.fmcomms2_sink_fc32('ip:192.168.2.1' if 'ip:192.168.2.1' else iio.get_pluto_uri(), [True, True], 32768, False)
-        self.iio_pluto_sink_0.set_len_tag_key('')
-        self.iio_pluto_sink_0.set_bandwidth(20000000)
-        self.iio_pluto_sink_0.set_frequency(int(freq))
-        self.iio_pluto_sink_0.set_samplerate(int(samp_rate))
-        self.iio_pluto_sink_0.set_attenuation(0, 10.0)
-        self.iio_pluto_sink_0.set_filter_params('Auto', '', 0, 0)
         self.epy_block_0 = epy_block_0.pmt_to_stream()
         self.digital_constellation_modulator_0 = digital.generic_mod(
             constellation=my_constellation,
@@ -148,7 +140,6 @@ class yabool2001_packet_tx_v1(gr.top_block, Qt.QWidget):
             verbose=False,
             log=False,
             truncate=False)
-        self.blocks_unpack_k_bits_bb_0 = blocks.unpack_k_bits_bb(8)
         self.blocks_message_strobe_0 = blocks.message_strobe(pmt.intern("0101"), 2000)
         self.blocks_message_debug_0 = blocks.message_debug(True, gr.log_levels.info)
 
@@ -158,10 +149,8 @@ class yabool2001_packet_tx_v1(gr.top_block, Qt.QWidget):
         ##################################################
         self.msg_connect((self.blocks_message_strobe_0, 'strobe'), (self.blocks_message_debug_0, 'print'))
         self.msg_connect((self.blocks_message_strobe_0, 'strobe'), (self.epy_block_0, 'in'))
-        self.connect((self.blocks_unpack_k_bits_bb_0, 0), (self.digital_constellation_modulator_0, 0))
-        self.connect((self.digital_constellation_modulator_0, 0), (self.iio_pluto_sink_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.qtgui_time_sink_x_1, 0))
-        self.connect((self.epy_block_0, 0), (self.blocks_unpack_k_bits_bb_0, 0))
+        self.connect((self.epy_block_0, 0), (self.digital_constellation_modulator_0, 0))
 
 
     def closeEvent(self, event):
@@ -183,7 +172,6 @@ class yabool2001_packet_tx_v1(gr.top_block, Qt.QWidget):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
-        self.iio_pluto_sink_0.set_samplerate(int(self.samp_rate))
         self.qtgui_time_sink_x_1.set_samp_rate(self.samp_rate)
 
     def get_my_constellation(self):
@@ -197,7 +185,6 @@ class yabool2001_packet_tx_v1(gr.top_block, Qt.QWidget):
 
     def set_freq(self, freq):
         self.freq = freq
-        self.iio_pluto_sink_0.set_frequency(int(self.freq))
 
 
 
