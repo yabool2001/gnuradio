@@ -63,9 +63,21 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [80, 75]
+    coordinate: [240, 8.0]
     rotation: 0
     state: enabled
+- name: freq
+  id: variable
+  parameters:
+    comment: ''
+    value: '820000000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [776, 16.0]
+    rotation: 0
+    state: disabled
 - name: freq
   id: variable_qtgui_range
   parameters:
@@ -187,24 +199,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [8, 75]
-    rotation: 0
-    state: enabled
-- name: tx_rrc_taps
-  id: variable_rrc_filter_taps
-  parameters:
-    alpha: eb
-    comment: ''
-    gain: sps
-    ntaps: 15*sps
-    samp_rate: sps
-    sym_rate: '1.0'
-    value: ''
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [184, 11]
+    coordinate: [168, 8.0]
     rotation: 0
     state: enabled
 - name: blocks_message_debug_0
@@ -267,7 +262,7 @@ blocks:
     log: 'False'
     maxoutbuf: '0'
     minoutbuf: '0'
-    samples_per_symbol: '4'
+    samples_per_symbol: sps*2
     truncate: 'False'
     verbose: 'False'
   states:
@@ -364,7 +359,7 @@ blocks:
     color9: '"red"'
     comment: ''
     grid: 'False'
-    gui_hint: tab0@2
+    gui_hint: ''
     label1: ''
     label10: ''
     label2: ''
@@ -426,7 +421,7 @@ blocks:
     bus_structure: null
     coordinate: [680, 568.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_freq_sink_x_0
   id: qtgui_freq_sink_x
   parameters:
@@ -462,7 +457,7 @@ blocks:
     fftsize: '256'
     freqhalf: 'True'
     grid: 'False'
-    gui_hint: tab0@1
+    gui_hint: ''
     label: Relative Gain
     label1: ''
     label10: ''
@@ -507,7 +502,7 @@ blocks:
     bus_structure: null
     coordinate: [680, 440.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_time_sink_x_1
   id: qtgui_time_sink_x
   parameters:
@@ -539,7 +534,7 @@ blocks:
     ctrlpanel: 'False'
     entags: 'True'
     grid: 'False'
-    gui_hint: tab0@0
+    gui_hint: ''
     label1: ''
     label10: ''
     label2: ''
@@ -603,40 +598,6 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [680, 336.0]
-    rotation: 0
-    state: enabled
-- name: tab0
-  id: qtgui_tab_widget
-  parameters:
-    alias: ''
-    comment: ''
-    gui_hint: 2,0,1,2
-    label0: Time
-    label1: Freq.
-    label10: Tab 10
-    label11: Tab 11
-    label12: Tab 12
-    label13: Tab 13
-    label14: Tab 14
-    label15: Tab 15
-    label16: Tab 16
-    label17: Tab 17
-    label18: Tab 18
-    label19: Tab 19
-    label2: Const.
-    label3: Tab 3
-    label4: Tab 4
-    label5: Tab 5
-    label6: Tab 6
-    label7: Tab 7
-    label8: Tab 8
-    label9: Tab 9
-    num_tabs: '3'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [336, 11]
     rotation: 0
     state: enabled
 - name: uhd_usrp_sink_0
