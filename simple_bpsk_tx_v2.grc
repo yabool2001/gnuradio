@@ -108,6 +108,26 @@ blocks:
     coordinate: [48, 1052.0]
     rotation: 0
     state: enabled
+- name: my_constellation
+  id: variable_constellation
+  parameters:
+    comment: ''
+    const_points: '[1, -1]'
+    dims: '1'
+    normalization: digital.constellation.AMPLITUDE_NORMALIZATION
+    npwr: '1.0'
+    precision: '8'
+    rot_sym: '4'
+    soft_dec_lut: None
+    sym_map: '[0,1]'
+    type: bpsk
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 16.0]
+    rotation: 0
+    state: enabled
 - name: pkt_len
   id: variable
   parameters:
@@ -210,70 +230,14 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    msg: pmt.intern("test")
+    msg: pmt.intern("0101")
     period: '4000'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [72, 184.0]
+    coordinate: [64, 184.0]
     rotation: 0
-    state: enabled
-- name: blocks_multiply_const_vxx_0
-  id: blocks_multiply_const_vxx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    const: amp
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: complex
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [208, 808.0]
-    rotation: 0
-    state: enabled
-- name: blocks_tag_debug_0
-  id: blocks_tag_debug
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    display: 'True'
-    filter: packet_len
-    name: ''
-    num_inputs: '1'
-    type: complex
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [424, 848.0]
-    rotation: 0
-    state: disabled
-- name: blocks_tagged_stream_multiply_length_0
-  id: blocks_tagged_stream_multiply_length
-  parameters:
-    affinity: ''
-    alias: ''
-    c: sps*8
-    comment: ''
-    lengthtagname: packet_len
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    type: complex
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [80, 480.0]
-    rotation: 180
     state: enabled
 - name: blocks_unpack_k_bits_bb_0
   id: blocks_unpack_k_bits_bb
@@ -288,27 +252,29 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [384, 344.0]
+    coordinate: [240, 360.0]
     rotation: 0
     state: enabled
-- name: digital_chunks_to_symbols_xx_0
-  id: digital_chunks_to_symbols_xx
+- name: digital_constellation_modulator_0
+  id: digital_constellation_modulator
   parameters:
     affinity: ''
     alias: ''
     comment: ''
-    dimension: '1'
-    in_type: byte
+    constellation: my_constellation
+    differential: 'False'
+    excess_bw: '0.35'
+    log: 'False'
     maxoutbuf: '0'
     minoutbuf: '0'
-    num_ports: '1'
-    out_type: complex
-    symbol_table: '[-1,1]'
+    samples_per_symbol: '4'
+    truncate: 'False'
+    verbose: 'False'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [632, 320.0]
+    coordinate: [400, 336.0]
     rotation: 0
     state: enabled
 - name: epy_block_0
@@ -316,8 +282,8 @@ blocks:
   parameters:
     _source_code: "import numpy as np\nfrom gnuradio import gr\nimport pmt\n\nclass\
       \ pmt_to_stream(gr.sync_block):\n    def __init__(self):\n        gr.sync_block.__init__(self,\n\
-      \            name=\"pmt_to_stream\",\n            in_sig=None,\n           \
-      \ out_sig=[np.byte])  # Wyj\u015Bcie jako strumie\u0144 bajt\xF3w\n        self.message_port_register_in(pmt.intern(\"\
+      \            name=\"PMT 2 STREAM\",\n            in_sig=None,\n            out_sig=[np.byte])\
+      \  # Wyj\u015Bcie jako strumie\u0144 bajt\xF3w\n        self.message_port_register_in(pmt.intern(\"\
       in\"))\n        self.set_msg_handler(pmt.intern(\"in\"), self.handle_msg)\n\n\
       \    def handle_msg(self, msg):\n        # Przekszta\u0142\u0107 wiadomo\u015B\
       \u0107 (PMT) na bajty\n        self.message = pmt.to_python(msg)\n        if\
@@ -335,33 +301,14 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
-    _io_cache: ('pmt_to_stream', 'pmt_to_stream', [], [('in', 'message', 1)], [('0',
+    _io_cache: ('PMT 2 STREAM', 'pmt_to_stream', [], [('in', 'message', 1)], [('0',
       'byte', 1)], '', [])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [200, 352.0]
+    coordinate: [80, 368.0]
     rotation: 0
     state: enabled
-- name: fir_filter_xxx_0
-  id: fir_filter_xxx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    decim: '1'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    samp_delay: 1 + (len(rx_rrc_taps)-1)/2
-    taps: rx_rrc_taps
-    type: ccc
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [128, 672.0]
-    rotation: 0
-    state: bypassed
 - name: iio_pluto_sink_0
   id: iio_pluto_sink
   parameters:
@@ -385,27 +332,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [792, 440.0]
+    coordinate: [680, 152.0]
     rotation: 0
-    state: enabled
-- name: interp_fir_filter_xxx_0
-  id: interp_fir_filter_xxx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    interp: sps
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    samp_delay: (len(tx_rrc_taps)-1)//(2*sps)
-    taps: tx_rrc_taps
-    type: ccc
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [432, 464.0]
-    rotation: 180
     state: enabled
 - name: qtgui_const_sink_x_0
   id: qtgui_const_sink_x
@@ -496,9 +424,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [592, 792.0]
+    coordinate: [680, 568.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_freq_sink_x_0
   id: qtgui_freq_sink_x
   parameters:
@@ -577,9 +505,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [792, 720.0]
+    coordinate: [680, 440.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_time_sink_x_1
   id: qtgui_time_sink_x
   parameters:
@@ -674,7 +602,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [800, 624.0]
+    coordinate: [680, 336.0]
     rotation: 0
     state: enabled
 - name: tab0
@@ -992,17 +920,12 @@ blocks:
 connections:
 - [blocks_message_strobe_0, strobe, blocks_message_debug_0, print]
 - [blocks_message_strobe_0, strobe, epy_block_0, in]
-- [blocks_multiply_const_vxx_0, '0', blocks_tag_debug_0, '0']
-- [blocks_multiply_const_vxx_0, '0', iio_pluto_sink_0, '0']
-- [blocks_multiply_const_vxx_0, '0', qtgui_const_sink_x_0, '0']
-- [blocks_multiply_const_vxx_0, '0', qtgui_freq_sink_x_0, '0']
-- [blocks_multiply_const_vxx_0, '0', qtgui_time_sink_x_1, '0']
-- [blocks_tagged_stream_multiply_length_0, '0', fir_filter_xxx_0, '0']
-- [blocks_unpack_k_bits_bb_0, '0', digital_chunks_to_symbols_xx_0, '0']
-- [digital_chunks_to_symbols_xx_0, '0', interp_fir_filter_xxx_0, '0']
+- [blocks_unpack_k_bits_bb_0, '0', digital_constellation_modulator_0, '0']
+- [digital_constellation_modulator_0, '0', iio_pluto_sink_0, '0']
+- [digital_constellation_modulator_0, '0', qtgui_const_sink_x_0, '0']
+- [digital_constellation_modulator_0, '0', qtgui_freq_sink_x_0, '0']
+- [digital_constellation_modulator_0, '0', qtgui_time_sink_x_1, '0']
 - [epy_block_0, '0', blocks_unpack_k_bits_bb_0, '0']
-- [fir_filter_xxx_0, '0', blocks_multiply_const_vxx_0, '0']
-- [interp_fir_filter_xxx_0, '0', blocks_tagged_stream_multiply_length_0, '0']
 
 metadata:
   file_format: 1

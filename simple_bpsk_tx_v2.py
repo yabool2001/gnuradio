@@ -15,9 +15,8 @@ from gnuradio import blocks
 import pmt
 from gnuradio import blocks, gr
 from gnuradio import digital
-from gnuradio import filter
-from gnuradio.filter import firdes
 from gnuradio import gr
+from gnuradio.filter import firdes
 from gnuradio.fft import window
 import sys
 import signal
@@ -74,6 +73,8 @@ class simple_bpsk_tx_v2(gr.top_block, Qt.QWidget):
         self.samp_rate = samp_rate = 200e3
         self.rx_rrc_taps = rx_rrc_taps = firdes.root_raised_cosine(1, sps,1.0, eb, (15*sps))
         self.pkt_len = pkt_len = 1000
+        self.my_constellation = my_constellation = digital.constellation_bpsk().base()
+        self.my_constellation.set_npwr(1.0)
         self.gain = gain = 56
         self.freq = freq = 483e6-300
         self.amp = amp = 0.7
@@ -114,13 +115,6 @@ class simple_bpsk_tx_v2(gr.top_block, Qt.QWidget):
         self._freq_win = qtgui.RangeWidget(self._freq_range, self.set_freq, "Frequency", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._freq_win, 0, 1, 1, 1)
         for r in range(0, 1):
-            self.top_grid_layout.setRowStretch(r, 1)
-        for c in range(1, 2):
-            self.top_grid_layout.setColumnStretch(c, 1)
-        self._amp_range = qtgui.Range(0, 0.9, 0.005, 0.7, 200)
-        self._amp_win = qtgui.RangeWidget(self._amp_range, self.set_amp, "Amplitude", "counter_slider", float, QtCore.Qt.Horizontal)
-        self.top_grid_layout.addWidget(self._amp_win, 1, 1, 1, 1)
-        for r in range(1, 2):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
@@ -176,93 +170,6 @@ class simple_bpsk_tx_v2(gr.top_block, Qt.QWidget):
 
         self._qtgui_time_sink_x_1_win = sip.wrapinstance(self.qtgui_time_sink_x_1.qwidget(), Qt.QWidget)
         self.tab0_layout_0.addWidget(self._qtgui_time_sink_x_1_win)
-        self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
-            1024, #size
-            window.WIN_BLACKMAN_hARRIS, #wintype
-            freq, #fc
-            20000000, #bw
-            "", #name
-            1,
-            None # parent
-        )
-        self.qtgui_freq_sink_x_0.set_update_time(0.10)
-        self.qtgui_freq_sink_x_0.set_y_axis((-140), 10)
-        self.qtgui_freq_sink_x_0.set_y_label('Relative Gain', 'dB')
-        self.qtgui_freq_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
-        self.qtgui_freq_sink_x_0.enable_autoscale(False)
-        self.qtgui_freq_sink_x_0.enable_grid(False)
-        self.qtgui_freq_sink_x_0.set_fft_average(1.0)
-        self.qtgui_freq_sink_x_0.enable_axis_labels(True)
-        self.qtgui_freq_sink_x_0.enable_control_panel(False)
-        self.qtgui_freq_sink_x_0.set_fft_window_normalized(False)
-
-        self.qtgui_freq_sink_x_0.disable_legend()
-
-
-        labels = ['', '', '', '', '',
-            '', '', '', '', '']
-        widths = [1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1]
-        colors = ["blue", "red", "green", "black", "cyan",
-            "magenta", "yellow", "dark red", "dark green", "dark blue"]
-        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
-            1.0, 1.0, 1.0, 1.0, 1.0]
-
-        for i in range(1):
-            if len(labels[i]) == 0:
-                self.qtgui_freq_sink_x_0.set_line_label(i, "Data {0}".format(i))
-            else:
-                self.qtgui_freq_sink_x_0.set_line_label(i, labels[i])
-            self.qtgui_freq_sink_x_0.set_line_width(i, widths[i])
-            self.qtgui_freq_sink_x_0.set_line_color(i, colors[i])
-            self.qtgui_freq_sink_x_0.set_line_alpha(i, alphas[i])
-
-        self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.qwidget(), Qt.QWidget)
-        self.tab0_layout_1.addWidget(self._qtgui_freq_sink_x_0_win)
-        self.qtgui_const_sink_x_0 = qtgui.const_sink_c(
-            1024, #size
-            "", #name
-            1, #number of inputs
-            None # parent
-        )
-        self.qtgui_const_sink_x_0.set_update_time(0.10)
-        self.qtgui_const_sink_x_0.set_y_axis((-2), 2)
-        self.qtgui_const_sink_x_0.set_x_axis((-2), 2)
-        self.qtgui_const_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, 'packet_len')
-        self.qtgui_const_sink_x_0.enable_autoscale(False)
-        self.qtgui_const_sink_x_0.enable_grid(False)
-        self.qtgui_const_sink_x_0.enable_axis_labels(True)
-
-        self.qtgui_const_sink_x_0.disable_legend()
-
-        labels = ['', '', '', '', '',
-            '', '', '', '', '']
-        widths = [1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1]
-        colors = ["blue", "red", "red", "red", "red",
-            "red", "red", "red", "red", "red"]
-        styles = [0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0]
-        markers = [0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0]
-        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
-            1.0, 1.0, 1.0, 1.0, 1.0]
-
-        for i in range(1):
-            if len(labels[i]) == 0:
-                self.qtgui_const_sink_x_0.set_line_label(i, "Data {0}".format(i))
-            else:
-                self.qtgui_const_sink_x_0.set_line_label(i, labels[i])
-            self.qtgui_const_sink_x_0.set_line_width(i, widths[i])
-            self.qtgui_const_sink_x_0.set_line_color(i, colors[i])
-            self.qtgui_const_sink_x_0.set_line_style(i, styles[i])
-            self.qtgui_const_sink_x_0.set_line_marker(i, markers[i])
-            self.qtgui_const_sink_x_0.set_line_alpha(i, alphas[i])
-
-        self._qtgui_const_sink_x_0_win = sip.wrapinstance(self.qtgui_const_sink_x_0.qwidget(), Qt.QWidget)
-        self.tab0_layout_2.addWidget(self._qtgui_const_sink_x_0_win)
-        self.interp_fir_filter_xxx_0 = filter.interp_fir_filter_ccc(sps, tx_rrc_taps)
-        self.interp_fir_filter_xxx_0.declare_sample_delay(((len(tx_rrc_taps)-1)//(2*sps)))
         self.iio_pluto_sink_0 = iio.fmcomms2_sink_fc32('ip:192.168.2.1' if 'ip:192.168.2.1' else iio.get_pluto_uri(), [True, True], 32768, False)
         self.iio_pluto_sink_0.set_len_tag_key('')
         self.iio_pluto_sink_0.set_bandwidth(20000000)
@@ -278,12 +185,25 @@ class simple_bpsk_tx_v2(gr.top_block, Qt.QWidget):
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
         self.epy_block_0 = epy_block_0.pmt_to_stream()
-        self.digital_chunks_to_symbols_xx_0 = digital.chunks_to_symbols_bc([-1,1], 1)
+        self.digital_constellation_modulator_0 = digital.generic_mod(
+            constellation=my_constellation,
+            differential=False,
+            samples_per_symbol=4,
+            pre_diff_code=True,
+            excess_bw=0.35,
+            verbose=False,
+            log=False,
+            truncate=False)
         self.blocks_unpack_k_bits_bb_0 = blocks.unpack_k_bits_bb(8)
-        self.blocks_tagged_stream_multiply_length_0 = blocks.tagged_stream_multiply_length(gr.sizeof_gr_complex*1, 'packet_len', (sps*8))
-        self.blocks_multiply_const_vxx_0 = blocks.multiply_const_cc(amp)
-        self.blocks_message_strobe_0 = blocks.message_strobe(pmt.intern("test"), 4000)
+        self.blocks_message_strobe_0 = blocks.message_strobe(pmt.intern("0101"), 4000)
         self.blocks_message_debug_0 = blocks.message_debug(True, gr.log_levels.info)
+        self._amp_range = qtgui.Range(0, 0.9, 0.005, 0.7, 200)
+        self._amp_win = qtgui.RangeWidget(self._amp_range, self.set_amp, "Amplitude", "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_grid_layout.addWidget(self._amp_win, 1, 1, 1, 1)
+        for r in range(1, 2):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(1, 2):
+            self.top_grid_layout.setColumnStretch(c, 1)
 
 
         ##################################################
@@ -291,15 +211,10 @@ class simple_bpsk_tx_v2(gr.top_block, Qt.QWidget):
         ##################################################
         self.msg_connect((self.blocks_message_strobe_0, 'strobe'), (self.blocks_message_debug_0, 'print'))
         self.msg_connect((self.blocks_message_strobe_0, 'strobe'), (self.epy_block_0, 'in'))
-        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.iio_pluto_sink_0, 0))
-        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.qtgui_const_sink_x_0, 0))
-        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.qtgui_freq_sink_x_0, 0))
-        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.qtgui_time_sink_x_1, 0))
-        self.connect((self.blocks_tagged_stream_multiply_length_0, 0), (self.blocks_multiply_const_vxx_0, 0))
-        self.connect((self.blocks_unpack_k_bits_bb_0, 0), (self.digital_chunks_to_symbols_xx_0, 0))
-        self.connect((self.digital_chunks_to_symbols_xx_0, 0), (self.interp_fir_filter_xxx_0, 0))
+        self.connect((self.blocks_unpack_k_bits_bb_0, 0), (self.digital_constellation_modulator_0, 0))
+        self.connect((self.digital_constellation_modulator_0, 0), (self.iio_pluto_sink_0, 0))
+        self.connect((self.digital_constellation_modulator_0, 0), (self.qtgui_time_sink_x_1, 0))
         self.connect((self.epy_block_0, 0), (self.blocks_unpack_k_bits_bb_0, 0))
-        self.connect((self.interp_fir_filter_xxx_0, 0), (self.blocks_tagged_stream_multiply_length_0, 0))
 
 
     def closeEvent(self, event):
@@ -317,7 +232,6 @@ class simple_bpsk_tx_v2(gr.top_block, Qt.QWidget):
         self.sps = sps
         self.set_rx_rrc_taps(firdes.root_raised_cosine(1, self.sps, 1.0, self.eb, (15*self.sps)))
         self.set_tx_rrc_taps(firdes.root_raised_cosine(self.sps, self.sps, 1.0, self.eb, (15*self.sps)))
-        self.blocks_tagged_stream_multiply_length_0.set_scalar((self.sps*8))
 
     def get_eb(self):
         return self.eb
@@ -332,7 +246,6 @@ class simple_bpsk_tx_v2(gr.top_block, Qt.QWidget):
 
     def set_tx_rrc_taps(self, tx_rrc_taps):
         self.tx_rrc_taps = tx_rrc_taps
-        self.interp_fir_filter_xxx_0.set_taps(self.tx_rrc_taps)
 
     def get_samp_rate(self):
         return self.samp_rate
@@ -347,13 +260,18 @@ class simple_bpsk_tx_v2(gr.top_block, Qt.QWidget):
 
     def set_rx_rrc_taps(self, rx_rrc_taps):
         self.rx_rrc_taps = rx_rrc_taps
-        self.fir_filter_xxx_0.set_taps(self.rx_rrc_taps)
 
     def get_pkt_len(self):
         return self.pkt_len
 
     def set_pkt_len(self, pkt_len):
         self.pkt_len = pkt_len
+
+    def get_my_constellation(self):
+        return self.my_constellation
+
+    def set_my_constellation(self, my_constellation):
+        self.my_constellation = my_constellation
 
     def get_gain(self):
         return self.gain
@@ -367,14 +285,12 @@ class simple_bpsk_tx_v2(gr.top_block, Qt.QWidget):
     def set_freq(self, freq):
         self.freq = freq
         self.iio_pluto_sink_0.set_frequency(int(self.freq))
-        self.qtgui_freq_sink_x_0.set_frequency_range(self.freq, 20000000)
 
     def get_amp(self):
         return self.amp
 
     def set_amp(self, amp):
         self.amp = amp
-        self.blocks_multiply_const_vxx_0.set_k(self.amp)
 
 
 

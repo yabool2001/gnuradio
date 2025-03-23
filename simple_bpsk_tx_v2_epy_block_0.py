@@ -5,7 +5,7 @@ import pmt
 class pmt_to_stream(gr.sync_block):
     def __init__(self):
         gr.sync_block.__init__(self,
-            name="pmt_to_stream",
+            name="PMT 2 STREAM",
             in_sig=None,
             out_sig=[np.byte])  # Wyjście jako strumień bajtów
         self.message_port_register_in(pmt.intern("in"))
