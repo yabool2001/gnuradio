@@ -42,7 +42,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [376, 16.0]
+    coordinate: [656, 28.0]
     rotation: 0
     state: enabled
 - name: my_constellation
@@ -62,7 +62,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [576, 8.0]
+    coordinate: [840, 24.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -74,7 +74,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [200, 12]
+    coordinate: [312, 20.0]
     rotation: 0
     state: enabled
 - name: sps
@@ -86,7 +86,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [296, 16.0]
+    coordinate: [480, 28.0]
     rotation: 0
     state: enabled
 - name: blocks_message_debug_0
@@ -112,13 +112,34 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    msg: pmt.intern("0101")
+    msg: pmt.intern("*")
     period: '2000'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
     coordinate: [64, 308.0]
+    rotation: 0
+    state: enabled
+- name: blocks_throttle2_0
+  id: blocks_throttle2
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    ignoretag: 'True'
+    limit: auto
+    maximum: '0.1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_second: samp_rate
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [664, 316.0]
     rotation: 0
     state: enabled
 - name: digital_constellation_modulator_0
@@ -140,9 +161,32 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [672, 276.0]
+    coordinate: [984, 292.0]
     rotation: 0
     state: enabled
+- name: digital_pfb_clock_sync_xxx_0
+  id: digital_pfb_clock_sync_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    filter_size: nfilts
+    init_phase: nfilts/2
+    loop_bw: 6.28/400.0
+    max_dev: '1.5'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    osps: '1'
+    sps: sps
+    taps: psf_taps
+    type: ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [56, 776.0]
+    rotation: 0
+    state: disabled
 - name: epy_block_0
   id: epy_block
   parameters:
@@ -198,7 +242,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1152, 152.0]
+    coordinate: [1696, 168.0]
     rotation: 0
     state: disabled
 - name: qtgui_time_sink_x_1
@@ -256,7 +300,7 @@ blocks:
     marker9: '-1'
     name: '""'
     nconnections: '1'
-    size: '128'
+    size: '1024'
     srate: samp_rate
     stemplot: 'False'
     style1: '1'
@@ -295,16 +339,18 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1176, 464.0]
+    coordinate: [1384, 480.0]
     rotation: 0
     state: enabled
 
 connections:
 - [blocks_message_strobe_0, strobe, blocks_message_debug_0, print]
 - [blocks_message_strobe_0, strobe, epy_block_0, in]
+- [blocks_throttle2_0, '0', digital_constellation_modulator_0, '0']
+- [digital_constellation_modulator_0, '0', digital_pfb_clock_sync_xxx_0, '0']
 - [digital_constellation_modulator_0, '0', iio_pluto_sink_0, '0']
 - [digital_constellation_modulator_0, '0', qtgui_time_sink_x_1, '0']
-- [epy_block_0, '0', digital_constellation_modulator_0, '0']
+- [epy_block_0, '0', blocks_throttle2_0, '0']
 
 metadata:
   file_format: 1
