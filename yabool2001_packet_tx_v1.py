@@ -141,7 +141,7 @@ class yabool2001_packet_tx_v1(gr.top_block, Qt.QWidget):
             log=False,
             truncate=False)
         self.blocks_throttle2_0 = blocks.throttle( gr.sizeof_char*1, samp_rate, True, 0 if "auto" == "auto" else max( int(float(0.1) * samp_rate) if "auto" == "time" else int(0.1), 1) )
-        self.blocks_message_strobe_0 = blocks.message_strobe(pmt.intern("*"), 2000)
+        self.blocks_message_strobe_0 = blocks.message_strobe(pmt.intern ( "1" ), 2000)
         self.blocks_message_debug_0 = blocks.message_debug(True, gr.log_levels.info)
 
 

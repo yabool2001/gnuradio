@@ -42,7 +42,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [656, 28.0]
+    coordinate: [360, 16.0]
     rotation: 0
     state: enabled
 - name: my_constellation
@@ -62,7 +62,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [840, 24.0]
+    coordinate: [440, 16.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -74,7 +74,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [312, 20.0]
+    coordinate: [184, 16.0]
     rotation: 0
     state: enabled
 - name: sps
@@ -86,7 +86,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [480, 28.0]
+    coordinate: [280, 16.0]
     rotation: 0
     state: enabled
 - name: blocks_message_debug_0
@@ -101,7 +101,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [344, 500.0]
+    coordinate: [304, 376.0]
     rotation: 0
     state: enabled
 - name: blocks_message_strobe_0
@@ -112,13 +112,13 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    msg: pmt.intern("*")
+    msg: pmt.intern ( "1" )
     period: '2000'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [64, 308.0]
+    coordinate: [48, 328.0]
     rotation: 0
     state: enabled
 - name: blocks_throttle2_0
@@ -139,7 +139,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [664, 316.0]
+    coordinate: [424, 264.0]
     rotation: 0
     state: enabled
 - name: digital_constellation_modulator_0
@@ -161,7 +161,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [984, 292.0]
+    coordinate: [600, 248.0]
     rotation: 0
     state: enabled
 - name: digital_pfb_clock_sync_xxx_0
@@ -184,7 +184,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [56, 776.0]
+    coordinate: [848, 360.0]
     rotation: 0
     state: disabled
 - name: epy_block_0
@@ -216,7 +216,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [408, 340.0]
+    coordinate: [264, 280.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_sink_0
@@ -242,7 +242,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1696, 168.0]
+    coordinate: [848, 80.0]
     rotation: 0
     state: disabled
 - name: qtgui_time_sink_x_1
@@ -339,7 +339,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1384, 480.0]
+    coordinate: [848, 256.0]
     rotation: 0
     state: enabled
 
