@@ -131,7 +131,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     msg: pmt.make_u8vector ( 1 , 1 )
-    period: '1000'
+    period: '500'
   states:
     bus_sink: false
     bus_source: false
@@ -148,35 +148,14 @@ blocks:
     len_tag_key: '"packet_len"'
     maxoutbuf: '0'
     minoutbuf: '0'
-    packet_len: '1'
+    packet_len: '4'
     type: byte
     vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [424, 264.0]
-    rotation: 0
-    state: enabled
-- name: blocks_throttle2_0
-  id: blocks_throttle2
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    ignoretag: 'True'
-    limit: auto
-    maximum: '0.1'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    samples_per_second: samp_rate
-    type: byte
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [536, 136.0]
+    coordinate: [480, 168.0]
     rotation: 0
     state: enabled
 - name: digital_constellation_modulator_0
@@ -206,31 +185,27 @@ blocks:
   parameters:
     _source_code: "import numpy as np\nfrom gnuradio import gr\nimport pmt\n\nclass\
       \ pmt_to_stream(gr.sync_block):\n    def __init__(self):\n        gr.sync_block.__init__(self,\n\
-      \            name=\"PMT 2 STREAM\",\n            in_sig=None,\n            out_sig=[np.uint8])\
-      \  # strumie\u0144 bajt\xF3w (uint8)\n        self.message_port_register_in(pmt.intern(\"\
+      \            name=\"PMT 2 STREAM (z buforem)\",\n            in_sig=None,\n\
+      \            out_sig=[np.uint8])\n\n        self.message_port_register_in(pmt.intern(\"\
       in\"))\n        self.set_msg_handler(pmt.intern(\"in\"), self.handle_msg)\n\
-      \        self.message = None  # None = brak danych\n\n    def handle_msg(self,\
-      \ msg):\n        if pmt.is_u8vector(msg):\n            vec = pmt.u8vector_elements(msg)\n\
-      \            if len(vec) > 0:\n                self.message = bytearray(vec)\n\
-      \            else:\n                self.message = None\n        else:\n   \
-      \         self.message = None\n\n    def work(self, input_items, output_items):\n\
-      \        out = output_items[0]\n        if self.message:\n            # wypu\u015B\
-      \u0107 tylko tyle, ile mamy miejsca\n            length = min(len(out), len(self.message))\n\
-      \            out[:length] = np.frombuffer(self.message[:length], dtype=np.uint8)\n\
-      \            self.message = None  # wyczy\u015B\u0107 bufor po jednym pakiecie\n\
-      \            return length\n        return 0\n"
+      \        self.message_queue = []\n\n    def handle_msg(self, msg):\n       \
+      \ if pmt.is_u8vector(msg):\n            vec = pmt.u8vector_elements(msg)\n \
+      \           self.message_queue.extend(vec)\n\n    def work(self, input_items,\
+      \ output_items):\n        out = output_items[0]\n        if self.message_queue:\n\
+      \            out[0] = self.message_queue.pop(0)\n            return 1\n    \
+      \    return 0\n"
     affinity: ''
     alias: ''
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
-    _io_cache: ('PMT 2 STREAM', 'pmt_to_stream', [], [('in', 'message', 1)], [('0',
-      'byte', 1)], '', [])
+    _io_cache: ('PMT 2 STREAM (z buforem)', 'pmt_to_stream', [], [('in', 'message',
+      1)], [('0', 'byte', 1)], '', [])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [264, 280.0]
+    coordinate: [280, 280.0]
     rotation: 0
     state: enabled
 - name: epy_block_1
@@ -394,8 +369,7 @@ blocks:
 connections:
 - [blocks_message_strobe_0, strobe, blocks_message_debug_0, print]
 - [blocks_message_strobe_0, strobe, epy_block_0, in]
-- [blocks_stream_to_tagged_stream_0, '0', blocks_throttle2_0, '0']
-- [blocks_throttle2_0, '0', digital_constellation_modulator_0, '0']
+- [blocks_stream_to_tagged_stream_0, '0', digital_constellation_modulator_0, '0']
 - [digital_constellation_modulator_0, '0', blocks_file_sink_0, '0']
 - [digital_constellation_modulator_0, '0', epy_block_1, '0']
 - [digital_constellation_modulator_0, '0', iio_pluto_sink_0, '0']

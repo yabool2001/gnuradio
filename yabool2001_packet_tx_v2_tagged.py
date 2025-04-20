@@ -142,9 +142,8 @@ class yabool2001_packet_tx_v2_tagged(gr.top_block, Qt.QWidget):
             verbose=False,
             log=False,
             truncate=False)
-        self.blocks_throttle2_0 = blocks.throttle( gr.sizeof_char*1, samp_rate, True, 0 if "auto" == "auto" else max( int(float(0.1) * samp_rate) if "auto" == "time" else int(0.1), 1) )
-        self.blocks_stream_to_tagged_stream_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 1, "packet_len")
-        self.blocks_message_strobe_0 = blocks.message_strobe(pmt.make_u8vector ( 1 , 1 ), 1000)
+        self.blocks_stream_to_tagged_stream_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 4, "packet_len")
+        self.blocks_message_strobe_0 = blocks.message_strobe(pmt.make_u8vector ( 1 , 1 ), 500)
         self.blocks_message_debug_0 = blocks.message_debug(True, gr.log_levels.info)
 
 
@@ -153,8 +152,7 @@ class yabool2001_packet_tx_v2_tagged(gr.top_block, Qt.QWidget):
         ##################################################
         self.msg_connect((self.blocks_message_strobe_0, 'strobe'), (self.blocks_message_debug_0, 'print'))
         self.msg_connect((self.blocks_message_strobe_0, 'strobe'), (self.epy_block_0, 'in'))
-        self.connect((self.blocks_stream_to_tagged_stream_0, 0), (self.blocks_throttle2_0, 0))
-        self.connect((self.blocks_throttle2_0, 0), (self.digital_constellation_modulator_0, 0))
+        self.connect((self.blocks_stream_to_tagged_stream_0, 0), (self.digital_constellation_modulator_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.epy_block_1, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.qtgui_time_sink_x_1, 0))
         self.connect((self.epy_block_0, 0), (self.blocks_stream_to_tagged_stream_0, 0))
@@ -179,7 +177,6 @@ class yabool2001_packet_tx_v2_tagged(gr.top_block, Qt.QWidget):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
-        self.blocks_throttle2_0.set_sample_rate(self.samp_rate)
         self.qtgui_time_sink_x_1.set_samp_rate(self.samp_rate)
 
     def get_my_constellation(self):
