@@ -29,6 +29,7 @@ from gnuradio import eng_notation
 import sip
 import threading
 import yabool2001_packet_tx_v2_tagged_epy_block_0 as epy_block_0  # embedded python block
+import yabool2001_packet_tx_v2_tagged_epy_block_1 as epy_block_1  # embedded python block
 
 
 
@@ -79,7 +80,7 @@ class yabool2001_packet_tx_v2_tagged(gr.top_block, Qt.QWidget):
         ##################################################
 
         self.qtgui_time_sink_x_1 = qtgui.time_sink_c(
-            1024, #size
+            256, #size
             samp_rate, #samp_rate
             "", #name
             1, #number of inputs
@@ -130,6 +131,7 @@ class yabool2001_packet_tx_v2_tagged(gr.top_block, Qt.QWidget):
 
         self._qtgui_time_sink_x_1_win = sip.wrapinstance(self.qtgui_time_sink_x_1.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_time_sink_x_1_win)
+        self.epy_block_1 = epy_block_1.complex_logger(filename="yabool2001_packet_tx_v2-tagged_output.txt")
         self.epy_block_0 = epy_block_0.pmt_to_stream()
         self.digital_constellation_modulator_0 = digital.generic_mod(
             constellation=digital.constellation_bpsk().base(),
@@ -142,7 +144,7 @@ class yabool2001_packet_tx_v2_tagged(gr.top_block, Qt.QWidget):
             truncate=False)
         self.blocks_throttle2_0 = blocks.throttle( gr.sizeof_char*1, samp_rate, True, 0 if "auto" == "auto" else max( int(float(0.1) * samp_rate) if "auto" == "time" else int(0.1), 1) )
         self.blocks_stream_to_tagged_stream_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 1, "packet_len")
-        self.blocks_message_strobe_0 = blocks.message_strobe(pmt.make_u8vector ( 4 , 1 ), 2000)
+        self.blocks_message_strobe_0 = blocks.message_strobe(pmt.make_u8vector ( 1 , 1 ), 1000)
         self.blocks_message_debug_0 = blocks.message_debug(True, gr.log_levels.info)
 
 
@@ -153,6 +155,7 @@ class yabool2001_packet_tx_v2_tagged(gr.top_block, Qt.QWidget):
         self.msg_connect((self.blocks_message_strobe_0, 'strobe'), (self.epy_block_0, 'in'))
         self.connect((self.blocks_stream_to_tagged_stream_0, 0), (self.blocks_throttle2_0, 0))
         self.connect((self.blocks_throttle2_0, 0), (self.digital_constellation_modulator_0, 0))
+        self.connect((self.digital_constellation_modulator_0, 0), (self.epy_block_1, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.qtgui_time_sink_x_1, 0))
         self.connect((self.epy_block_0, 0), (self.blocks_stream_to_tagged_stream_0, 0))
 

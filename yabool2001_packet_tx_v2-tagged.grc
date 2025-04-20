@@ -89,6 +89,24 @@ blocks:
     coordinate: [280, 16.0]
     rotation: 0
     state: enabled
+- name: blocks_file_sink_0
+  id: blocks_file_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    comment: ''
+    file: C:\Users\mzeml\Downloads\yabool2001_packet_tx_v2-tagged_output.txt
+    type: complex
+    unbuffered: 'True'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1064, 216.0]
+    rotation: 0
+    state: disabled
 - name: blocks_message_debug_0
   id: blocks_message_debug
   parameters:
@@ -112,8 +130,8 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    msg: pmt.make_u8vector ( 4 , 1 )
-    period: '2000'
+    msg: pmt.make_u8vector ( 1 , 1 )
+    period: '1000'
   states:
     bus_sink: false
     bus_source: false
@@ -183,48 +201,24 @@ blocks:
     coordinate: [664, 248.0]
     rotation: 0
     state: enabled
-- name: digital_pfb_clock_sync_xxx_0
-  id: digital_pfb_clock_sync_xxx
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    filter_size: nfilts
-    init_phase: nfilts/2
-    loop_bw: 6.28/400.0
-    max_dev: '1.5'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    osps: '1'
-    sps: sps
-    taps: psf_taps
-    type: ccf
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [848, 360.0]
-    rotation: 0
-    state: disabled
 - name: epy_block_0
   id: epy_block
   parameters:
     _source_code: "import numpy as np\nfrom gnuradio import gr\nimport pmt\n\nclass\
       \ pmt_to_stream(gr.sync_block):\n    def __init__(self):\n        gr.sync_block.__init__(self,\n\
-      \            name=\"PMT 2 STREAM\",\n            in_sig=None,\n            out_sig=[np.byte])\
-      \  # Wyj\u015Bcie jako strumie\u0144 bajt\xF3w\n        self.message_port_register_in(pmt.intern(\"\
-      in\"))\n        self.set_msg_handler(pmt.intern(\"in\"), self.handle_msg)\n\n\
-      \    def handle_msg(self, msg):\n        # Przekszta\u0142\u0107 wiadomo\u015B\
-      \u0107 (PMT) na bajty\n        self.message = pmt.to_python(msg)\n        if\
-      \ pmt.is_u8vector(msg):\n            self.message = bytearray(pmt.u8vector_elements(msg))\n\
-      \        if isinstance(self.message, str):\n            self.message = bytearray(self.message,\
-      \ 'utf-8')\n        elif isinstance(self.message, bytes):\n            self.message\
-      \ = bytearray(self.message)\n        else:\n            self.message = bytearray()\n\
-      \n    def work(self, input_items, output_items):\n        if hasattr(self, 'message')\
-      \ and self.message:\n            # Skopiuj dane do wyj\u015Bcia\n          \
-      \  output_items[0][:len(self.message)] = self.message\n            self.message\
-      \ = bytearray()  # Wyczy\u015B\u0107 wiadomo\u015B\u0107 po wys\u0142aniu\n\
-      \            return len(output_items[0])\n        return 0"
+      \            name=\"PMT 2 STREAM\",\n            in_sig=None,\n            out_sig=[np.uint8])\
+      \  # strumie\u0144 bajt\xF3w (uint8)\n        self.message_port_register_in(pmt.intern(\"\
+      in\"))\n        self.set_msg_handler(pmt.intern(\"in\"), self.handle_msg)\n\
+      \        self.message = None  # None = brak danych\n\n    def handle_msg(self,\
+      \ msg):\n        if pmt.is_u8vector(msg):\n            vec = pmt.u8vector_elements(msg)\n\
+      \            if len(vec) > 0:\n                self.message = bytearray(vec)\n\
+      \            else:\n                self.message = None\n        else:\n   \
+      \         self.message = None\n\n    def work(self, input_items, output_items):\n\
+      \        out = output_items[0]\n        if self.message:\n            # wypu\u015B\
+      \u0107 tylko tyle, ile mamy miejsca\n            length = min(len(out), len(self.message))\n\
+      \            out[:length] = np.frombuffer(self.message[:length], dtype=np.uint8)\n\
+      \            self.message = None  # wyczy\u015B\u0107 bufor po jednym pakiecie\n\
+      \            return length\n        return 0\n"
     affinity: ''
     alias: ''
     comment: ''
@@ -237,6 +231,40 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [264, 280.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_1
+  id: epy_block
+  parameters:
+    _source_code: "from gnuradio import gr\nimport numpy as np\nimport time\n\nclass\
+      \ complex_logger(gr.sync_block):\n    def __init__(self, filename=\"yabool2001_packet_tx_v2-tagged_output.txt\"\
+      ):\n        gr.sync_block.__init__(self,\n            name=\"COMPLEX LOG\",\n\
+      \            in_sig=[np.complex64],\n            out_sig=None)\n        self.f\
+      \ = open(filename, \"a\")\n        self.start_time = time.time()\n        self.sample_index\
+      \ = 0\n\n    def work(self, input_items, output_items):\n        current_time\
+      \ = time.time()\n        elapsed = current_time - self.start_time\n        samp_rate\
+      \ = self.sample_rate()\n\n        for i, c in enumerate(input_items[0]):\n \
+      \           timestamp = elapsed + (i / samp_rate)\n            self.f.write(f\"\
+      {timestamp:.6f},{c.real:.6f},{c.imag:.6f}\\n\")\n\n        self.f.flush()\n\
+      \        return len(input_items[0])\n\n    def sample_rate(self):\n        #\
+      \ Spr\xF3buj odczyta\u0107 pr\xF3bkuj\u0105c\u0105 cz\u0119stotliwo\u015B\u0107\
+      \ z upstream\n        try:\n            return self.sample_rate_hz\n       \
+      \ except AttributeError:\n            # Domy\u015Blna warto\u015B\u0107 je\u015B\
+      li nie ustawiona\n            return 65105  # <- mo\u017Cesz dopasowa\u0107\
+      \ do swojego systemu\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    filename: '"yabool2001_packet_tx_v2-tagged_output.txt"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    _io_cache: ('COMPLEX LOG', 'complex_logger', [('filename', "'yabool2001_packet_tx_v2-tagged_output.txt'")],
+      [('0', 'complex', 1)], [], '', [])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1064, 304.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_sink_0
@@ -320,7 +348,7 @@ blocks:
     marker9: '-1'
     name: '""'
     nconnections: '1'
-    size: '1024'
+    size: '256'
     srate: samp_rate
     stemplot: 'False'
     style1: '1'
@@ -359,7 +387,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [928, 256.0]
+    coordinate: [904, 368.0]
     rotation: 0
     state: enabled
 
@@ -368,7 +396,8 @@ connections:
 - [blocks_message_strobe_0, strobe, epy_block_0, in]
 - [blocks_stream_to_tagged_stream_0, '0', blocks_throttle2_0, '0']
 - [blocks_throttle2_0, '0', digital_constellation_modulator_0, '0']
-- [digital_constellation_modulator_0, '0', digital_pfb_clock_sync_xxx_0, '0']
+- [digital_constellation_modulator_0, '0', blocks_file_sink_0, '0']
+- [digital_constellation_modulator_0, '0', epy_block_1, '0']
 - [digital_constellation_modulator_0, '0', iio_pluto_sink_0, '0']
 - [digital_constellation_modulator_0, '0', qtgui_time_sink_x_1, '0']
 - [epy_block_0, '0', blocks_stream_to_tagged_stream_0, '0']

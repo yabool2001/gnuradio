@@ -7,26 +7,27 @@ class pmt_to_stream(gr.sync_block):
         gr.sync_block.__init__(self,
             name="PMT 2 STREAM",
             in_sig=None,
-            out_sig=[np.byte])  # Wyjście jako strumień bajtów
+            out_sig=[np.uint8])  # strumień bajtów (uint8)
         self.message_port_register_in(pmt.intern("in"))
         self.set_msg_handler(pmt.intern("in"), self.handle_msg)
+        self.message = None  # None = brak danych
 
     def handle_msg(self, msg):
-        # Przekształć wiadomość (PMT) na bajty
-        self.message = pmt.to_python(msg)
         if pmt.is_u8vector(msg):
-            self.message = bytearray(pmt.u8vector_elements(msg))
-        if isinstance(self.message, str):
-            self.message = bytearray(self.message, 'utf-8')
-        elif isinstance(self.message, bytes):
-            self.message = bytearray(self.message)
+            vec = pmt.u8vector_elements(msg)
+            if len(vec) > 0:
+                self.message = bytearray(vec)
+            else:
+                self.message = None
         else:
-            self.message = bytearray()
+            self.message = None
 
     def work(self, input_items, output_items):
-        if hasattr(self, 'message') and self.message:
-            # Skopiuj dane do wyjścia
-            output_items[0][:len(self.message)] = self.message
-            self.message = bytearray()  # Wyczyść wiadomość po wysłaniu
-            return len(output_items[0])
+        out = output_items[0]
+        if self.message:
+            # wypuść tylko tyle, ile mamy miejsca
+            length = min(len(out), len(self.message))
+            out[:length] = np.frombuffer(self.message[:length], dtype=np.uint8)
+            self.message = None  # wyczyść bufor po jednym pakiecie
+            return length
         return 0
