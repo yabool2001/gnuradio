@@ -17,8 +17,9 @@ from gnuradio import analog
 from gnuradio import blocks
 import pmt
 from gnuradio import digital
-from gnuradio import gr
+from gnuradio import filter
 from gnuradio.filter import firdes
+from gnuradio import gr
 from gnuradio.fft import window
 import sys
 import signal
@@ -68,12 +69,21 @@ class qpsk_modulator_chatgpt_01(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
+        self.sps = sps = 32
         self.samp_rate = samp_rate = 32000
 
         ##################################################
         # Blocks
         ##################################################
 
+        self.root_raised_cosine_filter_0 = filter.fir_filter_ccf(
+            1,
+            firdes.root_raised_cosine(
+                1,
+                samp_rate,
+                sps,
+                0.35,
+                (11*samp_rate)))
         self.qtgui_time_sink_x_0 = qtgui.time_sink_f(
             128, #size
             samp_rate, #samp_rate
@@ -122,12 +132,54 @@ class qpsk_modulator_chatgpt_01(gr.top_block, Qt.QWidget):
 
         self._qtgui_time_sink_x_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_time_sink_x_0_win)
+        self.qtgui_const_sink_x_0 = qtgui.const_sink_c(
+            128, #size
+            "", #name
+            1, #number of inputs
+            None # parent
+        )
+        self.qtgui_const_sink_x_0.set_update_time(0.10)
+        self.qtgui_const_sink_x_0.set_y_axis((-2), 2)
+        self.qtgui_const_sink_x_0.set_x_axis((-2), 2)
+        self.qtgui_const_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, "")
+        self.qtgui_const_sink_x_0.enable_autoscale(True)
+        self.qtgui_const_sink_x_0.enable_grid(False)
+        self.qtgui_const_sink_x_0.enable_axis_labels(True)
+
+
+        labels = ['', '', '', '', '',
+            '', '', '', '', '']
+        widths = [1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1]
+        colors = ["blue", "red", "green", "black", "cyan",
+            "magenta", "yellow", "dark red", "dark green", "dark blue"]
+        styles = [0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0]
+        markers = [0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0]
+        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
+            1.0, 1.0, 1.0, 1.0, 1.0]
+
+        for i in range(1):
+            if len(labels[i]) == 0:
+                self.qtgui_const_sink_x_0.set_line_label(i, "Data {0}".format(i))
+            else:
+                self.qtgui_const_sink_x_0.set_line_label(i, labels[i])
+            self.qtgui_const_sink_x_0.set_line_width(i, widths[i])
+            self.qtgui_const_sink_x_0.set_line_color(i, colors[i])
+            self.qtgui_const_sink_x_0.set_line_style(i, styles[i])
+            self.qtgui_const_sink_x_0.set_line_marker(i, markers[i])
+            self.qtgui_const_sink_x_0.set_line_alpha(i, alphas[i])
+
+        self._qtgui_const_sink_x_0_win = sip.wrapinstance(self.qtgui_const_sink_x_0.qwidget(), Qt.QWidget)
+        self.top_layout.addWidget(self._qtgui_const_sink_x_0_win)
         self.pdu_pdu_to_tagged_stream_0 = pdu.pdu_to_tagged_stream(gr.types.byte_t, 'packet_len')
         self.digital_chunks_to_symbols_xx_0 = digital.chunks_to_symbols_bc([ (1+1j) , (-1+1j) , (-1-1j) , (1-1j) ], 2)
         self.blocks_throttle2_0 = blocks.throttle( gr.sizeof_float*1, samp_rate, True, 0 if "auto" == "auto" else max( int(float(0.1) * samp_rate) if "auto" == "time" else int(0.1), 1) )
         self.blocks_multiply_xx_0_0 = blocks.multiply_vff(1)
         self.blocks_multiply_xx_0 = blocks.multiply_vff(1)
         self.blocks_message_strobe_0 = blocks.message_strobe(pmt.cons ( pmt.PMT_NIL , pmt.init_u8vector ( 4 , [ 0x01 , 0x02 , 0x03 , 0x04 ] ) ), 1000)
+        self.blocks_float_to_complex_0 = blocks.float_to_complex(1)
         self.blocks_complex_to_float_0 = blocks.complex_to_float(1)
         self.blocks_add_xx_0 = blocks.add_vff(1)
         self.analog_sig_source_x_0_0 = analog.sig_source_f(samp_rate, analog.GR_COS_WAVE, 1000, 1, 0, 0)
@@ -143,11 +195,15 @@ class qpsk_modulator_chatgpt_01(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_add_xx_0, 0), (self.blocks_throttle2_0, 0))
         self.connect((self.blocks_complex_to_float_0, 1), (self.blocks_multiply_xx_0, 0))
         self.connect((self.blocks_complex_to_float_0, 0), (self.blocks_multiply_xx_0_0, 1))
+        self.connect((self.blocks_float_to_complex_0, 0), (self.qtgui_const_sink_x_0, 0))
         self.connect((self.blocks_multiply_xx_0, 0), (self.blocks_add_xx_0, 1))
+        self.connect((self.blocks_multiply_xx_0, 0), (self.blocks_float_to_complex_0, 1))
         self.connect((self.blocks_multiply_xx_0_0, 0), (self.blocks_add_xx_0, 0))
+        self.connect((self.blocks_multiply_xx_0_0, 0), (self.blocks_float_to_complex_0, 0))
         self.connect((self.blocks_throttle2_0, 0), (self.qtgui_time_sink_x_0, 0))
-        self.connect((self.digital_chunks_to_symbols_xx_0, 0), (self.blocks_complex_to_float_0, 0))
+        self.connect((self.digital_chunks_to_symbols_xx_0, 0), (self.root_raised_cosine_filter_0, 0))
         self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.digital_chunks_to_symbols_xx_0, 0))
+        self.connect((self.root_raised_cosine_filter_0, 0), (self.blocks_complex_to_float_0, 0))
 
 
     def closeEvent(self, event):
@@ -158,6 +214,13 @@ class qpsk_modulator_chatgpt_01(gr.top_block, Qt.QWidget):
 
         event.accept()
 
+    def get_sps(self):
+        return self.sps
+
+    def set_sps(self, sps):
+        self.sps = sps
+        self.root_raised_cosine_filter_0.set_taps(firdes.root_raised_cosine(1, self.samp_rate, self.sps, 0.35, (11*self.samp_rate)))
+
     def get_samp_rate(self):
         return self.samp_rate
 
@@ -167,6 +230,7 @@ class qpsk_modulator_chatgpt_01(gr.top_block, Qt.QWidget):
         self.analog_sig_source_x_0_0.set_sampling_freq(self.samp_rate)
         self.blocks_throttle2_0.set_sample_rate(self.samp_rate)
         self.qtgui_time_sink_x_0.set_samp_rate(self.samp_rate)
+        self.root_raised_cosine_filter_0.set_taps(firdes.root_raised_cosine(1, self.samp_rate, self.sps, 0.35, (11*self.samp_rate)))
 
 
 
