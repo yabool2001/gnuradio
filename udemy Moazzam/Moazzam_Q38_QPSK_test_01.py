@@ -129,7 +129,7 @@ class Moazzam_Q38_QPSK_test_01(gr.top_block, Qt.QWidget):
         self._qtgui_time_sink_x_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_time_sink_x_0_win)
         self.qtgui_const_sink_x_0 = qtgui.const_sink_c(
-            10, #size
+            1, #size
             "", #name
             1, #number of inputs
             None # parent
@@ -174,10 +174,9 @@ class Moazzam_Q38_QPSK_test_01(gr.top_block, Qt.QWidget):
         self.epy_block_1 = epy_block_1.byte_logger(samp_rate=samp_rate, filename="byte_log.csv")
         self.epy_block_0 = epy_block_0.complex_logger(samp_rate=samp_rate, filename="complex_log.csv")
         self.digital_chunks_to_symbols_xx_0 = digital.chunks_to_symbols_bc([ 1+1j , -1+1j , -1-1j , 1-1j ], 1)
+        self.blocks_throttle2_0 = blocks.throttle( gr.sizeof_char*1, samp_rate, True, 0 if "auto" == "auto" else max( int(float(0.1) * samp_rate) if "auto" == "time" else int(0.1), 1) )
         self.blocks_message_strobe_1 = blocks.message_strobe(pmt.init_u8vector ( 1 , [ 0x00 , 0x01 , 0x02 , 0x03 ] ), 1000)
         self.blocks_message_debug_0 = blocks.message_debug(True, gr.log_levels.info)
-        self.blocks_file_sink_0 = blocks.file_sink(gr.sizeof_gr_complex*1, 'C:\\Users\\mzeml\\gnuradio\\udemy Moazzam\\Moazzam_Q38_QPSK_test_01.csv', False)
-        self.blocks_file_sink_0.set_unbuffered(False)
 
 
         ##################################################
@@ -186,11 +185,11 @@ class Moazzam_Q38_QPSK_test_01(gr.top_block, Qt.QWidget):
         self.msg_connect((self.blocks_message_strobe_1, 'strobe'), (self.pdu_random_pdu_0, 'generate'))
         self.msg_connect((self.pdu_random_pdu_0, 'pdus'), (self.blocks_message_debug_0, 'print'))
         self.msg_connect((self.pdu_random_pdu_0, 'pdus'), (self.pdu_pdu_to_tagged_stream_0, 'pdus'))
-        self.connect((self.digital_chunks_to_symbols_xx_0, 0), (self.blocks_file_sink_0, 0))
+        self.connect((self.blocks_throttle2_0, 0), (self.digital_chunks_to_symbols_xx_0, 0))
         self.connect((self.digital_chunks_to_symbols_xx_0, 0), (self.epy_block_0, 0))
         self.connect((self.digital_chunks_to_symbols_xx_0, 0), (self.qtgui_const_sink_x_0, 0))
         self.connect((self.digital_chunks_to_symbols_xx_0, 0), (self.qtgui_time_sink_x_0, 0))
-        self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.digital_chunks_to_symbols_xx_0, 0))
+        self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.blocks_throttle2_0, 0))
         self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.epy_block_1, 0))
 
 
@@ -207,6 +206,7 @@ class Moazzam_Q38_QPSK_test_01(gr.top_block, Qt.QWidget):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
+        self.blocks_throttle2_0.set_sample_rate(self.samp_rate)
         self.epy_block_0.samp_rate = self.samp_rate
         self.epy_block_1.samp_rate = self.samp_rate
         self.qtgui_time_sink_x_0.set_samp_rate(self.samp_rate)
