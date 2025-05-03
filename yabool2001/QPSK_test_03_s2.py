@@ -183,6 +183,7 @@ class QPSK_test_03_s2(gr.top_block, Qt.QWidget):
             log=True,
             truncate=False)
         self.blocks_throttle2_0 = blocks.throttle( gr.sizeof_char*1, samp_rate, True, 0 if "auto" == "auto" else max( int(float(0.1) * samp_rate) if "auto" == "time" else int(0.1), 1) )
+        self.blocks_repack_bits_bb_0 = blocks.repack_bits_bb(8, 2, 'packet_len', False, gr.GR_LSB_FIRST)
         self.blocks_message_strobe_1 = blocks.message_strobe(pmt.cons ( pmt.PMT_NIL , pmt.make_u8vector ( 1 , 0x01 ) ), 1000)
 
 
@@ -190,7 +191,8 @@ class QPSK_test_03_s2(gr.top_block, Qt.QWidget):
         # Connections
         ##################################################
         self.msg_connect((self.blocks_message_strobe_1, 'strobe'), (self.pdu_pdu_to_tagged_stream_0, 'pdus'))
-        self.connect((self.blocks_throttle2_0, 0), (self.digital_constellation_modulator_0, 0))
+        self.connect((self.blocks_repack_bits_bb_0, 0), (self.digital_constellation_modulator_0, 0))
+        self.connect((self.blocks_throttle2_0, 0), (self.blocks_repack_bits_bb_0, 0))
         self.connect((self.blocks_throttle2_0, 0), (self.epy_block_1, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.epy_block_0_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.qtgui_const_sink_x_0_0, 0))

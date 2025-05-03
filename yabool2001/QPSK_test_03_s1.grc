@@ -50,7 +50,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [608, 136.0]
+    coordinate: [864, 128.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -94,6 +94,26 @@ blocks:
     coordinate: [16, 304.0]
     rotation: 0
     state: enabled
+- name: blocks_repack_bits_bb_0
+  id: blocks_repack_bits_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    align_output: 'False'
+    comment: ''
+    endianness: gr.GR_LSB_FIRST
+    k: '8'
+    l: '2'
+    len_tag_key: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [568, 292.0]
+    rotation: 0
+    state: enabled
 - name: blocks_throttle2_0
   id: blocks_throttle2
   parameters:
@@ -134,7 +154,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [592, 256.0]
+    coordinate: [864, 256.0]
     rotation: 0
     state: enabled
 - name: epy_block_0_0
@@ -174,7 +194,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [880.0, 16]
+    coordinate: [1152.0, 8]
     rotation: 90
     state: enabled
 - name: epy_block_1
@@ -300,7 +320,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [992, 292.0]
+    coordinate: [1280, 292.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0_0
@@ -397,13 +417,14 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [992, 392.0]
+    coordinate: [1280, 392.0]
     rotation: 0
     state: enabled
 
 connections:
 - [analog_const_source_x_0, '0', blocks_throttle2_0, '0']
-- [blocks_throttle2_0, '0', digital_constellation_modulator_0, '0']
+- [blocks_repack_bits_bb_0, '0', digital_constellation_modulator_0, '0']
+- [blocks_throttle2_0, '0', blocks_repack_bits_bb_0, '0']
 - [blocks_throttle2_0, '0', epy_block_1, '0']
 - [digital_constellation_modulator_0, '0', epy_block_0_0, '0']
 - [digital_constellation_modulator_0, '0', qtgui_const_sink_x_0_0, '0']

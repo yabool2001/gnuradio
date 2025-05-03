@@ -50,7 +50,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1136, 120.0]
+    coordinate: [1104, 640.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -94,6 +94,26 @@ blocks:
     coordinate: [88, 284.0]
     rotation: 0
     state: enabled
+- name: blocks_repack_bits_bb_0
+  id: blocks_repack_bits_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    align_output: 'False'
+    comment: ''
+    endianness: gr.GR_LSB_FIRST
+    k: '8'
+    l: '2'
+    len_tag_key: packet_len
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1136, 284.0]
+    rotation: 0
+    state: enabled
 - name: blocks_throttle2_0
   id: blocks_throttle2
   parameters:
@@ -112,7 +132,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [800, 284.0]
+    coordinate: [848, 284.0]
     rotation: 0
     state: enabled
 - name: digital_constellation_modulator_0
@@ -134,8 +154,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1120, 236.0]
-    rotation: 0
+    coordinate: [1096, 452.0]
+    rotation: 180
     state: enabled
 - name: epy_block_0_0
   id: epy_block
@@ -174,8 +194,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1416.0, 8]
-    rotation: 90
+    coordinate: [960.0, 608]
+    rotation: 270
     state: enabled
 - name: epy_block_1
   id: epy_block
@@ -208,7 +228,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1012.0, 8]
+    coordinate: [1036.0, 8]
     rotation: 90
     state: enabled
 - name: pdu_pdu_to_tagged_stream_0
@@ -225,7 +245,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [456, 296.0]
+    coordinate: [504, 296.0]
     rotation: 0
     state: enabled
 - name: qtgui_const_sink_x_0_0
@@ -317,8 +337,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1536, 284.0]
-    rotation: 0
+    coordinate: [688, 388.0]
+    rotation: 180
     state: enabled
 - name: qtgui_time_sink_x_0_0
   id: qtgui_time_sink_x
@@ -414,13 +434,14 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1536, 384.0]
-    rotation: 0
+    coordinate: [752, 488.0]
+    rotation: 180
     state: enabled
 
 connections:
 - [blocks_message_strobe_1, strobe, pdu_pdu_to_tagged_stream_0, pdus]
-- [blocks_throttle2_0, '0', digital_constellation_modulator_0, '0']
+- [blocks_repack_bits_bb_0, '0', digital_constellation_modulator_0, '0']
+- [blocks_throttle2_0, '0', blocks_repack_bits_bb_0, '0']
 - [blocks_throttle2_0, '0', epy_block_1, '0']
 - [digital_constellation_modulator_0, '0', epy_block_0_0, '0']
 - [digital_constellation_modulator_0, '0', qtgui_const_sink_x_0_0, '0']
