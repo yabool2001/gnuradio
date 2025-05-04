@@ -301,7 +301,7 @@ blocks:
     marker9: '0'
     name: '""'
     nconnections: '1'
-    size: '4'
+    size: sps
     style1: '0'
     style10: '0'
     style2: '0'
@@ -395,7 +395,7 @@ blocks:
     marker9: '-1'
     name: '""'
     nconnections: '1'
-    size: '4'
+    size: 4*sps
     srate: samp_rate
     stemplot: 'False'
     style1: '1'

@@ -79,7 +79,7 @@ class QPSK_test_03_s2(gr.top_block, Qt.QWidget):
         ##################################################
 
         self.qtgui_time_sink_x_0_0 = qtgui.time_sink_c(
-            4, #size
+            (4*sps), #size
             samp_rate, #samp_rate
             "", #name
             1, #number of inputs
@@ -130,7 +130,7 @@ class QPSK_test_03_s2(gr.top_block, Qt.QWidget):
         self._qtgui_time_sink_x_0_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_time_sink_x_0_0_win)
         self.qtgui_const_sink_x_0_0 = qtgui.const_sink_c(
-            4, #size
+            sps, #size
             "", #name
             1, #number of inputs
             None # parent
