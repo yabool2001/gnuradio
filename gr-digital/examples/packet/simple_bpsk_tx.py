@@ -26,7 +26,6 @@ from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import gr, pdu
-from gnuradio import iio
 from gnuradio import pdu
 import sip
 import threading
@@ -111,13 +110,6 @@ class simple_bpsk_tx(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
             self.top_grid_layout.setColumnStretch(c, 1)
-        self._freq_range = qtgui.Range(50e6, 3e9, 500e3, 483e6-300, 200)
-        self._freq_win = qtgui.RangeWidget(self._freq_range, self.set_freq, "Frequency", "counter_slider", float, QtCore.Qt.Horizontal)
-        self.top_grid_layout.addWidget(self._freq_win, 0, 1, 1, 1)
-        for r in range(0, 1):
-            self.top_grid_layout.setRowStretch(r, 1)
-        for c in range(1, 2):
-            self.top_grid_layout.setColumnStretch(c, 1)
         self._amp_range = qtgui.Range(0, 0.9, 0.005, 0.7, 200)
         self._amp_win = qtgui.RangeWidget(self._amp_range, self.set_amp, "Amplitude", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._amp_win, 1, 1, 1, 1)
@@ -127,7 +119,7 @@ class simple_bpsk_tx(gr.top_block, Qt.QWidget):
             self.top_grid_layout.setColumnStretch(c, 1)
         self.qtgui_time_sink_x_1 = qtgui.time_sink_c(
             600, #size
-            samp_rate, #samp_rate
+            1, #samp_rate
             "", #name
             1, #number of inputs
             None # parent
@@ -139,7 +131,7 @@ class simple_bpsk_tx(gr.top_block, Qt.QWidget):
 
         self.qtgui_time_sink_x_1.enable_tags(True)
         self.qtgui_time_sink_x_1.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, 0, 'packet_len')
-        self.qtgui_time_sink_x_1.enable_autoscale(True)
+        self.qtgui_time_sink_x_1.enable_autoscale(False)
         self.qtgui_time_sink_x_1.enable_grid(False)
         self.qtgui_time_sink_x_1.enable_axis_labels(True)
         self.qtgui_time_sink_x_1.enable_control_panel(False)
@@ -180,8 +172,8 @@ class simple_bpsk_tx(gr.top_block, Qt.QWidget):
         self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
             1024, #size
             window.WIN_BLACKMAN_hARRIS, #wintype
-            freq, #fc
-            20000000, #bw
+            0, #fc
+            1, #bw
             "", #name
             1,
             None # parent
@@ -266,19 +258,19 @@ class simple_bpsk_tx(gr.top_block, Qt.QWidget):
         self.pdu_pdu_to_tagged_stream_0 = pdu.pdu_to_tagged_stream(gr.types.byte_t, 'packet_len')
         self.interp_fir_filter_xxx_0 = filter.interp_fir_filter_ccc(sps, tx_rrc_taps)
         self.interp_fir_filter_xxx_0.declare_sample_delay(((len(tx_rrc_taps)-1)//(2*sps)))
-        self.iio_pluto_sink_0 = iio.fmcomms2_sink_fc32('ip:192.168.2.1' if 'ip:192.168.2.1' else iio.get_pluto_uri(), [True, True], 32768, False)
-        self.iio_pluto_sink_0.set_len_tag_key('')
-        self.iio_pluto_sink_0.set_bandwidth(20000000)
-        self.iio_pluto_sink_0.set_frequency(int(freq))
-        self.iio_pluto_sink_0.set_samplerate(int(samp_rate))
-        self.iio_pluto_sink_0.set_attenuation(0, 10.0)
-        self.iio_pluto_sink_0.set_filter_params('Auto', '', 0, 0)
         self._gain_range = qtgui.Range(0, 83, 1, 56, 200)
         self._gain_win = qtgui.RangeWidget(self._gain_range, self.set_gain, "Gain", "counter_slider", float, QtCore.Qt.Horizontal)
         self.top_grid_layout.addWidget(self._gain_win, 1, 0, 1, 1)
         for r in range(1, 2):
             self.top_grid_layout.setRowStretch(r, 1)
         for c in range(0, 1):
+            self.top_grid_layout.setColumnStretch(c, 1)
+        self._freq_range = qtgui.Range(50e6, 3e9, 500e3, 483e6-300, 200)
+        self._freq_win = qtgui.RangeWidget(self._freq_range, self.set_freq, "Frequency", "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_grid_layout.addWidget(self._freq_win, 0, 1, 1, 1)
+        for r in range(0, 1):
+            self.top_grid_layout.setRowStretch(r, 1)
+        for c in range(1, 2):
             self.top_grid_layout.setColumnStretch(c, 1)
         self.digital_chunks_to_symbols_xx_0 = digital.chunks_to_symbols_bc([-1,1], 1)
         self.blocks_unpack_k_bits_bb_0 = blocks.unpack_k_bits_bb(8)
@@ -291,10 +283,9 @@ class simple_bpsk_tx(gr.top_block, Qt.QWidget):
         ##################################################
         # Connections
         ##################################################
-        self.msg_connect((self.blocks_message_strobe_0, 'strobe'), (self.blocks_message_debug_0, 'print'))
         self.msg_connect((self.blocks_message_strobe_0, 'strobe'), (self.pdu_random_pdu_0, 'generate'))
+        self.msg_connect((self.pdu_random_pdu_0, 'pdus'), (self.blocks_message_debug_0, 'print_pdu'))
         self.msg_connect((self.pdu_random_pdu_0, 'pdus'), (self.pdu_pdu_to_tagged_stream_0, 'pdus'))
-        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.iio_pluto_sink_0, 0))
         self.connect((self.blocks_multiply_const_vxx_0, 0), (self.qtgui_const_sink_x_0, 0))
         self.connect((self.blocks_multiply_const_vxx_0, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.blocks_multiply_const_vxx_0, 0), (self.qtgui_time_sink_x_1, 0))
@@ -342,8 +333,6 @@ class simple_bpsk_tx(gr.top_block, Qt.QWidget):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
-        self.iio_pluto_sink_0.set_samplerate(int(self.samp_rate))
-        self.qtgui_time_sink_x_1.set_samp_rate(self.samp_rate)
 
     def get_rx_rrc_taps(self):
         return self.rx_rrc_taps
@@ -369,8 +358,6 @@ class simple_bpsk_tx(gr.top_block, Qt.QWidget):
 
     def set_freq(self, freq):
         self.freq = freq
-        self.iio_pluto_sink_0.set_frequency(int(self.freq))
-        self.qtgui_freq_sink_x_0.set_frequency_range(self.freq, 20000000)
 
     def get_amp(self):
         return self.amp
