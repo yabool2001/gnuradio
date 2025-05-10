@@ -93,7 +93,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '4'
+    value: '2'
   states:
     bus_sink: false
     bus_source: false
@@ -109,7 +109,7 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    msg: pmt.cons ( pmt.PMT_NIL , pmt.make_u8vector ( 1 , 0x01 ) )
+    msg: pmt.cons ( pmt.PMT_NIL , pmt.make_u8vector ( 1 , 0x02 ) )
     period: '1000'
   states:
     bus_sink: false
@@ -123,7 +123,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    align_output: 'False'
+    align_output: 'True'
     comment: ''
     endianness: gr.GR_LSB_FIRST
     k: '8'
@@ -135,7 +135,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [608, 240.0]
+    coordinate: [568, 240.0]
     rotation: 0
     state: enabled
 - name: blocks_repack_bits_bb_1
@@ -143,20 +143,135 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    align_output: 'False'
+    align_output: 'True'
     comment: ''
     endianness: gr.GR_LSB_FIRST
     k: '2'
     l: '8'
-    len_tag_key: ''
+    len_tag_key: packet_len
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [728, 536.0]
+    coordinate: [224, 584.0]
     rotation: 180
+    state: enabled
+- name: blocks_stream_to_tagged_stream_0_0
+  id: blocks_stream_to_tagged_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    len_tag_key: '"packet_len"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    packet_len: '1'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 584.0]
+    rotation: 180
+    state: enabled
+- name: blocks_tag_debug_0
+  id: blocks_tag_debug
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    display: 'True'
+    filter: '""'
+    name: Modulator
+    num_inputs: '1'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1136, 520.0]
+    rotation: 0
+    state: enabled
+- name: blocks_tag_debug_0_0
+  id: blocks_tag_debug
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    display: 'True'
+    filter: '""'
+    name: Constellation Decoder
+    num_inputs: '1'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 448.0]
+    rotation: 180
+    state: enabled
+- name: blocks_tag_debug_0_0_0
+  id: blocks_tag_debug
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    display: 'True'
+    filter: '""'
+    name: After Repack Bits Tx
+    num_inputs: '1'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [744, 344.0]
+    rotation: 0
+    state: enabled
+- name: blocks_threshold_ff_0
+  id: blocks_threshold_ff
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    high: '100'
+    init: '0'
+    low: '-100'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1152, 664.0]
+    rotation: 0
+    state: disabled
+- name: blocks_throttle2_0
+  id: blocks_throttle2
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    ignoretag: 'True'
+    limit: auto
+    maximum: '0.1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_second: samp_rate
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1016.0, 400]
+    rotation: 270
     state: enabled
 - name: digital_constellation_decoder_cb_1_0
   id: digital_constellation_decoder_cb
@@ -171,8 +286,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1000.0, 360]
-    rotation: 270
+    coordinate: [648, 592.0]
+    rotation: 180
     state: enabled
 - name: digital_constellation_modulator_0
   id: digital_constellation_modulator
@@ -196,45 +311,46 @@ blocks:
     coordinate: [808, 208.0]
     rotation: 0
     state: enabled
-- name: epy_block_0_0
-  id: epy_block
+- name: digital_costas_loop_cc_0
+  id: digital_costas_loop_cc
   parameters:
-    _source_code: "from gnuradio import gr\nimport numpy as np\nimport time\nimport\
-      \ os\n\nclass complex_sps_file_sink(gr.sync_block):\n    def __init__(self,\
-      \ samp_rate=32000, sps=2, filename=\"complex_log.csv\"):\n        gr.sync_block.__init__(self,\n\
-      \            name=\"Complex Sps File Sink\",\n            in_sig=[np.complex64],\n\
-      \            out_sig=None)\n        self.filename = filename\n        self.samp_rate\
-      \ = samp_rate\n        self.sps = sps\n        self.start_time = time.time()\n\
-      \        self.sample_index = 0  # licznik pr\xF3bek\n\n        file_exists =\
-      \ os.path.isfile(filename)\n        self.f = open(filename, \"w\", encoding=\"\
-      utf-8\")\n\n        if not file_exists or os.stat(filename).st_size == 0:\n\
-      \            self.f.write(\"timestamp;real;imag;symbol_index;samp_rate\\n\"\
-      )\n\n    def work(self, input_items, output_items):\n        elapsed = time.time()\
-      \ - self.start_time\n        for c in input_items[0]:\n            timestamp\
-      \ = elapsed\n            ts = f\"{timestamp:.6f}\".replace('.', ',')\n     \
-      \       re = f\"{c.real:.6f}\".replace('.', ',')\n            im = f\"{c.imag:.6f}\"\
-      .replace('.', ',')\n            symbol_idx = str(self.sample_index // self.sps)\n\
-      \            sr = f\"{self.samp_rate:.0f}\".replace('.', ',')\n\n          \
-      \  self.f.write(f\"{ts};{re};{im};{symbol_idx};{sr}\\n\")\n\n            elapsed\
-      \ += 1 / self.samp_rate\n            self.sample_index += 1\n\n        self.f.flush()\n\
-      \        return len(input_items[0])\n"
     affinity: ''
     alias: ''
     comment: ''
-    filename: '"complex_tx_qpsk_mod_log.csv"'
     maxoutbuf: '0'
     minoutbuf: '0'
-    samp_rate: samp_rate
-    sps: sps
+    order: '4'
+    use_snr: 'False'
+    w: '0.005'
   states:
-    _io_cache: ('Complex Sps File Sink', 'complex_sps_file_sink', [('samp_rate', '32000'),
-      ('sps', '2'), ('filename', "'complex_log.csv'")], [('0', 'complex', 1)], [],
-      '', ['filename', 'samp_rate', 'sps'])
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1152.0, 16]
-    rotation: 90
+    coordinate: [688, 768.0]
+    rotation: 180
+    state: enabled
+- name: digital_pfb_clock_sync_xxx_0
+  id: digital_pfb_clock_sync_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    filter_size: '32'
+    init_phase: '0'
+    loop_bw: '0.01'
+    max_dev: '1.5'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    osps: '1'
+    sps: sps
+    taps: firdes.root_raised_cosine(nfilts, nfilts, 1.0, 0.35, 11*sps*nfilts)
+    type: ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [904, 792.0]
+    rotation: 180
     state: enabled
 - name: epy_block_1_0
   id: epy_block
@@ -257,7 +373,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    filename: '"byte_rx_qpsk_mod_log.csv"'
+    filename: '"04_byte_rx_qpsk_mod_log.csv"'
     maxoutbuf: '0'
     minoutbuf: '0'
     samp_rate: samp_rate
@@ -267,7 +383,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 536.0]
+    coordinate: [8, 584.0]
     rotation: 180
     state: enabled
 - name: epy_block_1_0_0
@@ -291,7 +407,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    filename: '"byte_tx_qpsk_mod_log.csv"'
+    filename: '"01_byte_tx_qpsk_mod_log.csv"'
     maxoutbuf: '0'
     minoutbuf: '0'
     samp_rate: samp_rate
@@ -301,8 +417,76 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [536.0, 64]
-    rotation: 90
+    coordinate: [568, 152.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_1_0_0_0
+  id: epy_block
+  parameters:
+    _source_code: "from gnuradio import gr\nimport numpy as np\nimport time\nimport\
+      \ os\n\nclass byte_logger(gr.sync_block):\n    def __init__(self, samp_rate=32000,\
+      \ filename=\"byte_log.csv\"):\n        gr.sync_block.__init__(self,\n      \
+      \      name=\"BYTE FILE SINK\",\n            in_sig=[np.uint8],\n          \
+      \  out_sig=None)\n        self.filename = filename\n        self.samp_rate =\
+      \ samp_rate\n        self.start_time = time.time()\n\n        file_exists =\
+      \ os.path.isfile(filename)\n        self.f = open(filename, \"w\", encoding=\"\
+      utf-8\")\n\n        if not file_exists or os.stat(filename).st_size == 0:\n\
+      \            self.f.write(\"timestamp;byte;samp_rate\\n\")\n\n    def work(self,\
+      \ input_items, output_items):\n        current_time = time.time()\n        elapsed\
+      \ = current_time - self.start_time\n\n        for i, b in enumerate(input_items[0]):\n\
+      \            timestamp = elapsed + (i / self.samp_rate)\n            ts = f\"\
+      {timestamp:.6f}\".replace('.', ',')\n            val = str(b)\n            sr\
+      \ = f\"{self.samp_rate:.0f}\".replace('.', ',')\n            self.f.write(f\"\
+      {ts};{val};{sr}\\n\")\n\n        self.f.flush()\n        return len(input_items[0])\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    filename: '"02_byte_tx_qpsk_mod_log.csv"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+  states:
+    _io_cache: ('BYTE FILE SINK', 'byte_logger', [('samp_rate', '32000'), ('filename',
+      "'byte_log.csv'")], [('0', 'byte', 1)], [], '', ['filename', 'samp_rate'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [776, 32.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_1_0_0_0_0
+  id: epy_block
+  parameters:
+    _source_code: "from gnuradio import gr\nimport numpy as np\nimport time\nimport\
+      \ os\n\nclass byte_logger(gr.sync_block):\n    def __init__(self, samp_rate=32000,\
+      \ filename=\"byte_log.csv\"):\n        gr.sync_block.__init__(self,\n      \
+      \      name=\"BYTE FILE SINK\",\n            in_sig=[np.uint8],\n          \
+      \  out_sig=None)\n        self.filename = filename\n        self.samp_rate =\
+      \ samp_rate\n        self.start_time = time.time()\n\n        file_exists =\
+      \ os.path.isfile(filename)\n        self.f = open(filename, \"w\", encoding=\"\
+      utf-8\")\n\n        if not file_exists or os.stat(filename).st_size == 0:\n\
+      \            self.f.write(\"timestamp;byte;samp_rate\\n\")\n\n    def work(self,\
+      \ input_items, output_items):\n        current_time = time.time()\n        elapsed\
+      \ = current_time - self.start_time\n\n        for i, b in enumerate(input_items[0]):\n\
+      \            timestamp = elapsed + (i / self.samp_rate)\n            ts = f\"\
+      {timestamp:.6f}\".replace('.', ',')\n            val = str(b)\n            sr\
+      \ = f\"{self.samp_rate:.0f}\".replace('.', ',')\n            self.f.write(f\"\
+      {ts};{val};{sr}\\n\")\n\n        self.f.flush()\n        return len(input_items[0])\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    filename: '"03_byte_rx_qpsk_mod_log.csv"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+  states:
+    _io_cache: ('BYTE FILE SINK', 'byte_logger', [('samp_rate', '32000'), ('filename',
+      "'byte_log.csv'")], [('0', 'byte', 1)], [], '', ['filename', 'samp_rate'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [392, 688.0]
+    rotation: 180
     state: enabled
 - name: pdu_pdu_to_tagged_stream_0
   id: pdu_pdu_to_tagged_stream
@@ -318,7 +502,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [352, 248.0]
+    coordinate: [320, 248.0]
     rotation: 0
     state: enabled
 - name: qtgui_const_sink_x_0_0
@@ -374,7 +558,7 @@ blocks:
     marker9: '0'
     name: '"Tx constellation"'
     nconnections: '1'
-    size: sps
+    size: 4*sps
     style1: '0'
     style10: '0'
     style2: '0'
@@ -410,8 +594,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [960.0, 16]
-    rotation: 90
+    coordinate: [1080, 96.0]
+    rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0_0
   id: qtgui_time_sink_x
@@ -507,19 +691,28 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1048.0, 48]
-    rotation: 90
+    coordinate: [1096, 192.0]
+    rotation: 0
     state: disabled
 
 connections:
 - [blocks_message_strobe_1, strobe, pdu_pdu_to_tagged_stream_0, pdus]
+- [blocks_repack_bits_bb_0, '0', blocks_tag_debug_0_0_0, '0']
 - [blocks_repack_bits_bb_0, '0', digital_constellation_modulator_0, '0']
+- [blocks_repack_bits_bb_0, '0', epy_block_1_0_0_0, '0']
 - [blocks_repack_bits_bb_1, '0', epy_block_1_0, '0']
-- [digital_constellation_decoder_cb_1_0, '0', blocks_repack_bits_bb_1, '0']
-- [digital_constellation_modulator_0, '0', digital_constellation_decoder_cb_1_0, '0']
-- [digital_constellation_modulator_0, '0', epy_block_0_0, '0']
+- [blocks_stream_to_tagged_stream_0_0, '0', blocks_repack_bits_bb_1, '0']
+- [blocks_throttle2_0, '0', blocks_tag_debug_0, '0']
+- [blocks_throttle2_0, '0', digital_pfb_clock_sync_xxx_0, '0']
+- [digital_constellation_decoder_cb_1_0, '0', blocks_stream_to_tagged_stream_0_0,
+  '0']
+- [digital_constellation_decoder_cb_1_0, '0', blocks_tag_debug_0_0, '0']
+- [digital_constellation_decoder_cb_1_0, '0', epy_block_1_0_0_0_0, '0']
+- [digital_constellation_modulator_0, '0', blocks_throttle2_0, '0']
 - [digital_constellation_modulator_0, '0', qtgui_const_sink_x_0_0, '0']
 - [digital_constellation_modulator_0, '0', qtgui_time_sink_x_0_0, '0']
+- [digital_costas_loop_cc_0, '0', digital_constellation_decoder_cb_1_0, '0']
+- [digital_pfb_clock_sync_xxx_0, '0', digital_costas_loop_cc_0, '0']
 - [pdu_pdu_to_tagged_stream_0, '0', blocks_repack_bits_bb_0, '0']
 - [pdu_pdu_to_tagged_stream_0, '0', epy_block_1_0_0, '0']
 

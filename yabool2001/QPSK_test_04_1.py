@@ -26,9 +26,10 @@ from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import gr, pdu
-import QPSK_test_04_1_epy_block_0_0 as epy_block_0_0  # embedded python block
 import QPSK_test_04_1_epy_block_1_0 as epy_block_1_0  # embedded python block
 import QPSK_test_04_1_epy_block_1_0_0 as epy_block_1_0_0  # embedded python block
+import QPSK_test_04_1_epy_block_1_0_0_0 as epy_block_1_0_0_0  # embedded python block
+import QPSK_test_04_1_epy_block_1_0_0_0_0 as epy_block_1_0_0_0_0  # embedded python block
 import sip
 import threading
 
@@ -70,7 +71,7 @@ class QPSK_test_04_1(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.sps = sps = 4
+        self.sps = sps = 2
         self.samp_rate = samp_rate = 65105
         self.nfilts = nfilts = 32
         self.f_o = f_o = 820000000
@@ -82,7 +83,7 @@ class QPSK_test_04_1(gr.top_block, Qt.QWidget):
         ##################################################
 
         self.qtgui_const_sink_x_0_0 = qtgui.const_sink_c(
-            sps, #size
+            (4*sps), #size
             "Tx constellation", #name
             1, #number of inputs
             None # parent
@@ -123,9 +124,12 @@ class QPSK_test_04_1(gr.top_block, Qt.QWidget):
         self._qtgui_const_sink_x_0_0_win = sip.wrapinstance(self.qtgui_const_sink_x_0_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_const_sink_x_0_0_win)
         self.pdu_pdu_to_tagged_stream_0 = pdu.pdu_to_tagged_stream(gr.types.byte_t, 'packet_len')
-        self.epy_block_1_0_0 = epy_block_1_0_0.byte_logger(samp_rate=samp_rate, filename="byte_tx_qpsk_mod_log.csv")
-        self.epy_block_1_0 = epy_block_1_0.byte_logger(samp_rate=samp_rate, filename="byte_rx_qpsk_mod_log.csv")
-        self.epy_block_0_0 = epy_block_0_0.complex_sps_file_sink(samp_rate=samp_rate, sps=sps, filename="complex_tx_qpsk_mod_log.csv")
+        self.epy_block_1_0_0_0_0 = epy_block_1_0_0_0_0.byte_logger(samp_rate=samp_rate, filename="03_byte_rx_qpsk_mod_log.csv")
+        self.epy_block_1_0_0_0 = epy_block_1_0_0_0.byte_logger(samp_rate=samp_rate, filename="02_byte_tx_qpsk_mod_log.csv")
+        self.epy_block_1_0_0 = epy_block_1_0_0.byte_logger(samp_rate=samp_rate, filename="01_byte_tx_qpsk_mod_log.csv")
+        self.epy_block_1_0 = epy_block_1_0.byte_logger(samp_rate=samp_rate, filename="04_byte_rx_qpsk_mod_log.csv")
+        self.digital_pfb_clock_sync_xxx_0 = digital.pfb_clock_sync_ccf(sps, 0.01, firdes.root_raised_cosine(nfilts, nfilts, 1.0, 0.35, 11*sps*nfilts), 32, 0, 1.5, 1)
+        self.digital_costas_loop_cc_0 = digital.costas_loop_cc(0.005, 4, False)
         self.digital_constellation_modulator_0 = digital.generic_mod(
             constellation=const_obj,
             differential=False,
@@ -136,22 +140,41 @@ class QPSK_test_04_1(gr.top_block, Qt.QWidget):
             log=True,
             truncate=False)
         self.digital_constellation_decoder_cb_1_0 = digital.constellation_decoder_cb(const_obj)
-        self.blocks_repack_bits_bb_1 = blocks.repack_bits_bb(2, 8, '', False, gr.GR_LSB_FIRST)
+        self.blocks_throttle2_0 = blocks.throttle( gr.sizeof_gr_complex*1, samp_rate, True, 0 if "auto" == "auto" else max( int(float(0.1) * samp_rate) if "auto" == "time" else int(0.1), 1) )
+        self.blocks_tag_debug_0_0_0_0 = blocks.tag_debug(gr.sizeof_char*1, 'Before Repack Bits Tx', "")
+        self.blocks_tag_debug_0_0_0_0.set_display(True)
+        self.blocks_tag_debug_0_0_0 = blocks.tag_debug(gr.sizeof_char*1, 'After Repack Bits Tx', "")
+        self.blocks_tag_debug_0_0_0.set_display(True)
+        self.blocks_tag_debug_0_0 = blocks.tag_debug(gr.sizeof_char*1, 'Constellation Decoder', "")
+        self.blocks_tag_debug_0_0.set_display(True)
+        self.blocks_tag_debug_0 = blocks.tag_debug(gr.sizeof_gr_complex*1, 'Modulator', "")
+        self.blocks_tag_debug_0.set_display(True)
+        self.blocks_stream_to_tagged_stream_0_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 1, "packet_len")
+        self.blocks_repack_bits_bb_1 = blocks.repack_bits_bb(2, 8, 'packet_len', True, gr.GR_LSB_FIRST)
         self.blocks_repack_bits_bb_0 = blocks.repack_bits_bb(8, 2, 'packet_len', False, gr.GR_LSB_FIRST)
-        self.blocks_message_strobe_1 = blocks.message_strobe(pmt.cons ( pmt.PMT_NIL , pmt.make_u8vector ( 1 , 0x01 ) ), 1000)
+        self.blocks_message_strobe_1 = blocks.message_strobe(pmt.cons ( pmt.PMT_NIL , pmt.make_u8vector ( 1 , 0x02 ) ), 1000)
 
 
         ##################################################
         # Connections
         ##################################################
         self.msg_connect((self.blocks_message_strobe_1, 'strobe'), (self.pdu_pdu_to_tagged_stream_0, 'pdus'))
+        self.connect((self.blocks_repack_bits_bb_0, 0), (self.blocks_tag_debug_0_0_0, 0))
         self.connect((self.blocks_repack_bits_bb_0, 0), (self.digital_constellation_modulator_0, 0))
+        self.connect((self.blocks_repack_bits_bb_0, 0), (self.epy_block_1_0_0_0, 0))
         self.connect((self.blocks_repack_bits_bb_1, 0), (self.epy_block_1_0, 0))
-        self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.blocks_repack_bits_bb_1, 0))
-        self.connect((self.digital_constellation_modulator_0, 0), (self.digital_constellation_decoder_cb_1_0, 0))
-        self.connect((self.digital_constellation_modulator_0, 0), (self.epy_block_0_0, 0))
+        self.connect((self.blocks_stream_to_tagged_stream_0_0, 0), (self.blocks_repack_bits_bb_1, 0))
+        self.connect((self.blocks_throttle2_0, 0), (self.blocks_tag_debug_0, 0))
+        self.connect((self.blocks_throttle2_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
+        self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.blocks_stream_to_tagged_stream_0_0, 0))
+        self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.blocks_tag_debug_0_0, 0))
+        self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.epy_block_1_0_0_0_0, 0))
+        self.connect((self.digital_constellation_modulator_0, 0), (self.blocks_throttle2_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.qtgui_const_sink_x_0_0, 0))
+        self.connect((self.digital_costas_loop_cc_0, 0), (self.digital_constellation_decoder_cb_1_0, 0))
+        self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.digital_costas_loop_cc_0, 0))
         self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.blocks_repack_bits_bb_0, 0))
+        self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.blocks_tag_debug_0_0_0_0, 0))
         self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.epy_block_1_0_0, 0))
 
 
@@ -168,22 +191,25 @@ class QPSK_test_04_1(gr.top_block, Qt.QWidget):
 
     def set_sps(self, sps):
         self.sps = sps
-        self.epy_block_0_0.sps = self.sps
+        self.digital_pfb_clock_sync_xxx_0.update_taps(firdes.root_raised_cosine(self.nfilts, self.nfilts, 1.0, 0.35, 11*self.sps*self.nfilts))
 
     def get_samp_rate(self):
         return self.samp_rate
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
-        self.epy_block_0_0.samp_rate = self.samp_rate
+        self.blocks_throttle2_0.set_sample_rate(self.samp_rate)
         self.epy_block_1_0.samp_rate = self.samp_rate
         self.epy_block_1_0_0.samp_rate = self.samp_rate
+        self.epy_block_1_0_0_0.samp_rate = self.samp_rate
+        self.epy_block_1_0_0_0_0.samp_rate = self.samp_rate
 
     def get_nfilts(self):
         return self.nfilts
 
     def set_nfilts(self, nfilts):
         self.nfilts = nfilts
+        self.digital_pfb_clock_sync_xxx_0.update_taps(firdes.root_raised_cosine(self.nfilts, self.nfilts, 1.0, 0.35, 11*self.sps*self.nfilts))
 
     def get_f_o(self):
         return self.f_o
