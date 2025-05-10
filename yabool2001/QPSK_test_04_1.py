@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: QPSK test 04 adalm-pluto
+# Title: QPSK test 04_1 adalm-pluto
 # Author: yabool2001
 # Copyright: mzemlo.pl@gmail.com
 # Description: QPSK demonstration test w. adalm-pluto
@@ -26,21 +26,20 @@ from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import gr, pdu
-from gnuradio import iio
-import QPSK_test_04_epy_block_0_0 as epy_block_0_0  # embedded python block
-import QPSK_test_04_epy_block_1_0 as epy_block_1_0  # embedded python block
-import QPSK_test_04_epy_block_1_0_0 as epy_block_1_0_0  # embedded python block
+import QPSK_test_04_1_epy_block_0_0 as epy_block_0_0  # embedded python block
+import QPSK_test_04_1_epy_block_1_0 as epy_block_1_0  # embedded python block
+import QPSK_test_04_1_epy_block_1_0_0 as epy_block_1_0_0  # embedded python block
 import sip
 import threading
 
 
 
-class QPSK_test_04(gr.top_block, Qt.QWidget):
+class QPSK_test_04_1(gr.top_block, Qt.QWidget):
 
     def __init__(self):
-        gr.top_block.__init__(self, "QPSK test 04 adalm-pluto", catch_exceptions=True)
+        gr.top_block.__init__(self, "QPSK test 04_1 adalm-pluto", catch_exceptions=True)
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("QPSK test 04 adalm-pluto")
+        self.setWindowTitle("QPSK test 04_1 adalm-pluto")
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
@@ -58,7 +57,7 @@ class QPSK_test_04(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "QPSK_test_04")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "QPSK_test_04_1")
 
         try:
             geometry = self.settings.value("geometry")
@@ -82,47 +81,6 @@ class QPSK_test_04(gr.top_block, Qt.QWidget):
         # Blocks
         ##################################################
 
-        self.qtgui_const_sink_x_0_0_0 = qtgui.const_sink_c(
-            sps, #size
-            "Rx side", #name
-            1, #number of inputs
-            None # parent
-        )
-        self.qtgui_const_sink_x_0_0_0.set_update_time(0.10)
-        self.qtgui_const_sink_x_0_0_0.set_y_axis((-2), 2)
-        self.qtgui_const_sink_x_0_0_0.set_x_axis((-2), 2)
-        self.qtgui_const_sink_x_0_0_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, "")
-        self.qtgui_const_sink_x_0_0_0.enable_autoscale(False)
-        self.qtgui_const_sink_x_0_0_0.enable_grid(False)
-        self.qtgui_const_sink_x_0_0_0.enable_axis_labels(True)
-
-
-        labels = ['', '', '', '', '',
-            '', '', '', '', '']
-        widths = [1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1]
-        colors = ["blue", "red", "green", "black", "cyan",
-            "magenta", "yellow", "dark red", "dark green", "dark blue"]
-        styles = [0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0]
-        markers = [0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0]
-        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
-            1.0, 1.0, 1.0, 1.0, 1.0]
-
-        for i in range(1):
-            if len(labels[i]) == 0:
-                self.qtgui_const_sink_x_0_0_0.set_line_label(i, "Data {0}".format(i))
-            else:
-                self.qtgui_const_sink_x_0_0_0.set_line_label(i, labels[i])
-            self.qtgui_const_sink_x_0_0_0.set_line_width(i, widths[i])
-            self.qtgui_const_sink_x_0_0_0.set_line_color(i, colors[i])
-            self.qtgui_const_sink_x_0_0_0.set_line_style(i, styles[i])
-            self.qtgui_const_sink_x_0_0_0.set_line_marker(i, markers[i])
-            self.qtgui_const_sink_x_0_0_0.set_line_alpha(i, alphas[i])
-
-        self._qtgui_const_sink_x_0_0_0_win = sip.wrapinstance(self.qtgui_const_sink_x_0_0_0.qwidget(), Qt.QWidget)
-        self.top_layout.addWidget(self._qtgui_const_sink_x_0_0_0_win)
         self.qtgui_const_sink_x_0_0 = qtgui.const_sink_c(
             sps, #size
             "Tx constellation", #name
@@ -165,27 +123,9 @@ class QPSK_test_04(gr.top_block, Qt.QWidget):
         self._qtgui_const_sink_x_0_0_win = sip.wrapinstance(self.qtgui_const_sink_x_0_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_const_sink_x_0_0_win)
         self.pdu_pdu_to_tagged_stream_0 = pdu.pdu_to_tagged_stream(gr.types.byte_t, 'packet_len')
-        self.iio_pluto_source_0 = iio.fmcomms2_source_fc32('192.168.2.1' if '192.168.2.1' else iio.get_pluto_uri(), [True, True], 32768)
-        self.iio_pluto_source_0.set_len_tag_key('packet_len')
-        self.iio_pluto_source_0.set_frequency(f_o)
-        self.iio_pluto_source_0.set_samplerate(samp_rate)
-        self.iio_pluto_source_0.set_gain_mode(0, 'fast_attack')
-        self.iio_pluto_source_0.set_gain(0, 64)
-        self.iio_pluto_source_0.set_quadrature(True)
-        self.iio_pluto_source_0.set_rfdc(True)
-        self.iio_pluto_source_0.set_bbdc(True)
-        self.iio_pluto_source_0.set_filter_params('Auto', '', 0, 0)
-        self.iio_pluto_sink_0 = iio.fmcomms2_sink_fc32('192.168.2.1' if '192.168.2.1' else iio.get_pluto_uri(), [True, True], 32768, False)
-        self.iio_pluto_sink_0.set_len_tag_key('')
-        self.iio_pluto_sink_0.set_bandwidth(20000000)
-        self.iio_pluto_sink_0.set_frequency(f_o)
-        self.iio_pluto_sink_0.set_samplerate(samp_rate)
-        self.iio_pluto_sink_0.set_attenuation(0, 1)
-        self.iio_pluto_sink_0.set_filter_params('Auto', '', 0, 0)
         self.epy_block_1_0_0 = epy_block_1_0_0.byte_logger(samp_rate=samp_rate, filename="byte_tx_qpsk_mod_log.csv")
         self.epy_block_1_0 = epy_block_1_0.byte_logger(samp_rate=samp_rate, filename="byte_rx_qpsk_mod_log.csv")
         self.epy_block_0_0 = epy_block_0_0.complex_sps_file_sink(samp_rate=samp_rate, sps=sps, filename="complex_tx_qpsk_mod_log.csv")
-        self.digital_pfb_clock_sync_xxx_0 = digital.pfb_clock_sync_ccf(sps, 0.0628, firdes.root_raised_cosine(nfilts, nfilts, 1.0/float(sps), 0.35, 11*sps*nfilts), 32, 16, 1.5, 1)
         self.digital_constellation_modulator_0 = digital.generic_mod(
             constellation=const_obj,
             differential=False,
@@ -208,18 +148,15 @@ class QPSK_test_04(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_repack_bits_bb_0, 0), (self.digital_constellation_modulator_0, 0))
         self.connect((self.blocks_repack_bits_bb_1, 0), (self.epy_block_1_0, 0))
         self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.blocks_repack_bits_bb_1, 0))
+        self.connect((self.digital_constellation_modulator_0, 0), (self.digital_constellation_decoder_cb_1_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.epy_block_0_0, 0))
-        self.connect((self.digital_constellation_modulator_0, 0), (self.iio_pluto_sink_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.qtgui_const_sink_x_0_0, 0))
-        self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.digital_constellation_decoder_cb_1_0, 0))
-        self.connect((self.iio_pluto_source_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
-        self.connect((self.iio_pluto_source_0, 0), (self.qtgui_const_sink_x_0_0_0, 0))
         self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.blocks_repack_bits_bb_0, 0))
         self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.epy_block_1_0_0, 0))
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "QPSK_test_04")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "QPSK_test_04_1")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -231,7 +168,6 @@ class QPSK_test_04(gr.top_block, Qt.QWidget):
 
     def set_sps(self, sps):
         self.sps = sps
-        self.digital_pfb_clock_sync_xxx_0.update_taps(firdes.root_raised_cosine(self.nfilts, self.nfilts, 1.0/float(self.sps), 0.35, 11*self.sps*self.nfilts))
         self.epy_block_0_0.sps = self.sps
 
     def get_samp_rate(self):
@@ -242,23 +178,18 @@ class QPSK_test_04(gr.top_block, Qt.QWidget):
         self.epy_block_0_0.samp_rate = self.samp_rate
         self.epy_block_1_0.samp_rate = self.samp_rate
         self.epy_block_1_0_0.samp_rate = self.samp_rate
-        self.iio_pluto_sink_0.set_samplerate(self.samp_rate)
-        self.iio_pluto_source_0.set_samplerate(self.samp_rate)
 
     def get_nfilts(self):
         return self.nfilts
 
     def set_nfilts(self, nfilts):
         self.nfilts = nfilts
-        self.digital_pfb_clock_sync_xxx_0.update_taps(firdes.root_raised_cosine(self.nfilts, self.nfilts, 1.0/float(self.sps), 0.35, 11*self.sps*self.nfilts))
 
     def get_f_o(self):
         return self.f_o
 
     def set_f_o(self, f_o):
         self.f_o = f_o
-        self.iio_pluto_sink_0.set_frequency(self.f_o)
-        self.iio_pluto_source_0.set_frequency(self.f_o)
 
     def get_const_obj(self):
         return self.const_obj
@@ -270,7 +201,7 @@ class QPSK_test_04(gr.top_block, Qt.QWidget):
 
 
 
-def main(top_block_cls=QPSK_test_04, options=None):
+def main(top_block_cls=QPSK_test_04_1, options=None):
 
     qapp = Qt.QApplication(sys.argv)
 
