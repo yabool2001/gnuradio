@@ -65,6 +65,18 @@ blocks:
     coordinate: [264, 80.0]
     rotation: 0
     state: enabled
+- name: rrc_taps
+  id: variable
+  parameters:
+    comment: ''
+    value: firdes.root_raised_cosine(nfilts, nfilts, 1.0/float(sps), 0.35, 11*sps*nfilts)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [24, 136.0]
+    rotation: 0
+    state: enabled
 - name: samp_rate
   id: variable
   parameters:
@@ -123,7 +135,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [248, 616.0]
+    coordinate: [224, 544.0]
     rotation: 180
     state: enabled
 - name: blocks_tagged_stream_mux_0
@@ -164,8 +176,24 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [960.0, 384]
-    rotation: 270
+    coordinate: [1000, 336.0]
+    rotation: 0
+    state: enabled
+- name: blocks_unpack_k_bits_bb_0
+  id: blocks_unpack_k_bits_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    k: '2'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 544.0]
+    rotation: 180
     state: enabled
 - name: digital_constellation_decoder_cb_1_0
   id: digital_constellation_decoder_cb
@@ -180,7 +208,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [632, 616.0]
+    coordinate: [752, 544.0]
     rotation: 180
     state: enabled
 - name: digital_constellation_modulator_0
@@ -221,7 +249,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [376, 600.0]
+    coordinate: [352, 528.0]
     rotation: 180
     state: enabled
 - name: digital_pfb_clock_sync_xxx_0
@@ -238,13 +266,13 @@ blocks:
     minoutbuf: '0'
     osps: '1'
     sps: sps
-    taps: firdes.root_raised_cosine(nfilts, nfilts, 1.0/float(sps), 0.35, 11*sps*nfilts)
+    taps: rrc_taps
     type: ccf
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [856, 616.0]
+    coordinate: [976, 544.0]
     rotation: 180
     state: enabled
 - name: digital_protocol_formatter_bb_0
@@ -335,7 +363,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [32, 608.0]
+    coordinate: [8, 536.0]
     rotation: 180
     state: enabled
 - name: epy_block_1_0_0
@@ -671,8 +699,8 @@ connections:
 - [blocks_tagged_stream_mux_0, '0', digital_constellation_modulator_0, '0']
 - [blocks_tagged_stream_mux_0, '0', epy_block_1_0_0_0_0, '0']
 - [blocks_throttle2_0, '0', digital_pfb_clock_sync_xxx_0, '0']
-- [digital_constellation_decoder_cb_1_0, '0', digital_correlate_access_code_xx_ts_1_0,
-  '0']
+- [blocks_unpack_k_bits_bb_0, '0', digital_correlate_access_code_xx_ts_1_0, '0']
+- [digital_constellation_decoder_cb_1_0, '0', blocks_unpack_k_bits_bb_0, '0']
 - [digital_constellation_modulator_0, '0', blocks_throttle2_0, '0']
 - [digital_constellation_modulator_0, '0', epy_block_0_0, '0']
 - [digital_constellation_modulator_0, '0', qtgui_const_sink_x_0_0, '0']

@@ -77,8 +77,9 @@ class QPSK_test_01(gr.top_block, Qt.QWidget):
         # Variables
         ##################################################
         self.sps = sps = 4
-        self.samp_rate = samp_rate = 65105
         self.nfilts = nfilts = 32
+        self.samp_rate = samp_rate = 65105
+        self.rrc_taps = rrc_taps = firdes.root_raised_cosine(nfilts, nfilts, 1.0/float(sps), 0.35, 11*sps*nfilts)
         self.const_obj = const_obj = digital.constellation_qpsk().base()
         self.const_obj.set_npwr(1)
 
@@ -133,7 +134,7 @@ class QPSK_test_01(gr.top_block, Qt.QWidget):
         self.epy_block_1_0_0 = epy_block_1_0_0.byte_logger(samp_rate=samp_rate, filename="02_byte_tx_qpsk_mod_log.csv")
         self.epy_block_1_0 = epy_block_1_0.byte_logger(samp_rate=samp_rate, filename="05_byte_rx_qpsk_mod_log.csv")
         self.digital_protocol_formatter_bb_0 = digital.protocol_formatter_bb(hdr_format, "packet_len")
-        self.digital_pfb_clock_sync_xxx_0 = digital.pfb_clock_sync_ccf(sps, 0.0628, firdes.root_raised_cosine(nfilts, nfilts, 1.0/float(sps), 0.35, 11*sps*nfilts), 32, 16, 1.5, 1)
+        self.digital_pfb_clock_sync_xxx_0 = digital.pfb_clock_sync_ccf(sps, 0.0628, rrc_taps, 32, 16, 1.5, 1)
         self.digital_correlate_access_code_xx_ts_1_0 = digital.correlate_access_code_bb_ts(digital.packet_utils.default_access_code,
           0, "packet_len")
         self.digital_constellation_modulator_0 = digital.generic_mod(
@@ -146,6 +147,7 @@ class QPSK_test_01(gr.top_block, Qt.QWidget):
             log=True,
             truncate=False)
         self.digital_constellation_decoder_cb_1_0 = digital.constellation_decoder_cb(const_obj)
+        self.blocks_unpack_k_bits_bb_0 = blocks.unpack_k_bits_bb(2)
         self.blocks_throttle2_0 = blocks.throttle( gr.sizeof_gr_complex*1, samp_rate, True, 0 if "auto" == "auto" else max( int(float(0.1) * samp_rate) if "auto" == "time" else int(0.1), 1) )
         self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_char*1, "packet_len", 0)
         self.blocks_pack_k_bits_bb_0 = blocks.pack_k_bits_bb(8)
@@ -160,7 +162,8 @@ class QPSK_test_01(gr.top_block, Qt.QWidget):
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_constellation_modulator_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.epy_block_1_0_0_0_0, 0))
         self.connect((self.blocks_throttle2_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
-        self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.digital_correlate_access_code_xx_ts_1_0, 0))
+        self.connect((self.blocks_unpack_k_bits_bb_0, 0), (self.digital_correlate_access_code_xx_ts_1_0, 0))
+        self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.blocks_unpack_k_bits_bb_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.blocks_throttle2_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.qtgui_const_sink_x_0_0, 0))
         self.connect((self.digital_correlate_access_code_xx_ts_1_0, 0), (self.blocks_pack_k_bits_bb_0, 0))
@@ -192,7 +195,14 @@ class QPSK_test_01(gr.top_block, Qt.QWidget):
 
     def set_sps(self, sps):
         self.sps = sps
-        self.digital_pfb_clock_sync_xxx_0.update_taps(firdes.root_raised_cosine(self.nfilts, self.nfilts, 1.0/float(self.sps), 0.35, 11*self.sps*self.nfilts))
+        self.set_rrc_taps(firdes.root_raised_cosine(self.nfilts, self.nfilts, 1.0/float(self.sps), 0.35, 11*self.sps*self.nfilts))
+
+    def get_nfilts(self):
+        return self.nfilts
+
+    def set_nfilts(self, nfilts):
+        self.nfilts = nfilts
+        self.set_rrc_taps(firdes.root_raised_cosine(self.nfilts, self.nfilts, 1.0/float(self.sps), 0.35, 11*self.sps*self.nfilts))
 
     def get_samp_rate(self):
         return self.samp_rate
@@ -205,12 +215,12 @@ class QPSK_test_01(gr.top_block, Qt.QWidget):
         self.epy_block_1_0_0_0.samp_rate = self.samp_rate
         self.epy_block_1_0_0_0_0.samp_rate = self.samp_rate
 
-    def get_nfilts(self):
-        return self.nfilts
+    def get_rrc_taps(self):
+        return self.rrc_taps
 
-    def set_nfilts(self, nfilts):
-        self.nfilts = nfilts
-        self.digital_pfb_clock_sync_xxx_0.update_taps(firdes.root_raised_cosine(self.nfilts, self.nfilts, 1.0/float(self.sps), 0.35, 11*self.sps*self.nfilts))
+    def set_rrc_taps(self, rrc_taps):
+        self.rrc_taps = rrc_taps
+        self.digital_pfb_clock_sync_xxx_0.update_taps(self.rrc_taps)
 
     def get_const_obj(self):
         return self.const_obj
