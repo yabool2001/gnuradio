@@ -78,7 +78,7 @@ class Moazzam_BPSK_test_05_simplest_packet_len_24(gr.top_block, Qt.QWidget):
         self.taps = taps = [1.0, 0.25-0.25j, 0.50 + 0.10j, -0.3 + 0.2j]
         self.sps = sps = 4
         self.samp_rate = samp_rate = int(bw*3)
-        self.pluto_context = pluto_context = "ip:192.168.2.1"
+        self.pluto_context = pluto_context = "usb:"
         self.nfilts = nfilts = 32
         self.f_c = f_c = 820000000
 
