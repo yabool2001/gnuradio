@@ -5,10 +5,10 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: Moazzam BPSK test 06 simplest packet len 24
+# Title: BPSK_test_01
 # Author: yabool2001
 # Copyright: mzemlo.pl@gmail.com
-# Description:  BPSK demonstration over ADALM-PLuto
+# Description: BPSK_test_01
 # GNU Radio version: 3.10.12.0
 
 from PyQt5 import Qt
@@ -31,12 +31,12 @@ import threading
 
 
 
-class Moazzam_BPSK_test_06_simplest_packet_len_24(gr.top_block, Qt.QWidget):
+class BPSK_test_01_1(gr.top_block, Qt.QWidget):
 
     def __init__(self, hdr_format=digital.header_format_default(digital.packet_utils.default_access_code, 0)):
-        gr.top_block.__init__(self, "Moazzam BPSK test 06 simplest packet len 24", catch_exceptions=True)
+        gr.top_block.__init__(self, "BPSK_test_01", catch_exceptions=True)
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("Moazzam BPSK test 06 simplest packet len 24")
+        self.setWindowTitle("BPSK_test_01")
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
@@ -54,7 +54,7 @@ class Moazzam_BPSK_test_06_simplest_packet_len_24(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "Moazzam_BPSK_test_06_simplest_packet_len_24")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "BPSK_test_01_1")
 
         try:
             geometry = self.settings.value("geometry")
@@ -144,10 +144,7 @@ class Moazzam_BPSK_test_06_simplest_packet_len_24(gr.top_block, Qt.QWidget):
         self.iio_pluto_sink_0.set_samplerate(samp_rate)
         self.iio_pluto_sink_0.set_attenuation(0, 1)
         self.iio_pluto_sink_0.set_filter_params('Auto', '', 0, 0)
-        self.digital_protocol_formatter_bb_0 = digital.protocol_formatter_bb(hdr_format, "packet_len")
         self.digital_pfb_clock_sync_xxx_0 = digital.pfb_clock_sync_ccf(4, 0.0628, firdes.root_raised_cosine(nfilts, nfilts, 1.0/float(sps), 0.35, 11*sps*nfilts), 32, 16, 1.5, 1)
-        self.digital_correlate_access_code_xx_ts_1 = digital.correlate_access_code_bb_ts(digital.packet_utils.default_access_code,
-          0, "packet_len")
         self.digital_constellation_modulator_0_0 = digital.generic_mod(
             constellation=variable_constellation_1,
             differential=False,
@@ -158,7 +155,6 @@ class Moazzam_BPSK_test_06_simplest_packet_len_24(gr.top_block, Qt.QWidget):
             log=False,
             truncate=False)
         self.digital_constellation_decoder_cb_1_0 = digital.constellation_decoder_cb(variable_constellation_1)
-        self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_char*1, "packet_len", 0)
         self.blocks_stream_to_tagged_stream_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 24, "packet_len")
         self.blocks_repack_bits_bb_0_0_0 = blocks.repack_bits_bb(1, 8, "packet_len", False, gr.GR_MSB_FIRST)
         self.blocks_file_source_0 = blocks.file_source(gr.sizeof_char*1, 'C:\\Users\\mzeml\\gnuradio\\udemy Moazzam\\input_text.txt', True, 0, 0)
@@ -172,20 +168,16 @@ class Moazzam_BPSK_test_06_simplest_packet_len_24(gr.top_block, Qt.QWidget):
         ##################################################
         self.connect((self.blocks_file_source_0, 0), (self.blocks_stream_to_tagged_stream_0, 0))
         self.connect((self.blocks_repack_bits_bb_0_0_0, 0), (self.blocks_file_sink_0_0_0, 0))
-        self.connect((self.blocks_stream_to_tagged_stream_0, 0), (self.blocks_tagged_stream_mux_0, 1))
-        self.connect((self.blocks_stream_to_tagged_stream_0, 0), (self.digital_protocol_formatter_bb_0, 0))
-        self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_constellation_modulator_0_0, 0))
-        self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.digital_correlate_access_code_xx_ts_1, 0))
+        self.connect((self.blocks_stream_to_tagged_stream_0, 0), (self.digital_constellation_modulator_0_0, 0))
+        self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.blocks_repack_bits_bb_0_0_0, 0))
         self.connect((self.digital_constellation_modulator_0_0, 0), (self.iio_pluto_sink_0, 0))
-        self.connect((self.digital_correlate_access_code_xx_ts_1, 0), (self.blocks_repack_bits_bb_0_0_0, 0))
         self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.digital_constellation_decoder_cb_1_0, 0))
         self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.qtgui_const_sink_x_1, 0))
-        self.connect((self.digital_protocol_formatter_bb_0, 0), (self.blocks_tagged_stream_mux_0, 0))
         self.connect((self.iio_pluto_source_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "Moazzam_BPSK_test_06_simplest_packet_len_24")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "BPSK_test_01_1")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -197,7 +189,6 @@ class Moazzam_BPSK_test_06_simplest_packet_len_24(gr.top_block, Qt.QWidget):
 
     def set_hdr_format(self, hdr_format):
         self.hdr_format = hdr_format
-        self.digital_protocol_formatter_bb_0.set_header_format(self.hdr_format)
 
     def get_bw(self):
         return self.bw
@@ -259,12 +250,12 @@ class Moazzam_BPSK_test_06_simplest_packet_len_24(gr.top_block, Qt.QWidget):
 
 
 def argument_parser():
-    description = ' BPSK demonstration over ADALM-PLuto'
+    description = 'BPSK_test_01'
     parser = ArgumentParser(description=description)
     return parser
 
 
-def main(top_block_cls=Moazzam_BPSK_test_06_simplest_packet_len_24, options=None):
+def main(top_block_cls=BPSK_test_01_1, options=None):
     if options is None:
         options = argument_parser().parse_args()
 
