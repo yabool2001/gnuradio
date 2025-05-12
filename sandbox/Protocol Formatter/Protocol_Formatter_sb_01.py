@@ -5,10 +5,9 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: Protocol Formatter tutorial 01
+# Title: Protocol Formatter sandbox 01
 # Author: yabool2001
 # Copyright: mzemlo.pl@gmail.com
-# Description: Protocol Formatter tutorial 01
 # GNU Radio version: 3.10.12.0
 
 from PyQt5 import Qt
@@ -27,21 +26,18 @@ from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import gr, pdu
-import Protocol_Formatter_tuto_01_epy_block_1_0 as epy_block_1_0  # embedded python block
-import Protocol_Formatter_tuto_01_epy_block_1_0_0 as epy_block_1_0_0  # embedded python block
-import Protocol_Formatter_tuto_01_epy_block_1_0_0_0 as epy_block_1_0_0_0  # embedded python block
-import Protocol_Formatter_tuto_01_epy_block_1_0_1 as epy_block_1_0_1  # embedded python block
+import Protocol_Formatter_sb_01_epy_block_1_0_1 as epy_block_1_0_1  # embedded python block
 import sip
 import threading
 
 
 
-class Protocol_Formatter_tuto_01(gr.top_block, Qt.QWidget):
+class Protocol_Formatter_sb_01(gr.top_block, Qt.QWidget):
 
     def __init__(self):
-        gr.top_block.__init__(self, "Protocol Formatter tutorial 01", catch_exceptions=True)
+        gr.top_block.__init__(self, "Protocol Formatter sandbox 01", catch_exceptions=True)
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("Protocol Formatter tutorial 01")
+        self.setWindowTitle("Protocol Formatter sandbox 01")
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
@@ -59,7 +55,7 @@ class Protocol_Formatter_tuto_01(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "Protocol_Formatter_tuto_01")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "Protocol_Formatter_sb_01")
 
         try:
             geometry = self.settings.value("geometry")
@@ -128,9 +124,6 @@ class Protocol_Formatter_tuto_01(gr.top_block, Qt.QWidget):
         self.pdu_tagged_stream_to_pdu_0 = pdu.tagged_stream_to_pdu(gr.types.byte_t, 'packet_len')
         self.pdu_pdu_to_tagged_stream_0 = pdu.pdu_to_tagged_stream(gr.types.byte_t, 'packet_len')
         self.epy_block_1_0_1 = epy_block_1_0_1.byte_logger(samp_rate=samp_rate, filename="03_byte_rx_log.csv")
-        self.epy_block_1_0_0_0 = epy_block_1_0_0_0.byte_logger(samp_rate=samp_rate, filename="02_byte_tx_log.csv")
-        self.epy_block_1_0_0 = epy_block_1_0_0.byte_logger(samp_rate=samp_rate, filename="01_byte_tx_log.csv")
-        self.epy_block_1_0 = epy_block_1_0.byte_logger(samp_rate=samp_rate, filename="04_byte_rx_log.csv")
         self.digital_protocol_formatter_bb_0 = digital.protocol_formatter_bb(header, "packet_len")
         self.digital_pfb_clock_sync_xxx_0 = digital.pfb_clock_sync_ccf(sps, 0.0628, firdes.root_raised_cosine(nfilts, nfilts, 1.0/float(sps), 0.35, 11*sps*nfilts), 32, 16, 1.5, 1)
         self.digital_crc_check_0 = digital.crc_check(32, 0x4C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, True, True, False, False, 0)
@@ -160,12 +153,9 @@ class Protocol_Formatter_tuto_01(gr.top_block, Qt.QWidget):
         self.msg_connect((self.blocks_message_strobe_1, 'strobe'), (self.digital_crc_append_0, 'in'))
         self.msg_connect((self.digital_crc_append_0, 'out'), (self.pdu_pdu_to_tagged_stream_0, 'pdus'))
         self.msg_connect((self.digital_crc_check_0, 'ok'), (self.blocks_message_debug_0, 'print'))
-        self.msg_connect((self.digital_crc_check_0, 'fail'), (self.blocks_message_debug_0, 'print'))
         self.msg_connect((self.pdu_tagged_stream_to_pdu_0, 'pdus'), (self.digital_crc_check_0, 'in'))
-        self.connect((self.blocks_pack_k_bits_bb_0, 0), (self.epy_block_1_0, 0))
         self.connect((self.blocks_pack_k_bits_bb_0, 0), (self.pdu_tagged_stream_to_pdu_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_constellation_modulator_0, 0))
-        self.connect((self.blocks_tagged_stream_mux_0, 0), (self.epy_block_1_0_0_0, 0))
         self.connect((self.blocks_throttle2_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
         self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.digital_correlate_access_code_xx_ts_1_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.blocks_throttle2_0, 0))
@@ -174,13 +164,12 @@ class Protocol_Formatter_tuto_01(gr.top_block, Qt.QWidget):
         self.connect((self.digital_correlate_access_code_xx_ts_1_0, 0), (self.epy_block_1_0_1, 0))
         self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.digital_constellation_decoder_cb_1_0, 0))
         self.connect((self.digital_protocol_formatter_bb_0, 0), (self.blocks_tagged_stream_mux_0, 0))
-        self.connect((self.digital_protocol_formatter_bb_0, 0), (self.epy_block_1_0_0, 0))
         self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.blocks_tagged_stream_mux_0, 1))
         self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.digital_protocol_formatter_bb_0, 0))
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "Protocol_Formatter_tuto_01")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "Protocol_Formatter_sb_01")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -207,9 +196,6 @@ class Protocol_Formatter_tuto_01(gr.top_block, Qt.QWidget):
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
         self.blocks_throttle2_0.set_sample_rate(self.samp_rate)
-        self.epy_block_1_0.samp_rate = self.samp_rate
-        self.epy_block_1_0_0.samp_rate = self.samp_rate
-        self.epy_block_1_0_0_0.samp_rate = self.samp_rate
         self.epy_block_1_0_1.samp_rate = self.samp_rate
 
     def get_nfilts(self):
@@ -236,7 +222,7 @@ class Protocol_Formatter_tuto_01(gr.top_block, Qt.QWidget):
 
 
 
-def main(top_block_cls=Protocol_Formatter_tuto_01, options=None):
+def main(top_block_cls=Protocol_Formatter_sb_01, options=None):
 
     qapp = Qt.QApplication(sys.argv)
 
