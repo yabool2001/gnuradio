@@ -15,6 +15,7 @@ from PyQt5 import Qt
 from gnuradio import qtgui
 from gnuradio import blocks
 import pmt
+from gnuradio import blocks, gr
 from gnuradio import digital
 from gnuradio import gr
 from gnuradio.filter import firdes
@@ -124,6 +125,7 @@ class Protocol_Formatter_tuto_01(gr.top_block, Qt.QWidget):
 
         self._qtgui_const_sink_x_0_0_win = sip.wrapinstance(self.qtgui_const_sink_x_0_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_const_sink_x_0_0_win)
+        self.pdu_tagged_stream_to_pdu_0 = pdu.tagged_stream_to_pdu(gr.types.byte_t, 'packet_len')
         self.pdu_pdu_to_tagged_stream_0 = pdu.pdu_to_tagged_stream(gr.types.byte_t, 'packet_len')
         self.epy_block_1_0_1 = epy_block_1_0_1.byte_logger(samp_rate=samp_rate, filename="03_byte_rx_log.csv")
         self.epy_block_1_0_0_0 = epy_block_1_0_0_0.byte_logger(samp_rate=samp_rate, filename="02_byte_tx_log.csv")
@@ -131,6 +133,8 @@ class Protocol_Formatter_tuto_01(gr.top_block, Qt.QWidget):
         self.epy_block_1_0 = epy_block_1_0.byte_logger(samp_rate=samp_rate, filename="04_byte_rx_log.csv")
         self.digital_protocol_formatter_bb_0 = digital.protocol_formatter_bb(header, "packet_len")
         self.digital_pfb_clock_sync_xxx_0 = digital.pfb_clock_sync_ccf(sps, 0.0628, firdes.root_raised_cosine(nfilts, nfilts, 1.0/float(sps), 0.35, 11*sps*nfilts), 32, 16, 1.5, 1)
+        self.digital_crc_check_0 = digital.crc_check(32, 0x4C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, True, True, False, False, 0)
+        self.digital_crc_append_0 = digital.crc_append(32, 0x4C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, True, True, False, 0)
         self.digital_correlate_access_code_xx_ts_1_0 = digital.correlate_access_code_bb_ts(access_key,
           0, "packet_len")
         self.digital_constellation_modulator_0 = digital.generic_mod(
@@ -147,13 +151,19 @@ class Protocol_Formatter_tuto_01(gr.top_block, Qt.QWidget):
         self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_char*1, "packet_len", 0)
         self.blocks_pack_k_bits_bb_0 = blocks.pack_k_bits_bb(8)
         self.blocks_message_strobe_1 = blocks.message_strobe(pmt.cons ( pmt.PMT_NIL , pmt.make_u8vector ( 1 , 0x13 ) ), 1000)
+        self.blocks_message_debug_0 = blocks.message_debug(True, gr.log_levels.info)
 
 
         ##################################################
         # Connections
         ##################################################
-        self.msg_connect((self.blocks_message_strobe_1, 'strobe'), (self.pdu_pdu_to_tagged_stream_0, 'pdus'))
+        self.msg_connect((self.blocks_message_strobe_1, 'strobe'), (self.digital_crc_append_0, 'in'))
+        self.msg_connect((self.digital_crc_append_0, 'out'), (self.pdu_pdu_to_tagged_stream_0, 'pdus'))
+        self.msg_connect((self.digital_crc_check_0, 'ok'), (self.blocks_message_debug_0, 'print'))
+        self.msg_connect((self.digital_crc_check_0, 'fail'), (self.blocks_message_debug_0, 'print'))
+        self.msg_connect((self.pdu_tagged_stream_to_pdu_0, 'pdus'), (self.digital_crc_check_0, 'in'))
         self.connect((self.blocks_pack_k_bits_bb_0, 0), (self.epy_block_1_0, 0))
+        self.connect((self.blocks_pack_k_bits_bb_0, 0), (self.pdu_tagged_stream_to_pdu_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_constellation_modulator_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.epy_block_1_0_0_0, 0))
         self.connect((self.blocks_throttle2_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
