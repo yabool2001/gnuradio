@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: Protocol Formatter sandbox 01
+# Title: Protocol Formatter sandbox 02
 # Author: yabool2001
 # Copyright: mzemlo.pl@gmail.com
 # GNU Radio version: 3.10.12.0
@@ -26,19 +26,19 @@ from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import gr, pdu
-import Protocol_Formatter_sb_01_epy_block_1_0 as epy_block_1_0  # embedded python block
-import Protocol_Formatter_sb_01_epy_block_1_0_0_0 as epy_block_1_0_0_0  # embedded python block
-import Protocol_Formatter_sb_01_epy_block_1_0_1 as epy_block_1_0_1  # embedded python block
+import Protocol_Formatter_sb_02_epy_block_1_0 as epy_block_1_0  # embedded python block
+import Protocol_Formatter_sb_02_epy_block_1_0_0_0 as epy_block_1_0_0_0  # embedded python block
+import Protocol_Formatter_sb_02_epy_block_1_0_1 as epy_block_1_0_1  # embedded python block
 import threading
 
 
 
-class Protocol_Formatter_sb_01(gr.top_block, Qt.QWidget):
+class Protocol_Formatter_sb_02(gr.top_block, Qt.QWidget):
 
     def __init__(self):
-        gr.top_block.__init__(self, "Protocol Formatter sandbox 01", catch_exceptions=True)
+        gr.top_block.__init__(self, "Protocol Formatter sandbox 02", catch_exceptions=True)
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("Protocol Formatter sandbox 01")
+        self.setWindowTitle("Protocol Formatter sandbox 02")
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
@@ -56,7 +56,7 @@ class Protocol_Formatter_sb_01(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "Protocol_Formatter_sb_01")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "Protocol_Formatter_sb_02")
 
         try:
             geometry = self.settings.value("geometry")
@@ -103,7 +103,6 @@ class Protocol_Formatter_sb_01(gr.top_block, Qt.QWidget):
         self.msg_connect((self.digital_crc_check_0, 'ok'), (self.blocks_message_debug_0, 'print'))
         self.msg_connect((self.pdu_tagged_stream_to_pdu_0, 'pdus'), (self.digital_crc_check_0, 'in'))
         self.connect((self.blocks_pack_k_bits_bb_0, 0), (self.epy_block_1_0, 0))
-        self.connect((self.blocks_pack_k_bits_bb_0, 0), (self.pdu_tagged_stream_to_pdu_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.blocks_throttle2_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.epy_block_1_0_0_0, 0))
         self.connect((self.blocks_throttle2_0, 0), (self.blocks_unpack_k_bits_bb_0, 0))
@@ -113,10 +112,11 @@ class Protocol_Formatter_sb_01(gr.top_block, Qt.QWidget):
         self.connect((self.digital_protocol_formatter_bb_0, 0), (self.blocks_tagged_stream_mux_0, 0))
         self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.blocks_tagged_stream_mux_0, 1))
         self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.digital_protocol_formatter_bb_0, 0))
+        self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.pdu_tagged_stream_to_pdu_0, 0))
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "Protocol_Formatter_sb_01")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "Protocol_Formatter_sb_02")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -150,7 +150,7 @@ class Protocol_Formatter_sb_01(gr.top_block, Qt.QWidget):
 
 
 
-def main(top_block_cls=Protocol_Formatter_sb_01, options=None):
+def main(top_block_cls=Protocol_Formatter_sb_02, options=None):
 
     qapp = Qt.QApplication(sys.argv)
 

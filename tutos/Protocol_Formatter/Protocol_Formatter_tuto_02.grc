@@ -11,7 +11,7 @@ options:
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: Protocol_Formatter_sb_01
+    id: Protocol_Formatter_tuto_02
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -22,7 +22,7 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: Protocol Formatter sandbox 01
+    title: Protocol Formatter tuto 02
     window_size: ''
   states:
     bus_sink: false
@@ -123,6 +123,25 @@ blocks:
     coordinate: [1008, 736.0]
     rotation: 180
     state: enabled
+- name: blocks_stream_to_tagged_stream_0
+  id: blocks_stream_to_tagged_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    len_tag_key: '"packet_len"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    packet_len: '5'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1232, 1180.0]
+    rotation: 180
+    state: enabled
 - name: blocks_tagged_stream_mux_0
   id: blocks_tagged_stream_mux
   parameters:
@@ -169,7 +188,11 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: ''
+    comment: 'Without this unpack,
+
+      the Correlate Access Code
+
+      - Tag Stream is not working'
     k: '8'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -196,7 +219,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1272, 712.0]
+    coordinate: [1520, 672.0]
     rotation: 180
     state: enabled
 - name: digital_crc_append_0
@@ -437,12 +460,14 @@ blocks:
 connections:
 - [blocks_message_strobe_1, strobe, digital_crc_append_0, in]
 - [blocks_pack_k_bits_bb_0, '0', epy_block_1_0, '0']
-- [blocks_pack_k_bits_bb_0, '0', pdu_tagged_stream_to_pdu_0, '0']
+- [blocks_stream_to_tagged_stream_0, '0', pdu_tagged_stream_to_pdu_0, '0']
 - [blocks_tagged_stream_mux_0, '0', blocks_throttle2_0, '0']
 - [blocks_tagged_stream_mux_0, '0', epy_block_1_0_0_0, '0']
 - [blocks_throttle2_0, '0', blocks_unpack_k_bits_bb_0, '0']
 - [blocks_unpack_k_bits_bb_0, '0', digital_correlate_access_code_xx_ts_1_0, '0']
 - [digital_correlate_access_code_xx_ts_1_0, '0', blocks_pack_k_bits_bb_0, '0']
+- [digital_correlate_access_code_xx_ts_1_0, '0', blocks_stream_to_tagged_stream_0,
+  '0']
 - [digital_correlate_access_code_xx_ts_1_0, '0', epy_block_1_0_1, '0']
 - [digital_crc_append_0, out, pdu_pdu_to_tagged_stream_0, pdus]
 - [digital_crc_check_0, ok, blocks_message_debug_0, print]
