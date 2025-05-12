@@ -5,16 +5,16 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: BPSK test 02 1
+# Title: BPSK test 02 3
 # Author: yabool2001
 # Copyright: mzemlo.pl@gmail.com
-# Description: BPSK test 02 1
+# Description: BPSK test 02 3
 # GNU Radio version: 3.10.12.0
 
 from PyQt5 import Qt
 from gnuradio import qtgui
-from gnuradio import analog
 from gnuradio import blocks
+import pmt
 from gnuradio import digital
 from gnuradio import gr
 from gnuradio.filter import firdes
@@ -25,18 +25,18 @@ from PyQt5 import Qt
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
+from gnuradio import gr, pdu
 from gnuradio import iio
-import sip
 import threading
 
 
 
-class BPSK_test_02_1(gr.top_block, Qt.QWidget):
+class BPSK_test_02_3(gr.top_block, Qt.QWidget):
 
     def __init__(self, hdr_format=digital.header_format_default(digital.packet_utils.default_access_code, 0)):
-        gr.top_block.__init__(self, "BPSK test 02 1", catch_exceptions=True)
+        gr.top_block.__init__(self, "BPSK test 02 3", catch_exceptions=True)
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("BPSK test 02 1")
+        self.setWindowTitle("BPSK test 02 3")
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
@@ -54,7 +54,7 @@ class BPSK_test_02_1(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "BPSK_test_02_1")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "BPSK_test_02_3")
 
         try:
             geometry = self.settings.value("geometry")
@@ -75,58 +75,17 @@ class BPSK_test_02_1(gr.top_block, Qt.QWidget):
         self.bw = bw = 20000000
         self.variable_constellation_1 = variable_constellation_1 = digital.constellation_bpsk().base()
         self.variable_constellation_1.set_npwr(1.0)
-        self.taps = taps = [1.0, 0.25-0.25j, 0.50 + 0.10j, -0.3 + 0.2j]
         self.sps = sps = 4
         self.samp_rate = samp_rate = int(bw*3)
         self.pluto_context = pluto_context = "usb:"
         self.nfilts = nfilts = 32
-        self.f_c = f_c = 820000000
+        self.f_c = f_c = 2400000000
 
         ##################################################
         # Blocks
         ##################################################
 
-        self.qtgui_const_sink_x_1 = qtgui.const_sink_c(
-            20, #size
-            "", #name
-            1, #number of inputs
-            None # parent
-        )
-        self.qtgui_const_sink_x_1.set_update_time(0.10)
-        self.qtgui_const_sink_x_1.set_y_axis((-2), 2)
-        self.qtgui_const_sink_x_1.set_x_axis((-2), 2)
-        self.qtgui_const_sink_x_1.set_trigger_mode(qtgui.TRIG_MODE_FREE, qtgui.TRIG_SLOPE_POS, 0.0, 0, "")
-        self.qtgui_const_sink_x_1.enable_autoscale(True)
-        self.qtgui_const_sink_x_1.enable_grid(False)
-        self.qtgui_const_sink_x_1.enable_axis_labels(True)
-
-
-        labels = ['', '', '', '', '',
-            '', '', '', '', '']
-        widths = [1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1]
-        colors = ["blue", "red", "green", "black", "cyan",
-            "magenta", "yellow", "dark red", "dark green", "dark blue"]
-        styles = [0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0]
-        markers = [0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0]
-        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
-            1.0, 1.0, 1.0, 1.0, 1.0]
-
-        for i in range(1):
-            if len(labels[i]) == 0:
-                self.qtgui_const_sink_x_1.set_line_label(i, "Data {0}".format(i))
-            else:
-                self.qtgui_const_sink_x_1.set_line_label(i, labels[i])
-            self.qtgui_const_sink_x_1.set_line_width(i, widths[i])
-            self.qtgui_const_sink_x_1.set_line_color(i, colors[i])
-            self.qtgui_const_sink_x_1.set_line_style(i, styles[i])
-            self.qtgui_const_sink_x_1.set_line_marker(i, markers[i])
-            self.qtgui_const_sink_x_1.set_line_alpha(i, alphas[i])
-
-        self._qtgui_const_sink_x_1_win = sip.wrapinstance(self.qtgui_const_sink_x_1.qwidget(), Qt.QWidget)
-        self.top_layout.addWidget(self._qtgui_const_sink_x_1_win)
+        self.pdu_pdu_to_tagged_stream_0 = pdu.pdu_to_tagged_stream(gr.types.byte_t, 'packet_len')
         self.iio_pluto_source_0 = iio.fmcomms2_source_fc32(pluto_context if pluto_context else iio.get_pluto_uri(), [True, True], 32768)
         self.iio_pluto_source_0.set_len_tag_key('packet_len')
         self.iio_pluto_source_0.set_frequency(f_c)
@@ -159,32 +118,30 @@ class BPSK_test_02_1(gr.top_block, Qt.QWidget):
             truncate=False)
         self.digital_constellation_decoder_cb_1_0 = digital.constellation_decoder_cb(variable_constellation_1)
         self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_char*1, "packet_len", 0)
-        self.blocks_stream_to_tagged_stream_0_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 1, "packet_len")
         self.blocks_repack_bits_bb_0_0_0 = blocks.repack_bits_bb(1, 8, "packet_len", False, gr.GR_MSB_FIRST)
+        self.blocks_message_strobe_1 = blocks.message_strobe(pmt.cons(pmt.PMT_NIL, pmt.init_u8vector(1, 0x31)), 500)
         self.blocks_file_sink_0_0_0 = blocks.file_sink(gr.sizeof_char*1, 'output_text.txt', False)
         self.blocks_file_sink_0_0_0.set_unbuffered(False)
-        self.analog_const_source_x_0 = analog.sig_source_b(0, analog.GR_CONST_WAVE, 0, 0, 0x11)
 
 
         ##################################################
         # Connections
         ##################################################
-        self.connect((self.analog_const_source_x_0, 0), (self.blocks_stream_to_tagged_stream_0_0, 0))
+        self.msg_connect((self.blocks_message_strobe_1, 'strobe'), (self.pdu_pdu_to_tagged_stream_0, 'pdus'))
         self.connect((self.blocks_repack_bits_bb_0_0_0, 0), (self.blocks_file_sink_0_0_0, 0))
-        self.connect((self.blocks_stream_to_tagged_stream_0_0, 0), (self.blocks_tagged_stream_mux_0, 1))
-        self.connect((self.blocks_stream_to_tagged_stream_0_0, 0), (self.digital_protocol_formatter_bb_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_constellation_modulator_0_0, 0))
         self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.digital_correlate_access_code_xx_ts_1, 0))
         self.connect((self.digital_constellation_modulator_0_0, 0), (self.iio_pluto_sink_0, 0))
         self.connect((self.digital_correlate_access_code_xx_ts_1, 0), (self.blocks_repack_bits_bb_0_0_0, 0))
         self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.digital_constellation_decoder_cb_1_0, 0))
-        self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.qtgui_const_sink_x_1, 0))
         self.connect((self.digital_protocol_formatter_bb_0, 0), (self.blocks_tagged_stream_mux_0, 0))
         self.connect((self.iio_pluto_source_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
+        self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.blocks_tagged_stream_mux_0, 1))
+        self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.digital_protocol_formatter_bb_0, 0))
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "BPSK_test_02_1")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "BPSK_test_02_3")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -212,12 +169,6 @@ class BPSK_test_02_1(gr.top_block, Qt.QWidget):
     def set_variable_constellation_1(self, variable_constellation_1):
         self.variable_constellation_1 = variable_constellation_1
         self.digital_constellation_decoder_cb_1_0.set_constellation(self.variable_constellation_1)
-
-    def get_taps(self):
-        return self.taps
-
-    def set_taps(self, taps):
-        self.taps = taps
 
     def get_sps(self):
         return self.sps
@@ -258,12 +209,12 @@ class BPSK_test_02_1(gr.top_block, Qt.QWidget):
 
 
 def argument_parser():
-    description = 'BPSK test 02 1'
+    description = 'BPSK test 02 3'
     parser = ArgumentParser(description=description)
     return parser
 
 
-def main(top_block_cls=BPSK_test_02_1, options=None):
+def main(top_block_cls=BPSK_test_02_3, options=None):
     if options is None:
         options = argument_parser().parse_args()
 

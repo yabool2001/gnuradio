@@ -157,7 +157,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1104, 472.0]
+    coordinate: [1096, 472.0]
     rotation: 0
     state: enabled
 - name: blocks_message_strobe_1
@@ -165,11 +165,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: 'HEX: 0x11
-
-      BIN: 0b00010001
-
-      DEC: 17'
+    comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
     msg: pmt.cons(pmt.PMT_NIL, pmt.init_u8vector(1, 0x31))
@@ -198,7 +194,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [920, 480.0]
+    coordinate: [912, 480.0]
     rotation: 0
     state: enabled
 - name: blocks_stream_to_tagged_stream_0_0
@@ -225,7 +221,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: Append header to payload
+    comment: ''
     lengthtagname: '"packet_len"'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -294,7 +290,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [664, 472.0]
+    coordinate: [656, 472.0]
     rotation: 0
     state: enabled
 - name: digital_pfb_clock_sync_xxx_0
@@ -334,7 +330,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 160.0]
+    coordinate: [456, 168.0]
     rotation: 0
     state: enabled
 - name: hdr_format
@@ -426,7 +422,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [176, 264.0]
+    coordinate: [184, 264.0]
     rotation: 0
     state: enabled
 
