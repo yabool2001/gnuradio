@@ -294,7 +294,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    discard_crc: 'False'
+    discard_crc: 'True'
     final_xor: '0xFFFFFFFF'
     initial_value: '0xFFFFFFFF'
     input_reflected: 'True'
@@ -425,7 +425,7 @@ blocks:
     bus_structure: null
     coordinate: [176, 956.0]
     rotation: 180
-    state: disabled
+    state: enabled
 - name: epy_block_1_0_0
   id: epy_block
   parameters:

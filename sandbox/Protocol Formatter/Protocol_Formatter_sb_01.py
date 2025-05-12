@@ -26,6 +26,7 @@ from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import gr, pdu
+import Protocol_Formatter_sb_01_epy_block_1_0 as epy_block_1_0  # embedded python block
 import Protocol_Formatter_sb_01_epy_block_1_0_1 as epy_block_1_0_1  # embedded python block
 import sip
 import threading
@@ -124,9 +125,10 @@ class Protocol_Formatter_sb_01(gr.top_block, Qt.QWidget):
         self.pdu_tagged_stream_to_pdu_0 = pdu.tagged_stream_to_pdu(gr.types.byte_t, 'packet_len')
         self.pdu_pdu_to_tagged_stream_0 = pdu.pdu_to_tagged_stream(gr.types.byte_t, 'packet_len')
         self.epy_block_1_0_1 = epy_block_1_0_1.byte_logger(samp_rate=samp_rate, filename="03_byte_rx_log.csv")
+        self.epy_block_1_0 = epy_block_1_0.byte_logger(samp_rate=samp_rate, filename="04_byte_rx_log.csv")
         self.digital_protocol_formatter_bb_0 = digital.protocol_formatter_bb(header, "packet_len")
         self.digital_pfb_clock_sync_xxx_0 = digital.pfb_clock_sync_ccf(sps, 0.0628, firdes.root_raised_cosine(nfilts, nfilts, 1.0/float(sps), 0.35, 11*sps*nfilts), 32, 16, 1.5, 1)
-        self.digital_crc_check_0 = digital.crc_check(32, 0x4C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, True, True, False, False, 0)
+        self.digital_crc_check_0 = digital.crc_check(32, 0x4C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, True, True, False, True, 0)
         self.digital_crc_append_0 = digital.crc_append(32, 0x4C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, True, True, False, 0)
         self.digital_correlate_access_code_xx_ts_1_0 = digital.correlate_access_code_bb_ts(access_key,
           0, "packet_len")
@@ -154,6 +156,7 @@ class Protocol_Formatter_sb_01(gr.top_block, Qt.QWidget):
         self.msg_connect((self.digital_crc_append_0, 'out'), (self.pdu_pdu_to_tagged_stream_0, 'pdus'))
         self.msg_connect((self.digital_crc_check_0, 'ok'), (self.blocks_message_debug_0, 'print'))
         self.msg_connect((self.pdu_tagged_stream_to_pdu_0, 'pdus'), (self.digital_crc_check_0, 'in'))
+        self.connect((self.blocks_pack_k_bits_bb_0, 0), (self.epy_block_1_0, 0))
         self.connect((self.blocks_pack_k_bits_bb_0, 0), (self.pdu_tagged_stream_to_pdu_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_constellation_modulator_0, 0))
         self.connect((self.blocks_throttle2_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
@@ -196,6 +199,7 @@ class Protocol_Formatter_sb_01(gr.top_block, Qt.QWidget):
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
         self.blocks_throttle2_0.set_sample_rate(self.samp_rate)
+        self.epy_block_1_0.samp_rate = self.samp_rate
         self.epy_block_1_0_1.samp_rate = self.samp_rate
 
     def get_nfilts(self):
