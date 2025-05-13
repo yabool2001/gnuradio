@@ -15,7 +15,6 @@ from PyQt5 import Qt
 from gnuradio import qtgui
 from gnuradio import analog
 from gnuradio import blocks
-import pmt
 from gnuradio import digital
 from gnuradio import gr
 from gnuradio.filter import firdes
@@ -26,8 +25,8 @@ from PyQt5 import Qt
 from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
-from gnuradio import gr, pdu
 from gnuradio import iio
+import BPSK_test_02_4_epy_block_1_0_0_0_0 as epy_block_1_0_0_0_0  # embedded python block
 import threading
 
 
@@ -86,7 +85,6 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
         # Blocks
         ##################################################
 
-        self.pdu_pdu_to_tagged_stream_0 = pdu.pdu_to_tagged_stream(gr.types.byte_t, 'packet_len')
         self.iio_pluto_source_0 = iio.fmcomms2_source_fc32(pluto_context if pluto_context else iio.get_pluto_uri(), [True, True], 32768)
         self.iio_pluto_source_0.set_len_tag_key('packet_len')
         self.iio_pluto_source_0.set_frequency(f_c)
@@ -104,6 +102,7 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
         self.iio_pluto_sink_0.set_samplerate(samp_rate)
         self.iio_pluto_sink_0.set_attenuation(0, 1)
         self.iio_pluto_sink_0.set_filter_params('Auto', '', 0, 0)
+        self.epy_block_1_0_0_0_0 = epy_block_1_0_0_0_0.byte_logger(samp_rate=samp_rate, filename="06_byte_rx_log.csv")
         self.digital_protocol_formatter_bb_0 = digital.protocol_formatter_bb(hdr_format, "packet_len")
         self.digital_pfb_clock_sync_xxx_0 = digital.pfb_clock_sync_ccf(4, 0.0628, firdes.root_raised_cosine(nfilts, nfilts, 1.0/float(sps), 0.35, 11*sps*nfilts), 32, 16, 1.5, 1)
         self.digital_correlate_access_code_xx_ts_1 = digital.correlate_access_code_bb_ts(digital.packet_utils.default_access_code,
@@ -119,19 +118,23 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
             truncate=False)
         self.digital_constellation_decoder_cb_1_0 = digital.constellation_decoder_cb(variable_constellation_1)
         self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_char*1, "packet_len", 0)
+        self.blocks_stream_to_tagged_stream_0_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 1, "packet_len")
         self.blocks_repack_bits_bb_0_0_0 = blocks.repack_bits_bb(1, 8, "packet_len", False, gr.GR_MSB_FIRST)
-        self.blocks_message_strobe_1 = blocks.message_strobe(pmt.cons(pmt.PMT_NIL, pmt.init_u8vector(1, 0x31)), 500)
         self.blocks_file_sink_0_0_0 = blocks.file_sink(gr.sizeof_char*1, 'output_text.txt', False)
         self.blocks_file_sink_0_0_0.set_unbuffered(False)
-        self.analog_simple_squelch_cc_0 = analog.simple_squelch_cc((-40), (1e-4))
+        self.analog_simple_squelch_cc_0 = analog.simple_squelch_cc((-50), (1e-4))
+        self.analog_const_source_x_0 = analog.sig_source_b(0, analog.GR_CONST_WAVE, 0, 0, 0x31)
 
 
         ##################################################
         # Connections
         ##################################################
-        self.msg_connect((self.blocks_message_strobe_1, 'strobe'), (self.pdu_pdu_to_tagged_stream_0, 'pdus'))
+        self.connect((self.analog_const_source_x_0, 0), (self.blocks_stream_to_tagged_stream_0_0, 0))
         self.connect((self.analog_simple_squelch_cc_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
         self.connect((self.blocks_repack_bits_bb_0_0_0, 0), (self.blocks_file_sink_0_0_0, 0))
+        self.connect((self.blocks_repack_bits_bb_0_0_0, 0), (self.epy_block_1_0_0_0_0, 0))
+        self.connect((self.blocks_stream_to_tagged_stream_0_0, 0), (self.blocks_tagged_stream_mux_0, 1))
+        self.connect((self.blocks_stream_to_tagged_stream_0_0, 0), (self.digital_protocol_formatter_bb_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_constellation_modulator_0_0, 0))
         self.connect((self.digital_constellation_decoder_cb_1_0, 0), (self.digital_correlate_access_code_xx_ts_1, 0))
         self.connect((self.digital_constellation_modulator_0_0, 0), (self.iio_pluto_sink_0, 0))
@@ -139,8 +142,6 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
         self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.digital_constellation_decoder_cb_1_0, 0))
         self.connect((self.digital_protocol_formatter_bb_0, 0), (self.blocks_tagged_stream_mux_0, 0))
         self.connect((self.iio_pluto_source_0, 0), (self.analog_simple_squelch_cc_0, 0))
-        self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.blocks_tagged_stream_mux_0, 1))
-        self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.digital_protocol_formatter_bb_0, 0))
 
 
     def closeEvent(self, event):
@@ -185,6 +186,7 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
+        self.epy_block_1_0_0_0_0.samp_rate = self.samp_rate
         self.iio_pluto_sink_0.set_samplerate(self.samp_rate)
         self.iio_pluto_source_0.set_samplerate(self.samp_rate)
 

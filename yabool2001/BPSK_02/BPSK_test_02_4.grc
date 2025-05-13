@@ -139,9 +139,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [24, 592.0]
+    coordinate: [40, 352.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: analog_pwr_squelch_xx_0
   id: analog_pwr_squelch_xx
   parameters:
@@ -159,7 +159,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [384, 900.0]
+    coordinate: [48, 768.0]
     rotation: 0
     state: disabled
 - name: analog_simple_squelch_cc_0
@@ -171,12 +171,12 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    threshold: '-40'
+    threshold: '-50'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [512, 1100.0]
+    coordinate: [248, 600.0]
     rotation: 0
     state: enabled
 - name: blocks_file_sink_0_0_0
@@ -194,7 +194,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [2040, 1200.0]
+    coordinate: [952, 608.0]
     rotation: 0
     state: enabled
 - name: blocks_message_strobe_1
@@ -211,9 +211,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [72, 236.0]
+    coordinate: [64, 184.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_repack_bits_bb_0_0_0
   id: blocks_repack_bits_bb
   parameters:
@@ -231,7 +231,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1768, 1004.0]
+    coordinate: [824, 520.0]
     rotation: 0
     state: enabled
 - name: blocks_selector_0
@@ -254,7 +254,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [696, 744.0]
+    coordinate: [240, 744.0]
     rotation: 0
     state: disabled
 - name: blocks_stream_to_tagged_stream_0_0
@@ -273,9 +273,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [288, 580.0]
+    coordinate: [216, 344.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: blocks_tagged_stream_mux_0
   id: blocks_tagged_stream_mux
   parameters:
@@ -293,7 +293,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [968, 304.0]
+    coordinate: [488, 232.0]
     rotation: 0
     state: enabled
 - name: digital_constellation_decoder_cb_1_0
@@ -309,7 +309,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1432, 880.0]
+    coordinate: [656, 432.0]
     rotation: 0
     state: enabled
 - name: digital_constellation_modulator_0_0
@@ -331,7 +331,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1328, 300.0]
+    coordinate: [696, 120.0]
     rotation: 0
     state: enabled
 - name: digital_correlate_access_code_xx_ts_1
@@ -350,7 +350,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1560, 1216.0]
+    coordinate: [560, 608.0]
     rotation: 0
     state: enabled
 - name: digital_pfb_clock_sync_xxx_0
@@ -373,7 +373,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [928, 1040.0]
+    coordinate: [400, 432.0]
     rotation: 0
     state: enabled
 - name: digital_protocol_formatter_bb_0
@@ -390,7 +390,41 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [696, 172.0]
+    coordinate: [288, 128.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_1_0_0_0_0
+  id: epy_block
+  parameters:
+    _source_code: "from gnuradio import gr\nimport numpy as np\nimport time\nimport\
+      \ os\n\nclass byte_logger(gr.sync_block):\n    def __init__(self, samp_rate=32000,\
+      \ filename=\"byte_log.csv\"):\n        gr.sync_block.__init__(self,\n      \
+      \      name=\"BYTE FILE SINK\",\n            in_sig=[np.uint8],\n          \
+      \  out_sig=None)\n        self.filename = filename\n        self.samp_rate =\
+      \ samp_rate\n        self.start_time = time.time()\n\n        file_exists =\
+      \ os.path.isfile(filename)\n        self.f = open(filename, \"w\", encoding=\"\
+      utf-8\")\n\n        if not file_exists or os.stat(filename).st_size == 0:\n\
+      \            self.f.write(\"timestamp;byte;samp_rate\\n\")\n\n    def work(self,\
+      \ input_items, output_items):\n        current_time = time.time()\n        elapsed\
+      \ = current_time - self.start_time\n\n        for i, b in enumerate(input_items[0]):\n\
+      \            timestamp = elapsed + (i / self.samp_rate)\n            ts = f\"\
+      {timestamp:.6f}\".replace('.', ',')\n            val = str(b)\n            sr\
+      \ = f\"{self.samp_rate:.0f}\".replace('.', ',')\n            self.f.write(f\"\
+      {ts};{val};{sr}\\n\")\n\n        self.f.flush()\n        return len(input_items[0])\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    filename: '"06_byte_rx_log.csv"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+  states:
+    _io_cache: ('BYTE FILE SINK', 'byte_logger', [('samp_rate', '32000'), ('filename',
+      "'byte_log.csv'")], [('0', 'byte', 1)], [], '', ['filename', 'samp_rate'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1024, 416.0]
     rotation: 0
     state: enabled
 - name: hdr_format
@@ -434,7 +468,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1808, 240.0]
+    coordinate: [920, 192.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_source_0
@@ -465,7 +499,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [24, 1000.0]
+    coordinate: [16, 532.0]
     rotation: 0
     state: enabled
 - name: pdu_pdu_to_tagged_stream_0
@@ -482,9 +516,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [280, 368.0]
+    coordinate: [232, 256.0]
     rotation: 0
-    state: enabled
+    state: disabled
 
 connections:
 - [analog_const_source_x_0, '0', blocks_stream_to_tagged_stream_0_0, '0']
@@ -492,6 +526,7 @@ connections:
 - [analog_simple_squelch_cc_0, '0', digital_pfb_clock_sync_xxx_0, '0']
 - [blocks_message_strobe_1, strobe, pdu_pdu_to_tagged_stream_0, pdus]
 - [blocks_repack_bits_bb_0_0_0, '0', blocks_file_sink_0_0_0, '0']
+- [blocks_repack_bits_bb_0_0_0, '0', epy_block_1_0_0_0_0, '0']
 - [blocks_stream_to_tagged_stream_0_0, '0', blocks_tagged_stream_mux_0, '1']
 - [blocks_stream_to_tagged_stream_0_0, '0', digital_protocol_formatter_bb_0, '0']
 - [blocks_tagged_stream_mux_0, '0', digital_constellation_modulator_0_0, '0']
