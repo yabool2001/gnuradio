@@ -4,7 +4,9 @@ options:
     catch_exceptions: 'True'
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
-    comment: https://wiki.gnuradio.org/index.php/Packet_Communications
+    comment: 'https://wiki.gnuradio.org/index.php/Packet_Communications
+
+      Stable version'
     copyright: mzemlo.pl@gmail.com
     description: ''
     gen_cmake: 'On'
