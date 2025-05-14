@@ -83,7 +83,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [72, 1164.0]
+    coordinate: [80, 792.0]
     rotation: 180
     state: enabled
 - name: blocks_message_strobe_1
@@ -104,7 +104,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [80, 396.0]
+    coordinate: [56, 160.0]
     rotation: 0
     state: enabled
 - name: blocks_pack_k_bits_bb_0
@@ -120,7 +120,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1008, 736.0]
+    coordinate: [696, 712.0]
     rotation: 180
     state: enabled
 - name: blocks_tagged_stream_mux_0
@@ -140,7 +140,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [848, 392.0]
+    coordinate: [664, 280.0]
     rotation: 0
     state: enabled
 - name: blocks_throttle2_0
@@ -161,7 +161,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1248, 380.0]
+    coordinate: [792, 384.0]
     rotation: 0
     state: enabled
 - name: blocks_unpack_k_bits_bb_0
@@ -177,7 +177,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1584, 384.0]
+    coordinate: [976, 392.0]
     rotation: 0
     state: enabled
 - name: digital_correlate_access_code_xx_ts_1_0
@@ -196,7 +196,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1272, 712.0]
+    coordinate: [800, 552.0]
     rotation: 180
     state: enabled
 - name: digital_crc_append_0
@@ -219,7 +219,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [256, 264.0]
+    coordinate: [168, 296.0]
     rotation: 0
     state: enabled
 - name: digital_crc_check_0
@@ -243,7 +243,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [488, 1192.0]
+    coordinate: [504, 864.0]
     rotation: 180
     state: enabled
 - name: digital_protocol_formatter_bb_0
@@ -260,7 +260,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [664, 220.0]
+    coordinate: [576, 160.0]
     rotation: 0
     state: enabled
 - name: epy_block_1_0
@@ -294,7 +294,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 724.0]
+    coordinate: [480, 616.0]
     rotation: 180
     state: enabled
 - name: epy_block_1_0_0
@@ -328,7 +328,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1064, 220.0]
+    coordinate: [840, 160.0]
     rotation: 0
     state: disabled
 - name: epy_block_1_0_0_0
@@ -362,7 +362,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1448, 220.0]
+    coordinate: [928, 280.0]
     rotation: 0
     state: enabled
 - name: epy_block_1_0_1
@@ -396,7 +396,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [888, 580.0]
+    coordinate: [544, 480.0]
     rotation: 180
     state: enabled
 - name: pdu_pdu_to_tagged_stream_0
@@ -413,7 +413,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [464, 408.0]
+    coordinate: [336, 168.0]
     rotation: 0
     state: enabled
 - name: pdu_tagged_stream_to_pdu_0
@@ -430,7 +430,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [848, 1192.0]
+    coordinate: [776, 880.0]
     rotation: 180
     state: enabled
 
