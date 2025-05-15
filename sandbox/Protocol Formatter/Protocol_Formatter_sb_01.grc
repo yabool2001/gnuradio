@@ -44,19 +44,19 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [816, 28.0]
+    coordinate: [456, 16.0]
     rotation: 0
     state: enabled
 - name: header
   id: variable
   parameters:
     comment: ''
-    value: digital.header_format_default(access_key, 0)
+    value: digital.header_format_default ( access_key , 0 )
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [496, 36.0]
+    coordinate: [280, 16.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -68,7 +68,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [320, 36.0]
+    coordinate: [192, 16.0]
     rotation: 0
     state: enabled
 - name: blocks_message_debug_0
@@ -83,7 +83,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [80, 792.0]
+    coordinate: [152, 536.0]
     rotation: 180
     state: enabled
 - name: blocks_message_strobe_1
@@ -104,7 +104,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [56, 160.0]
+    coordinate: [56, 216.0]
     rotation: 0
     state: enabled
 - name: blocks_pack_k_bits_bb_0
@@ -120,7 +120,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [696, 712.0]
+    coordinate: [544, 480.0]
     rotation: 180
     state: enabled
 - name: blocks_tagged_stream_mux_0
@@ -140,7 +140,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [664, 280.0]
+    coordinate: [880, 256.0]
     rotation: 0
     state: enabled
 - name: blocks_throttle2_0
@@ -161,8 +161,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [792, 384.0]
-    rotation: 0
+    coordinate: [1072.0, 344]
+    rotation: 270
     state: enabled
 - name: blocks_unpack_k_bits_bb_0
   id: blocks_unpack_k_bits_bb
@@ -177,8 +177,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [976, 392.0]
-    rotation: 0
+    coordinate: [960, 480.0]
+    rotation: 180
     state: enabled
 - name: digital_correlate_access_code_xx_ts_1_0
   id: digital_correlate_access_code_xx_ts
@@ -196,54 +196,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [800, 552.0]
-    rotation: 180
-    state: enabled
-- name: digital_crc_append_0
-  id: digital_crc_append
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    final_xor: '0xFFFFFFFF'
-    initial_value: '0xFFFFFFFF'
-    input_reflected: 'True'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    num_bits: '32'
-    poly: '0x4C11DB7'
-    result_reflected: 'True'
-    skip_header_bytes: '0'
-    swap_endianness: 'False'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [168, 296.0]
-    rotation: 0
-    state: enabled
-- name: digital_crc_check_0
-  id: digital_crc_check
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    discard_crc: 'True'
-    final_xor: '0xFFFFFFFF'
-    initial_value: '0xFFFFFFFF'
-    input_reflected: 'True'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    num_bits: '32'
-    poly: '0x4C11DB7'
-    result_reflected: 'True'
-    skip_header_bytes: '0'
-    swap_endianness: 'False'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [504, 864.0]
+    coordinate: [696, 464.0]
     rotation: 180
     state: enabled
 - name: digital_protocol_formatter_bb_0
@@ -260,42 +213,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [576, 160.0]
+    coordinate: [616, 184.0]
     rotation: 0
-    state: enabled
-- name: epy_block_1_0
-  id: epy_block
-  parameters:
-    _source_code: "from gnuradio import gr\nimport numpy as np\nimport time\nimport\
-      \ os\n\nclass byte_logger(gr.sync_block):\n    def __init__(self, samp_rate=32000,\
-      \ filename=\"byte_log.csv\"):\n        gr.sync_block.__init__(self,\n      \
-      \      name=\"BYTE FILE SINK\",\n            in_sig=[np.uint8],\n          \
-      \  out_sig=None)\n        self.filename = filename\n        self.samp_rate =\
-      \ samp_rate\n        self.start_time = time.time()\n\n        file_exists =\
-      \ os.path.isfile(filename)\n        self.f = open(filename, \"w\", encoding=\"\
-      utf-8\")\n\n        if not file_exists or os.stat(filename).st_size == 0:\n\
-      \            self.f.write(\"timestamp;byte;samp_rate\\n\")\n\n    def work(self,\
-      \ input_items, output_items):\n        current_time = time.time()\n        elapsed\
-      \ = current_time - self.start_time\n\n        for i, b in enumerate(input_items[0]):\n\
-      \            timestamp = elapsed + (i / self.samp_rate)\n            ts = f\"\
-      {timestamp:.6f}\".replace('.', ',')\n            val = str(b)\n            sr\
-      \ = f\"{self.samp_rate:.0f}\".replace('.', ',')\n            self.f.write(f\"\
-      {ts};{val};{sr}\\n\")\n\n        self.f.flush()\n        return len(input_items[0])\n"
-    affinity: ''
-    alias: ''
-    comment: ''
-    filename: '"04_byte_rx_log.csv"'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    samp_rate: samp_rate
-  states:
-    _io_cache: ('BYTE FILE SINK', 'byte_logger', [('samp_rate', '32000'), ('filename',
-      "'byte_log.csv'")], [('0', 'byte', 1)], [], '', ['filename', 'samp_rate'])
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [480, 616.0]
-    rotation: 180
     state: enabled
 - name: epy_block_1_0_0
   id: epy_block
@@ -328,9 +247,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [840, 160.0]
-    rotation: 0
-    state: disabled
+    coordinate: [808.0, 8]
+    rotation: 90
+    state: enabled
 - name: epy_block_1_0_0_0
   id: epy_block
   parameters:
@@ -362,8 +281,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [928, 280.0]
-    rotation: 0
+    coordinate: [1072.0, 72]
+    rotation: 90
     state: enabled
 - name: epy_block_1_0_1
   id: epy_block
@@ -396,8 +315,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [544, 480.0]
-    rotation: 180
+    coordinate: [448.0, 288]
+    rotation: 90
     state: enabled
 - name: pdu_pdu_to_tagged_stream_0
   id: pdu_pdu_to_tagged_stream
@@ -413,7 +332,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [336, 168.0]
+    coordinate: [296, 224.0]
     rotation: 0
     state: enabled
 - name: pdu_tagged_stream_to_pdu_0
@@ -421,7 +340,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: ''
+    comment: "Nie chce pracowa\u0107 z bajtami, tylko musz\u0119 puszcza\u0107 bity"
     maxoutbuf: '0'
     minoutbuf: '0'
     tag: packet_len
@@ -430,27 +349,24 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [776, 880.0]
+    coordinate: [456, 560.0]
     rotation: 180
     state: enabled
 
 connections:
-- [blocks_message_strobe_1, strobe, digital_crc_append_0, in]
-- [blocks_pack_k_bits_bb_0, '0', epy_block_1_0, '0']
-- [blocks_pack_k_bits_bb_0, '0', pdu_tagged_stream_to_pdu_0, '0']
+- [blocks_message_strobe_1, strobe, pdu_pdu_to_tagged_stream_0, pdus]
+- [blocks_pack_k_bits_bb_0, '0', epy_block_1_0_1, '0']
 - [blocks_tagged_stream_mux_0, '0', blocks_throttle2_0, '0']
 - [blocks_tagged_stream_mux_0, '0', epy_block_1_0_0_0, '0']
 - [blocks_throttle2_0, '0', blocks_unpack_k_bits_bb_0, '0']
 - [blocks_unpack_k_bits_bb_0, '0', digital_correlate_access_code_xx_ts_1_0, '0']
 - [digital_correlate_access_code_xx_ts_1_0, '0', blocks_pack_k_bits_bb_0, '0']
-- [digital_correlate_access_code_xx_ts_1_0, '0', epy_block_1_0_1, '0']
-- [digital_crc_append_0, out, pdu_pdu_to_tagged_stream_0, pdus]
-- [digital_crc_check_0, ok, blocks_message_debug_0, print]
+- [digital_correlate_access_code_xx_ts_1_0, '0', pdu_tagged_stream_to_pdu_0, '0']
 - [digital_protocol_formatter_bb_0, '0', blocks_tagged_stream_mux_0, '0']
 - [digital_protocol_formatter_bb_0, '0', epy_block_1_0_0, '0']
 - [pdu_pdu_to_tagged_stream_0, '0', blocks_tagged_stream_mux_0, '1']
 - [pdu_pdu_to_tagged_stream_0, '0', digital_protocol_formatter_bb_0, '0']
-- [pdu_tagged_stream_to_pdu_0, pdus, digital_crc_check_0, in]
+- [pdu_tagged_stream_to_pdu_0, pdus, blocks_message_debug_0, print]
 
 metadata:
   file_format: 1
