@@ -4,7 +4,9 @@ options:
     catch_exceptions: 'True'
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
-    comment: https://wiki.gnuradio.org/index.php/Packet_Communications
+    comment: 'https://wiki.gnuradio.org/index.php/Packet_Communications
+
+      Stable'
     copyright: mzemlo.pl@gmail.com
     description: ''
     gen_cmake: 'On'
@@ -83,7 +85,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [152, 536.0]
+    coordinate: [8, 472.0]
     rotation: 180
     state: enabled
 - name: blocks_message_strobe_1
@@ -104,10 +106,10 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [56, 216.0]
+    coordinate: [56, 232.0]
     rotation: 0
     state: enabled
-- name: blocks_pack_k_bits_bb_0
+- name: blocks_pack_k_bits_bb_0_0
   id: blocks_pack_k_bits_bb
   parameters:
     affinity: ''
@@ -120,7 +122,26 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [544, 480.0]
+    coordinate: [520, 496.0]
+    rotation: 180
+    state: enabled
+- name: blocks_stream_to_tagged_stream_0
+  id: blocks_stream_to_tagged_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    len_tag_key: '"packet_len"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    packet_len: '1'
+    type: byte
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [656, 488.0]
     rotation: 180
     state: enabled
 - name: blocks_tagged_stream_mux_0
@@ -140,7 +161,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [880, 256.0]
+    coordinate: [736, 248.0]
     rotation: 0
     state: enabled
 - name: blocks_throttle2_0
@@ -161,8 +182,8 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1072.0, 344]
-    rotation: 270
+    coordinate: [1008, 248.0]
+    rotation: 0
     state: enabled
 - name: blocks_unpack_k_bits_bb_0
   id: blocks_unpack_k_bits_bb
@@ -177,7 +198,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [960, 480.0]
+    coordinate: [1128, 496.0]
     rotation: 180
     state: enabled
 - name: digital_correlate_access_code_xx_ts_1_0
@@ -196,7 +217,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [696, 464.0]
+    coordinate: [872, 480.0]
     rotation: 180
     state: enabled
 - name: digital_protocol_formatter_bb_0
@@ -213,7 +234,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [616, 184.0]
+    coordinate: [520, 184.0]
     rotation: 0
     state: enabled
 - name: epy_block_1_0_0
@@ -247,9 +268,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [808.0, 8]
+    coordinate: [720.0, 8]
     rotation: 90
-    state: enabled
+    state: disabled
 - name: epy_block_1_0_0_0
   id: epy_block
   parameters:
@@ -281,7 +302,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1072.0, 72]
+    coordinate: [928.0, 72]
     rotation: 90
     state: enabled
 - name: epy_block_1_0_1
@@ -315,9 +336,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [448.0, 288]
+    coordinate: [424.0, 312]
     rotation: 90
-    state: enabled
+    state: disabled
 - name: pdu_pdu_to_tagged_stream_0
   id: pdu_pdu_to_tagged_stream
   parameters:
@@ -332,7 +353,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [296, 224.0]
+    coordinate: [288, 240.0]
     rotation: 0
     state: enabled
 - name: pdu_tagged_stream_to_pdu_0
@@ -340,7 +361,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    comment: "Nie chce pracowa\u0107 z bajtami, tylko musz\u0119 puszcza\u0107 bity"
+    comment: "Wymaga wcze\u015Bniejszego \"Stream to Tagged Stream\"."
     maxoutbuf: '0'
     minoutbuf: '0'
     tag: packet_len
@@ -349,19 +370,21 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [456, 560.0]
+    coordinate: [272, 496.0]
     rotation: 180
     state: enabled
 
 connections:
 - [blocks_message_strobe_1, strobe, pdu_pdu_to_tagged_stream_0, pdus]
-- [blocks_pack_k_bits_bb_0, '0', epy_block_1_0_1, '0']
+- [blocks_pack_k_bits_bb_0_0, '0', epy_block_1_0_1, '0']
+- [blocks_pack_k_bits_bb_0_0, '0', pdu_tagged_stream_to_pdu_0, '0']
+- [blocks_stream_to_tagged_stream_0, '0', blocks_pack_k_bits_bb_0_0, '0']
 - [blocks_tagged_stream_mux_0, '0', blocks_throttle2_0, '0']
 - [blocks_tagged_stream_mux_0, '0', epy_block_1_0_0_0, '0']
 - [blocks_throttle2_0, '0', blocks_unpack_k_bits_bb_0, '0']
 - [blocks_unpack_k_bits_bb_0, '0', digital_correlate_access_code_xx_ts_1_0, '0']
-- [digital_correlate_access_code_xx_ts_1_0, '0', blocks_pack_k_bits_bb_0, '0']
-- [digital_correlate_access_code_xx_ts_1_0, '0', pdu_tagged_stream_to_pdu_0, '0']
+- [digital_correlate_access_code_xx_ts_1_0, '0', blocks_stream_to_tagged_stream_0,
+  '0']
 - [digital_protocol_formatter_bb_0, '0', blocks_tagged_stream_mux_0, '0']
 - [digital_protocol_formatter_bb_0, '0', epy_block_1_0_0, '0']
 - [pdu_pdu_to_tagged_stream_0, '0', blocks_tagged_stream_mux_0, '1']
