@@ -170,7 +170,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [8, 624.0]
+    coordinate: [16, 880.0]
     rotation: 180
     state: disabled
 - name: blocks_message_debug_0_0
@@ -222,7 +222,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [520, 648.0]
+    coordinate: [512, 880.0]
     rotation: 180
     state: disabled
 - name: blocks_pack_k_bits_bb_0_0_0
@@ -257,7 +257,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [640, 768.0]
+    coordinate: [640, 936.0]
     rotation: 180
     state: disabled
 - name: blocks_stream_to_tagged_stream_0_0
@@ -312,7 +312,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1160, 776.0]
+    coordinate: [1128, 952.0]
     rotation: 180
     state: disabled
 - name: digital_constellation_decoder_cb_0
@@ -321,7 +321,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    constellation: ''
+    constellation: my_constellation
     maxoutbuf: '0'
     minoutbuf: '0'
   states:
@@ -369,7 +369,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [864, 752.0]
+    coordinate: [848, 936.0]
     rotation: 180
     state: disabled
 - name: digital_correlate_access_code_xx_ts_1_0_0
@@ -530,7 +530,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [392.0, 776]
+    coordinate: [392.0, 848]
     rotation: 90
     state: disabled
 - name: iio_pluto_sink_0
@@ -621,7 +621,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [272, 648.0]
+    coordinate: [168, 776.0]
     rotation: 180
     state: disabled
 - name: pdu_tagged_stream_to_pdu_0_0
@@ -641,9 +641,39 @@ blocks:
     coordinate: [912, 552.0]
     rotation: 0
     state: enabled
+- name: qtgui_sink_x_0
+  id: qtgui_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    bw: samp_rate
+    comment: ''
+    fc: f_c
+    fftsize: '1024'
+    gui_hint: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"Rx"'
+    plotconst: 'True'
+    plotfreq: 'True'
+    plottime: 'True'
+    plotwaterfall: 'True'
+    rate: '10'
+    showports: 'False'
+    showrf: 'False'
+    type: complex
+    wintype: window.WIN_BLACKMAN_hARRIS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [416, 600.0]
+    rotation: 0
+    state: enabled
 
 connections:
 - [analog_simple_squelch_cc_0, '0', digital_pfb_clock_sync_xxx_0, '0']
+- [analog_simple_squelch_cc_0, '0', qtgui_sink_x_0, '0']
 - [blocks_message_strobe_1, strobe, pdu_pdu_to_tagged_stream_0, pdus]
 - [blocks_pack_k_bits_bb_0_0, '0', epy_block_1_0_1, '0']
 - [blocks_pack_k_bits_bb_0_0, '0', pdu_tagged_stream_to_pdu_0, '0']

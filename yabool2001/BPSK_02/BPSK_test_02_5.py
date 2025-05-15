@@ -29,6 +29,7 @@ from gnuradio import eng_notation
 from gnuradio import gr, pdu
 from gnuradio import iio
 import BPSK_test_02_5_epy_block_1_0_0_0 as epy_block_1_0_0_0  # embedded python block
+import sip
 import threading
 
 
@@ -83,6 +84,24 @@ class BPSK_test_02_5(gr.top_block, Qt.QWidget):
         # Blocks
         ##################################################
 
+        self.qtgui_sink_x_0 = qtgui.sink_c(
+            1024, #fftsize
+            window.WIN_BLACKMAN_hARRIS, #wintype
+            f_c, #fc
+            samp_rate, #bw
+            "Rx", #name
+            True, #plotfreq
+            True, #plotwaterfall
+            True, #plottime
+            True, #plotconst
+            None # parent
+        )
+        self.qtgui_sink_x_0.set_update_time(1.0/10)
+        self._qtgui_sink_x_0_win = sip.wrapinstance(self.qtgui_sink_x_0.qwidget(), Qt.QWidget)
+
+        self.qtgui_sink_x_0.enable_rf_freq(False)
+
+        self.top_layout.addWidget(self._qtgui_sink_x_0_win)
         self.pdu_tagged_stream_to_pdu_0_0 = pdu.tagged_stream_to_pdu(gr.types.byte_t, 'packet_len')
         self.pdu_pdu_to_tagged_stream_0 = pdu.pdu_to_tagged_stream(gr.types.byte_t, 'packet_len')
         self.iio_pluto_source_0 = iio.fmcomms2_source_fc32('usb:' if 'usb:' else iio.get_pluto_uri(), [True, True], 32768)
@@ -116,7 +135,7 @@ class BPSK_test_02_5(gr.top_block, Qt.QWidget):
             verbose=True,
             log=True,
             truncate=False)
-        self.digital_constellation_decoder_cb_0 = digital.constellation_decoder_cb()
+        self.digital_constellation_decoder_cb_0 = digital.constellation_decoder_cb(my_constellation)
         self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_char*1, "packet_len", 0)
         self.blocks_stream_to_tagged_stream_0_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 1, "packet_len")
         self.blocks_pack_k_bits_bb_0_0_0 = blocks.pack_k_bits_bb(8)
@@ -131,6 +150,7 @@ class BPSK_test_02_5(gr.top_block, Qt.QWidget):
         self.msg_connect((self.blocks_message_strobe_1, 'strobe'), (self.pdu_pdu_to_tagged_stream_0, 'pdus'))
         self.msg_connect((self.pdu_tagged_stream_to_pdu_0_0, 'pdus'), (self.blocks_message_debug_0_0, 'print'))
         self.connect((self.analog_simple_squelch_cc_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
+        self.connect((self.analog_simple_squelch_cc_0, 0), (self.qtgui_sink_x_0, 0))
         self.connect((self.blocks_pack_k_bits_bb_0_0_0, 0), (self.pdu_tagged_stream_to_pdu_0_0, 0))
         self.connect((self.blocks_stream_to_tagged_stream_0_0, 0), (self.blocks_pack_k_bits_bb_0_0_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_constellation_modulator_0, 0))
@@ -189,12 +209,14 @@ class BPSK_test_02_5(gr.top_block, Qt.QWidget):
         self.epy_block_1_0_0_0.samp_rate = self.samp_rate
         self.iio_pluto_sink_0.set_samplerate(self.samp_rate)
         self.iio_pluto_source_0.set_samplerate(self.samp_rate)
+        self.qtgui_sink_x_0.set_frequency_range(self.f_c, self.samp_rate)
 
     def get_my_constellation(self):
         return self.my_constellation
 
     def set_my_constellation(self, my_constellation):
         self.my_constellation = my_constellation
+        self.digital_constellation_decoder_cb_0.set_constellation(self.my_constellation)
 
     def get_header(self):
         return self.header
@@ -210,6 +232,7 @@ class BPSK_test_02_5(gr.top_block, Qt.QWidget):
         self.f_c = f_c
         self.iio_pluto_sink_0.set_frequency(self.f_c)
         self.iio_pluto_source_0.set_frequency(self.f_c)
+        self.qtgui_sink_x_0.set_frequency_range(self.f_c, self.samp_rate)
 
 
 
