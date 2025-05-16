@@ -72,14 +72,15 @@ class BPSK_test_02_5(gr.top_block, Qt.QWidget):
         ##################################################
         self.sps = sps = 4
         self.nfilts = nfilts = 32
-        self.access_key = access_key = '11110000111100001010101010101010'
+        self.access_key_2 = access_key_2 = '1111000011110000101010101010101011110000111100001010101010101010'
         self.taps = taps = firdes.root_raised_cosine ( nfilts , nfilts , 1.0 / float ( sps ) , 0.35 , 11 * sps * nfilts )
         self.samp_rate = samp_rate = 65105
         self.my_constellation = my_constellation = digital.constellation_bpsk().base()
         self.my_constellation.set_npwr(1.0)
-        self.header = header = digital.header_format_default ( access_key , 0 )
+        self.header = header = digital.header_format_default ( access_key_2 , 1 )
         self.f_c = f_c = 820000000
         self.bw = bw = 20000000
+        self.access_key = access_key = '11110000111100001010101010101010'
 
         ##################################################
         # Blocks
@@ -125,7 +126,7 @@ class BPSK_test_02_5(gr.top_block, Qt.QWidget):
         self.epy_block_1_0_0_0_0 = epy_block_1_0_0_0_0.byte_logger(samp_rate=samp_rate, filename="06_byte_rx_log.csv")
         self.digital_protocol_formatter_bb_0 = digital.protocol_formatter_bb(header, "packet_len")
         self.digital_pfb_clock_sync_xxx_0 = digital.pfb_clock_sync_ccf(sps, 0.0628, taps, 32, 16, 1.5, 1)
-        self.digital_correlate_access_code_xx_ts_1_0_0 = digital.correlate_access_code_bb_ts(access_key,
+        self.digital_correlate_access_code_xx_ts_1_0_0 = digital.correlate_access_code_bb_ts(access_key_2,
           0, "packet_len")
         self.digital_constellation_modulator_0 = digital.generic_mod(
             constellation=my_constellation,
@@ -142,7 +143,7 @@ class BPSK_test_02_5(gr.top_block, Qt.QWidget):
         self.blocks_pack_k_bits_bb_0_0_0 = blocks.pack_k_bits_bb(8)
         self.blocks_message_strobe_1 = blocks.message_strobe(pmt.cons ( pmt.PMT_NIL , pmt.make_u8vector ( 1 , 0x13 ) ), 1000)
         self.blocks_message_debug_0_0 = blocks.message_debug(True, gr.log_levels.info)
-        self.analog_simple_squelch_cc_0 = analog.simple_squelch_cc((-40), (1e-4))
+        self.analog_simple_squelch_cc_0 = analog.simple_squelch_cc((-60), (1e-4))
 
 
         ##################################################
@@ -188,12 +189,12 @@ class BPSK_test_02_5(gr.top_block, Qt.QWidget):
         self.nfilts = nfilts
         self.set_taps(firdes.root_raised_cosine ( self.nfilts , self.nfilts , 1.0 / float ( self.sps ) , 0.35 , 11 * self.sps * self.nfilts ))
 
-    def get_access_key(self):
-        return self.access_key
+    def get_access_key_2(self):
+        return self.access_key_2
 
-    def set_access_key(self, access_key):
-        self.access_key = access_key
-        self.set_header(digital.header_format_default ( self.access_key , 0 ))
+    def set_access_key_2(self, access_key_2):
+        self.access_key_2 = access_key_2
+        self.set_header(digital.header_format_default ( self.access_key_2 , 1 ))
 
     def get_taps(self):
         return self.taps
@@ -240,6 +241,12 @@ class BPSK_test_02_5(gr.top_block, Qt.QWidget):
     def set_bw(self, bw):
         self.bw = bw
         self.iio_pluto_sink_0.set_bandwidth(self.bw)
+
+    def get_access_key(self):
+        return self.access_key
+
+    def set_access_key(self, access_key):
+        self.access_key = access_key
 
 
 

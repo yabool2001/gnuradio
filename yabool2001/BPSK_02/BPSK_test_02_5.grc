@@ -49,6 +49,20 @@ blocks:
     coordinate: [456, 16.0]
     rotation: 0
     state: enabled
+- name: access_key_2
+  id: variable
+  parameters:
+    comment: 'HEX: F0 F0 AA AA
+
+      DEC: 240 240 170 170'
+    value: '''1111000011110000101010101010101011110000111100001010101010101010'''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [984, 16.0]
+    rotation: 0
+    state: enabled
 - name: bw
   id: variable
   parameters:
@@ -77,7 +91,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: digital.header_format_default ( access_key , 0 )
+    value: digital.header_format_default ( access_key_2 , 1 )
   states:
     bus_sink: false
     bus_source: false
@@ -164,7 +178,7 @@ blocks:
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'
-    threshold: '-40'
+    threshold: '-60'
   states:
     bus_sink: false
     bus_source: false
@@ -304,7 +318,7 @@ blocks:
 - name: digital_correlate_access_code_xx_ts_1_0_0
   id: digital_correlate_access_code_xx_ts
   parameters:
-    access_code: access_key
+    access_code: access_key_2
     affinity: ''
     alias: ''
     comment: Correlates with access code to extract the payload.
