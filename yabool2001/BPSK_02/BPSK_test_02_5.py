@@ -73,12 +73,13 @@ class BPSK_test_02_5(gr.top_block, Qt.QWidget):
         self.sps = sps = 4
         self.nfilts = nfilts = 32
         self.access_key = access_key = '11110000111100001010101010101010'
-        self.taps = taps = firdes.root_raised_cosine(nfilts, nfilts, 1.0/float(sps), 0.35, 11*sps*nfilts)
+        self.taps = taps = firdes.root_raised_cosine ( nfilts , nfilts , 1.0 / float ( sps ) , 0.35 , 11 * sps * nfilts )
         self.samp_rate = samp_rate = 65105
         self.my_constellation = my_constellation = digital.constellation_bpsk().base()
         self.my_constellation.set_npwr(1.0)
         self.header = header = digital.header_format_default ( access_key , 0 )
         self.f_c = f_c = 820000000
+        self.bw = bw = 20000000
 
         ##################################################
         # Blocks
@@ -116,7 +117,7 @@ class BPSK_test_02_5(gr.top_block, Qt.QWidget):
         self.iio_pluto_source_0.set_filter_params('Auto', '', 0, 0)
         self.iio_pluto_sink_0 = iio.fmcomms2_sink_fc32('usb:' if 'usb:' else iio.get_pluto_uri(), [True, True], 32768, False)
         self.iio_pluto_sink_0.set_len_tag_key('')
-        self.iio_pluto_sink_0.set_bandwidth(20000000)
+        self.iio_pluto_sink_0.set_bandwidth(bw)
         self.iio_pluto_sink_0.set_frequency(f_c)
         self.iio_pluto_sink_0.set_samplerate(samp_rate)
         self.iio_pluto_sink_0.set_attenuation(0, 1)
@@ -178,14 +179,14 @@ class BPSK_test_02_5(gr.top_block, Qt.QWidget):
 
     def set_sps(self, sps):
         self.sps = sps
-        self.set_taps(firdes.root_raised_cosine(self.nfilts, self.nfilts, 1.0/float(self.sps), 0.35, 11*self.sps*self.nfilts))
+        self.set_taps(firdes.root_raised_cosine ( self.nfilts , self.nfilts , 1.0 / float ( self.sps ) , 0.35 , 11 * self.sps * self.nfilts ))
 
     def get_nfilts(self):
         return self.nfilts
 
     def set_nfilts(self, nfilts):
         self.nfilts = nfilts
-        self.set_taps(firdes.root_raised_cosine(self.nfilts, self.nfilts, 1.0/float(self.sps), 0.35, 11*self.sps*self.nfilts))
+        self.set_taps(firdes.root_raised_cosine ( self.nfilts , self.nfilts , 1.0 / float ( self.sps ) , 0.35 , 11 * self.sps * self.nfilts ))
 
     def get_access_key(self):
         return self.access_key
@@ -232,6 +233,13 @@ class BPSK_test_02_5(gr.top_block, Qt.QWidget):
         self.iio_pluto_sink_0.set_frequency(self.f_c)
         self.iio_pluto_source_0.set_frequency(self.f_c)
         self.qtgui_sink_x_0.set_frequency_range(self.f_c, 40000000)
+
+    def get_bw(self):
+        return self.bw
+
+    def set_bw(self, bw):
+        self.bw = bw
+        self.iio_pluto_sink_0.set_bandwidth(self.bw)
 
 
 

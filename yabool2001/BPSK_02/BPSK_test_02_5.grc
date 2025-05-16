@@ -49,6 +49,18 @@ blocks:
     coordinate: [456, 16.0]
     rotation: 0
     state: enabled
+- name: bw
+  id: variable
+  parameters:
+    comment: ''
+    value: '20000000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [904, 16.0]
+    rotation: 0
+    state: enabled
 - name: f_c
   id: variable
   parameters:
@@ -58,7 +70,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [976, 112.0]
+    coordinate: [992, 160.0]
     rotation: 0
     state: enabled
 - name: header
@@ -90,7 +102,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [768, 128.0]
+    coordinate: [768, 176.0]
     rotation: 0
     state: enabled
 - name: nfilts
@@ -132,13 +144,15 @@ blocks:
 - name: taps
   id: variable
   parameters:
-    comment: ''
-    value: firdes.root_raised_cosine(nfilts, nfilts, 1.0/float(sps), 0.35, 11*sps*nfilts)
+    comment: firdes.root_raised_cosine ( nfilts , nfilts , 1.0 / float ( sps ) , 0.35
+      , 11 * sps * nfilts )
+    value: firdes.root_raised_cosine ( nfilts , nfilts , 1.0 / float ( sps ) , 0.35
+      , 11 * sps * nfilts )
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [408, 344.0]
+    coordinate: [400, 504.0]
     rotation: 0
     state: enabled
 - name: analog_simple_squelch_cc_0
@@ -155,7 +169,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [232, 456.0]
+    coordinate: [208, 648.0]
     rotation: 0
     state: enabled
 - name: blocks_message_debug_0_0
@@ -170,7 +184,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1104, 624.0]
+    coordinate: [1104, 880.0]
     rotation: 0
     state: enabled
 - name: blocks_message_strobe_1
@@ -191,7 +205,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [56, 160.0]
+    coordinate: [56, 208.0]
     rotation: 0
     state: enabled
 - name: blocks_pack_k_bits_bb_0_0_0
@@ -207,7 +221,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [976, 456.0]
+    coordinate: [1048, 688.0]
     rotation: 0
     state: enabled
 - name: blocks_stream_to_tagged_stream_0_0
@@ -226,7 +240,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [880, 368.0]
+    coordinate: [832, 680.0]
     rotation: 0
     state: enabled
 - name: blocks_tagged_stream_mux_0
@@ -246,7 +260,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [488, 232.0]
+    coordinate: [488, 280.0]
     rotation: 0
     state: enabled
 - name: digital_constellation_decoder_cb_0
@@ -262,7 +276,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 376.0]
+    coordinate: [632, 608.0]
     rotation: 0
     state: enabled
 - name: digital_constellation_modulator_0
@@ -284,7 +298,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [768, 216.0]
+    coordinate: [768, 264.0]
     rotation: 0
     state: enabled
 - name: digital_correlate_access_code_xx_ts_1_0_0
@@ -303,7 +317,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [664, 440.0]
+    coordinate: [552, 760.0]
     rotation: 0
     state: enabled
 - name: digital_pfb_clock_sync_xxx_0
@@ -326,7 +340,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [408, 416.0]
+    coordinate: [392, 608.0]
     rotation: 0
     state: enabled
 - name: digital_protocol_formatter_bb_0
@@ -343,7 +357,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [320, 152.0]
+    coordinate: [320, 200.0]
     rotation: 0
     state: enabled
 - name: epy_block_1_0_0
@@ -377,7 +391,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624.0, 8]
+    coordinate: [624.0, 32]
     rotation: 90
     state: disabled
 - name: epy_block_1_0_0_0
@@ -411,7 +425,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [696.0, 8]
+    coordinate: [696.0, 32]
     rotation: 90
     state: disabled
 - name: epy_block_1_0_0_0_0
@@ -445,7 +459,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [784, 696.0]
+    coordinate: [832, 768.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_sink_0
@@ -454,7 +468,7 @@ blocks:
     affinity: ''
     alias: ''
     attenuation1: '1'
-    bandwidth: '20000000'
+    bandwidth: bw
     buffer_size: '32768'
     comment: ''
     cyclic: 'False'
@@ -471,7 +485,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [992, 184.0]
+    coordinate: [992, 232.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_source_0
@@ -479,7 +493,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    bandwidth: '20000000'
+    bandwidth: bw
     bbdc: 'True'
     buffer_size: '32768'
     comment: ''
@@ -502,7 +516,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [8, 388.0]
+    coordinate: [8, 628.0]
     rotation: 0
     state: enabled
 - name: pdu_pdu_to_tagged_stream_0
@@ -519,7 +533,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [200, 256.0]
+    coordinate: [200, 304.0]
     rotation: 0
     state: enabled
 - name: pdu_tagged_stream_to_pdu_0_0
@@ -536,7 +550,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [912, 552.0]
+    coordinate: [1048, 776.0]
     rotation: 0
     state: enabled
 - name: qtgui_sink_x_0
@@ -565,7 +579,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 600.0]
+    coordinate: [288, 832.0]
     rotation: 0
     state: enabled
 
