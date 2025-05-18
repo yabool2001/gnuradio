@@ -13,7 +13,7 @@ options:
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: CRC_Check_sb_01
+    id: CRC_Check_sb_02
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -24,7 +24,7 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: CRC Check sandbox 01
+    title: CRC Check sandbox 02
     window_size: ''
   states:
     bus_sink: false
@@ -153,6 +153,40 @@ blocks:
     coordinate: [752, 192.0]
     rotation: 0
     state: enabled
+- name: epy_block_1_0_0_0_0
+  id: epy_block
+  parameters:
+    _source_code: "from gnuradio import gr\nimport numpy as np\nimport time\nimport\
+      \ os\n\nclass byte_logger(gr.sync_block):\n    def __init__(self, samp_rate=32000,\
+      \ filename=\"byte_log.csv\"):\n        gr.sync_block.__init__(self,\n      \
+      \      name=\"BYTE FILE SINK\",\n            in_sig=[np.uint8],\n          \
+      \  out_sig=None)\n        self.filename = filename\n        self.samp_rate =\
+      \ samp_rate\n        self.start_time = time.time()\n\n        file_exists =\
+      \ os.path.isfile(filename)\n        self.f = open(filename, \"w\", encoding=\"\
+      utf-8\")\n\n        if not file_exists or os.stat(filename).st_size == 0:\n\
+      \            self.f.write(\"timestamp;byte;samp_rate\\n\")\n\n    def work(self,\
+      \ input_items, output_items):\n        current_time = time.time()\n        elapsed\
+      \ = current_time - self.start_time\n\n        for i, b in enumerate(input_items[0]):\n\
+      \            timestamp = elapsed + (i / self.samp_rate)\n            ts = f\"\
+      {timestamp:.6f}\".replace('.', ',')\n            val = str(b)\n            sr\
+      \ = f\"{self.samp_rate:.0f}\".replace('.', ',')\n            self.f.write(f\"\
+      {ts};{val};{sr}\\n\")\n\n        self.f.flush()\n        return len(input_items[0])\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    filename: '"01_byte_rx_log.csv"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+  states:
+    _io_cache: ('BYTE FILE SINK', 'byte_logger', [('samp_rate', '32000'), ('filename',
+      "'byte_log.csv'")], [('0', 'byte', 1)], [], '', ['filename', 'samp_rate'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1136, 176.0]
+    rotation: 0
+    state: enabled
 - name: pdu_pdu_to_tagged_stream_0
   id: pdu_pdu_to_tagged_stream
   parameters:
@@ -168,6 +202,23 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [320, 280.0]
+    rotation: 0
+    state: enabled
+- name: pdu_pdu_to_tagged_stream_0_0
+  id: pdu_pdu_to_tagged_stream
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    tag: packet_len
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [944, 120.0]
     rotation: 0
     state: enabled
 - name: pdu_tagged_stream_to_pdu_0
@@ -193,7 +244,9 @@ connections:
 - [blocks_throttle2_0, '0', pdu_tagged_stream_to_pdu_0, '0']
 - [digital_crc_append_0, out, pdu_pdu_to_tagged_stream_0, pdus]
 - [digital_crc_check_0, ok, blocks_message_debug_0, print]
+- [digital_crc_check_0, ok, pdu_pdu_to_tagged_stream_0_0, pdus]
 - [pdu_pdu_to_tagged_stream_0, '0', blocks_throttle2_0, '0']
+- [pdu_pdu_to_tagged_stream_0_0, '0', epy_block_1_0_0_0_0, '0']
 - [pdu_tagged_stream_to_pdu_0, pdus, digital_crc_check_0, in]
 
 metadata:

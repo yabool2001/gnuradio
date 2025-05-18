@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: CRC Check sandbox 01
+# Title: CRC Check sandbox 02
 # Author: yabool2001
 # Copyright: mzemlo.pl@gmail.com
 # GNU Radio version: 3.10.12.0
@@ -26,16 +26,17 @@ from argparse import ArgumentParser
 from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import gr, pdu
+import CRC_Check_sb_02_epy_block_1_0_0_0_0 as epy_block_1_0_0_0_0  # embedded python block
 import threading
 
 
 
-class CRC_Check_sb_01(gr.top_block, Qt.QWidget):
+class CRC_Check_sb_02(gr.top_block, Qt.QWidget):
 
     def __init__(self):
-        gr.top_block.__init__(self, "CRC Check sandbox 01", catch_exceptions=True)
+        gr.top_block.__init__(self, "CRC Check sandbox 02", catch_exceptions=True)
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("CRC Check sandbox 01")
+        self.setWindowTitle("CRC Check sandbox 02")
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
@@ -53,7 +54,7 @@ class CRC_Check_sb_01(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "CRC_Check_sb_01")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "CRC_Check_sb_02")
 
         try:
             geometry = self.settings.value("geometry")
@@ -73,7 +74,9 @@ class CRC_Check_sb_01(gr.top_block, Qt.QWidget):
         ##################################################
 
         self.pdu_tagged_stream_to_pdu_0 = pdu.tagged_stream_to_pdu(gr.types.byte_t, 'packet_len')
+        self.pdu_pdu_to_tagged_stream_0_0 = pdu.pdu_to_tagged_stream(gr.types.byte_t, 'packet_len')
         self.pdu_pdu_to_tagged_stream_0 = pdu.pdu_to_tagged_stream(gr.types.byte_t, 'packet_len')
+        self.epy_block_1_0_0_0_0 = epy_block_1_0_0_0_0.byte_logger(samp_rate=samp_rate, filename="01_byte_rx_log.csv")
         self.digital_crc_check_0 = digital.crc_check(32, 0x4C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, True, True, False, True, 0)
         self.digital_crc_append_0 = digital.crc_append(32, 0x4C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, True, True, False, 0)
         self.blocks_throttle2_0 = blocks.throttle( gr.sizeof_char*1, samp_rate, True, 0 if "auto" == "auto" else max( int(float(0.1) * samp_rate) if "auto" == "time" else int(0.1), 1) )
@@ -87,13 +90,15 @@ class CRC_Check_sb_01(gr.top_block, Qt.QWidget):
         self.msg_connect((self.blocks_message_strobe_1, 'strobe'), (self.digital_crc_append_0, 'in'))
         self.msg_connect((self.digital_crc_append_0, 'out'), (self.pdu_pdu_to_tagged_stream_0, 'pdus'))
         self.msg_connect((self.digital_crc_check_0, 'ok'), (self.blocks_message_debug_0, 'print'))
+        self.msg_connect((self.digital_crc_check_0, 'ok'), (self.pdu_pdu_to_tagged_stream_0_0, 'pdus'))
         self.msg_connect((self.pdu_tagged_stream_to_pdu_0, 'pdus'), (self.digital_crc_check_0, 'in'))
         self.connect((self.blocks_throttle2_0, 0), (self.pdu_tagged_stream_to_pdu_0, 0))
         self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.blocks_throttle2_0, 0))
+        self.connect((self.pdu_pdu_to_tagged_stream_0_0, 0), (self.epy_block_1_0_0_0_0, 0))
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "CRC_Check_sb_01")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "CRC_Check_sb_02")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -106,11 +111,12 @@ class CRC_Check_sb_01(gr.top_block, Qt.QWidget):
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
         self.blocks_throttle2_0.set_sample_rate(self.samp_rate)
+        self.epy_block_1_0_0_0_0.samp_rate = self.samp_rate
 
 
 
 
-def main(top_block_cls=CRC_Check_sb_01, options=None):
+def main(top_block_cls=CRC_Check_sb_02, options=None):
 
     qapp = Qt.QApplication(sys.argv)
 
