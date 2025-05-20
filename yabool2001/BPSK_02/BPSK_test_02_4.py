@@ -12,8 +12,8 @@
 
 from PyQt5 import Qt
 from gnuradio import qtgui
+from gnuradio import analog
 from gnuradio import blocks
-import pmt
 from gnuradio import blocks, gr
 from gnuradio import digital
 from gnuradio import gr
@@ -27,7 +27,6 @@ from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import gr, pdu
 from gnuradio import iio
-from gnuradio import pdu
 import BPSK_test_02_4_epy_block_1_0_0_0 as epy_block_1_0_0_0  # embedded python block
 import BPSK_test_02_4_epy_block_1_0_0_0_0 as epy_block_1_0_0_0_0  # embedded python block
 import BPSK_test_02_4_epy_block_1_0_0_0_1 as epy_block_1_0_0_0_1  # embedded python block
@@ -80,7 +79,7 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
         self.my_constellation = my_constellation = digital.constellation_bpsk().base()
         self.my_constellation.set_npwr(1.0)
         self.header = header = digital.header_format_default ( access_key , 0 )
-        self.f_c = f_c = 2900000000
+        self.f_c = f_c = 2400000000
         self.bw = bw = 20000000
         self.access_key_0 = access_key_0 = '101010101010101010101010'
 
@@ -107,10 +106,7 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
 
         self.top_layout.addWidget(self._qtgui_sink_x_0_win)
         self.pdu_tagged_stream_to_pdu_0_0 = pdu.tagged_stream_to_pdu(gr.types.byte_t, 'packet_len')
-        self.pdu_random_pdu_0 = pdu.random_pdu(4, 4, 0xFF, 1)
-        self.pdu_pdu_to_tagged_stream_0_0_0 = pdu.pdu_to_tagged_stream(gr.types.byte_t, 'packet_len')
         self.pdu_pdu_to_tagged_stream_0_0 = pdu.pdu_to_tagged_stream(gr.types.byte_t, 'packet_len')
-        self.pdu_pdu_to_tagged_stream_0 = pdu.pdu_to_tagged_stream(gr.types.byte_t, 'packet_len')
         self.iio_pluto_source_0 = iio.fmcomms2_source_fc32('usb:' if 'usb:' else iio.get_pluto_uri(), [True, True], 32768)
         self.iio_pluto_source_0.set_len_tag_key('packet_len')
         self.iio_pluto_source_0.set_frequency(f_c)
@@ -126,15 +122,15 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
         self.iio_pluto_sink_0.set_bandwidth(bw)
         self.iio_pluto_sink_0.set_frequency(f_c)
         self.iio_pluto_sink_0.set_samplerate(samp_rate)
-        self.iio_pluto_sink_0.set_attenuation(0, 6)
+        self.iio_pluto_sink_0.set_attenuation(0, 10)
         self.iio_pluto_sink_0.set_filter_params('Auto', '', 0, 0)
         self.epy_block_1_0_0_0_1 = epy_block_1_0_0_0_1.byte_logger(samp_rate=samp_rate, filename="01_byte_tx_log.csv")
         self.epy_block_1_0_0_0_0 = epy_block_1_0_0_0_0.byte_logger(samp_rate=samp_rate, filename="06_byte_rx_log.csv")
         self.epy_block_1_0_0_0 = epy_block_1_0_0_0.byte_logger(samp_rate=samp_rate, filename="02_byte_tx_log.csv")
         self.digital_protocol_formatter_bb_0 = digital.protocol_formatter_bb(header, "packet_len")
         self.digital_pfb_clock_sync_xxx_0 = digital.pfb_clock_sync_ccf(sps, 0.0628, taps, 32, 16, 1.5, 1)
-        self.digital_crc_check_0 = digital.crc_check(32, 0x4C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, True, True, False, True, 0)
-        self.digital_crc_append_0 = digital.crc_append(32, 0x4C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, True, True, False, 0)
+        self.digital_crc32_bb_1 = digital.crc32_bb(True, "packet_len", True)
+        self.digital_crc32_bb_0 = digital.crc32_bb(False, "packet_len", True)
         self.digital_correlate_access_code_xx_ts_1_0_0 = digital.correlate_access_code_bb_ts(access_key,
           0, "packet_len")
         self.digital_constellation_modulator_0 = digital.generic_mod(
@@ -148,37 +144,38 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
             truncate=False)
         self.digital_constellation_decoder_cb_0 = digital.constellation_decoder_cb(my_constellation)
         self.blocks_tagged_stream_mux_0 = blocks.tagged_stream_mux(gr.sizeof_char*1, "packet_len", 0)
-        self.blocks_stream_to_tagged_stream_0_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 8, "packet_len")
+        self.blocks_stream_to_tagged_stream_0_0_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 1, "packet_len")
+        self.blocks_stream_to_tagged_stream_0_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 5, "packet_len")
         self.blocks_pack_k_bits_bb_0_0_0 = blocks.pack_k_bits_bb(8)
-        self.blocks_message_strobe_1 = blocks.message_strobe(pmt.cons ( pmt.PMT_NIL , pmt.make_u8vector ( 1 , 0x31 ) ), 1000)
         self.blocks_message_debug_0_0 = blocks.message_debug(True, gr.log_levels.info)
+        self.blocks_delay_0 = blocks.delay(gr.sizeof_char*1, 1000)
+        self.analog_const_source_x_0 = analog.sig_source_b(0, analog.GR_CONST_WAVE, 0, 0, 49)
 
 
         ##################################################
         # Connections
         ##################################################
-        self.msg_connect((self.blocks_message_strobe_1, 'strobe'), (self.pdu_random_pdu_0, 'generate'))
-        self.msg_connect((self.digital_crc_append_0, 'out'), (self.pdu_pdu_to_tagged_stream_0, 'pdus'))
-        self.msg_connect((self.digital_crc_check_0, 'ok'), (self.blocks_message_debug_0_0, 'print'))
-        self.msg_connect((self.digital_crc_check_0, 'ok'), (self.pdu_pdu_to_tagged_stream_0_0, 'pdus'))
-        self.msg_connect((self.pdu_random_pdu_0, 'pdus'), (self.digital_crc_append_0, 'in'))
-        self.msg_connect((self.pdu_random_pdu_0, 'pdus'), (self.pdu_pdu_to_tagged_stream_0_0_0, 'pdus'))
-        self.msg_connect((self.pdu_tagged_stream_to_pdu_0_0, 'pdus'), (self.digital_crc_check_0, 'in'))
-        self.connect((self.blocks_pack_k_bits_bb_0_0_0, 0), (self.pdu_tagged_stream_to_pdu_0_0, 0))
+        self.msg_connect((self.pdu_tagged_stream_to_pdu_0_0, 'pdus'), (self.blocks_message_debug_0_0, 'print'))
+        self.msg_connect((self.pdu_tagged_stream_to_pdu_0_0, 'pdus'), (self.pdu_pdu_to_tagged_stream_0_0, 'pdus'))
+        self.connect((self.analog_const_source_x_0, 0), (self.digital_crc32_bb_0, 0))
+        self.connect((self.blocks_delay_0, 0), (self.pdu_tagged_stream_to_pdu_0_0, 0))
+        self.connect((self.blocks_pack_k_bits_bb_0_0_0, 0), (self.digital_crc32_bb_1, 0))
         self.connect((self.blocks_stream_to_tagged_stream_0_0, 0), (self.blocks_pack_k_bits_bb_0_0_0, 0))
+        self.connect((self.blocks_stream_to_tagged_stream_0_0_0, 0), (self.blocks_tagged_stream_mux_0, 1))
+        self.connect((self.blocks_stream_to_tagged_stream_0_0_0, 0), (self.digital_protocol_formatter_bb_0, 0))
+        self.connect((self.blocks_stream_to_tagged_stream_0_0_0, 0), (self.epy_block_1_0_0_0_1, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_constellation_modulator_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.epy_block_1_0_0_0, 0))
         self.connect((self.digital_constellation_decoder_cb_0, 0), (self.digital_correlate_access_code_xx_ts_1_0_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.iio_pluto_sink_0, 0))
         self.connect((self.digital_correlate_access_code_xx_ts_1_0_0, 0), (self.blocks_stream_to_tagged_stream_0_0, 0))
+        self.connect((self.digital_crc32_bb_0, 0), (self.blocks_stream_to_tagged_stream_0_0_0, 0))
+        self.connect((self.digital_crc32_bb_1, 0), (self.blocks_delay_0, 0))
         self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.digital_constellation_decoder_cb_0, 0))
         self.connect((self.digital_protocol_formatter_bb_0, 0), (self.blocks_tagged_stream_mux_0, 0))
         self.connect((self.iio_pluto_source_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
         self.connect((self.iio_pluto_source_0, 0), (self.qtgui_sink_x_0, 0))
-        self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.blocks_tagged_stream_mux_0, 1))
-        self.connect((self.pdu_pdu_to_tagged_stream_0, 0), (self.digital_protocol_formatter_bb_0, 0))
         self.connect((self.pdu_pdu_to_tagged_stream_0_0, 0), (self.epy_block_1_0_0_0_0, 0))
-        self.connect((self.pdu_pdu_to_tagged_stream_0_0_0, 0), (self.epy_block_1_0_0_0_1, 0))
 
 
     def closeEvent(self, event):
