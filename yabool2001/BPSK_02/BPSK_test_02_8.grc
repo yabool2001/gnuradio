@@ -13,7 +13,7 @@ options:
     gen_linking: dynamic
     generate_options: qt_gui
     hier_block_src_path: '.:'
-    id: BPSK_test_02_4
+    id: BPSK_test_02_8
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -24,7 +24,7 @@ options:
     run_options: prompt
     sizing_mode: fixed
     thread_safe_setters: ''
-    title: BPSK test 02.4
+    title: BPSK test 02.8
     window_size: ''
   states:
     bus_sink: false
@@ -205,26 +205,6 @@ blocks:
     coordinate: [160, 400.0]
     rotation: 0
     state: disabled
-- name: blocks_delay_0
-  id: blocks_delay
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    delay: '1000'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    num_ports: '1'
-    showports: 'False'
-    type: byte
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [880, 480.0]
-    rotation: 0
-    state: enabled
 - name: blocks_message_debug_0_0
   id: blocks_message_debug
   parameters:
@@ -291,7 +271,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [248, 168.0]
+    coordinate: [40, 256.0]
     rotation: 0
     state: enabled
 - name: blocks_tagged_stream_mux_0
@@ -386,7 +366,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [80, 232.0]
+    coordinate: [192, 144.0]
     rotation: 0
     state: enabled
 - name: digital_crc32_bb_1
@@ -399,7 +379,7 @@ blocks:
     lengthtagname: '"packet_len"'
     maxoutbuf: '0'
     minoutbuf: '0'
-    packed: 'True'
+    packed: 'False'
   states:
     bus_sink: false
     bus_source: false
@@ -520,7 +500,7 @@ blocks:
     bus_structure: null
     coordinate: [736, 112.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: epy_block_1_0_0_0_0
   id: epy_block
   parameters:
@@ -586,7 +566,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [328, 272.0]
+    coordinate: [312, 256.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_sink_0
@@ -677,7 +657,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 584.0]
+    coordinate: [928, 584.0]
     rotation: 0
     state: enabled
 - name: qtgui_sink_x_0
@@ -711,15 +691,12 @@ blocks:
     state: enabled
 
 connections:
-- [analog_const_source_x_0, '0', digital_crc32_bb_0, '0']
+- [analog_const_source_x_0, '0', blocks_stream_to_tagged_stream_0_0_0, '0']
 - [analog_simple_squelch_cc_0, '0', digital_pfb_clock_sync_xxx_0, '0']
 - [analog_simple_squelch_cc_0, '0', qtgui_sink_x_0, '0']
-- [blocks_delay_0, '0', pdu_tagged_stream_to_pdu_0_0, '0']
 - [blocks_pack_k_bits_bb_0_0_0, '0', digital_crc32_bb_1, '0']
 - [blocks_stream_to_tagged_stream_0_0, '0', blocks_pack_k_bits_bb_0_0_0, '0']
-- [blocks_stream_to_tagged_stream_0_0_0, '0', blocks_tagged_stream_mux_0, '1']
-- [blocks_stream_to_tagged_stream_0_0_0, '0', digital_protocol_formatter_bb_0, '0']
-- [blocks_stream_to_tagged_stream_0_0_0, '0', epy_block_1_0_0_0_1, '0']
+- [blocks_stream_to_tagged_stream_0_0_0, '0', digital_crc32_bb_0, '0']
 - [blocks_tagged_stream_mux_0, '0', digital_constellation_modulator_0, '0']
 - [blocks_tagged_stream_mux_0, '0', epy_block_1_0_0_0, '0']
 - [digital_constellation_decoder_cb_0, '0', digital_correlate_access_code_xx_ts_1_0_0,
@@ -728,8 +705,10 @@ connections:
 - [digital_constellation_modulator_0, '0', iio_pluto_sink_0, '0']
 - [digital_correlate_access_code_xx_ts_1_0_0, '0', blocks_stream_to_tagged_stream_0_0,
   '0']
-- [digital_crc32_bb_0, '0', blocks_stream_to_tagged_stream_0_0_0, '0']
-- [digital_crc32_bb_1, '0', blocks_delay_0, '0']
+- [digital_crc32_bb_0, '0', blocks_tagged_stream_mux_0, '1']
+- [digital_crc32_bb_0, '0', digital_protocol_formatter_bb_0, '0']
+- [digital_crc32_bb_0, '0', epy_block_1_0_0_0_1, '0']
+- [digital_crc32_bb_1, '0', pdu_tagged_stream_to_pdu_0_0, '0']
 - [digital_pfb_clock_sync_xxx_0, '0', digital_constellation_decoder_cb_0, '0']
 - [digital_protocol_formatter_bb_0, '0', blocks_tagged_stream_mux_0, '0']
 - [iio_pluto_source_0, '0', analog_simple_squelch_cc_0, '0']

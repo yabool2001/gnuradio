@@ -5,7 +5,7 @@
 # SPDX-License-Identifier: GPL-3.0
 #
 # GNU Radio Python Flow Graph
-# Title: BPSK test 02.4
+# Title: BPSK test 02.8
 # Author: yabool2001
 # Copyright: mzemlo.pl@gmail.com
 # GNU Radio version: 3.10.12.0
@@ -27,20 +27,19 @@ from gnuradio.eng_arg import eng_float, intx
 from gnuradio import eng_notation
 from gnuradio import gr, pdu
 from gnuradio import iio
-import BPSK_test_02_4_epy_block_1_0_0_0 as epy_block_1_0_0_0  # embedded python block
-import BPSK_test_02_4_epy_block_1_0_0_0_0 as epy_block_1_0_0_0_0  # embedded python block
-import BPSK_test_02_4_epy_block_1_0_0_0_1 as epy_block_1_0_0_0_1  # embedded python block
+import BPSK_test_02_8_epy_block_1_0_0_0_0 as epy_block_1_0_0_0_0  # embedded python block
+import BPSK_test_02_8_epy_block_1_0_0_0_1 as epy_block_1_0_0_0_1  # embedded python block
 import sip
 import threading
 
 
 
-class BPSK_test_02_4(gr.top_block, Qt.QWidget):
+class BPSK_test_02_8(gr.top_block, Qt.QWidget):
 
     def __init__(self):
-        gr.top_block.__init__(self, "BPSK test 02.4", catch_exceptions=True)
+        gr.top_block.__init__(self, "BPSK test 02.8", catch_exceptions=True)
         Qt.QWidget.__init__(self)
-        self.setWindowTitle("BPSK test 02.4")
+        self.setWindowTitle("BPSK test 02.8")
         qtgui.util.check_set_qss()
         try:
             self.setWindowIcon(Qt.QIcon.fromTheme('gnuradio-grc'))
@@ -58,7 +57,7 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "BPSK_test_02_4")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "BPSK_test_02_8")
 
         try:
             geometry = self.settings.value("geometry")
@@ -126,7 +125,6 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
         self.iio_pluto_sink_0.set_filter_params('Auto', '', 0, 0)
         self.epy_block_1_0_0_0_1 = epy_block_1_0_0_0_1.byte_logger(samp_rate=samp_rate, filename="01_byte_tx_log.csv")
         self.epy_block_1_0_0_0_0 = epy_block_1_0_0_0_0.byte_logger(samp_rate=samp_rate, filename="06_byte_rx_log.csv")
-        self.epy_block_1_0_0_0 = epy_block_1_0_0_0.byte_logger(samp_rate=samp_rate, filename="02_byte_tx_log.csv")
         self.digital_protocol_formatter_bb_0 = digital.protocol_formatter_bb(header, "packet_len")
         self.digital_pfb_clock_sync_xxx_0 = digital.pfb_clock_sync_ccf(sps, 0.0628, taps, 32, 16, 1.5, 1)
         self.digital_crc32_bb_1 = digital.crc32_bb(True, "packet_len", False)
@@ -148,7 +146,6 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
         self.blocks_stream_to_tagged_stream_0_0 = blocks.stream_to_tagged_stream(gr.sizeof_char, 1, 5, "packet_len")
         self.blocks_pack_k_bits_bb_0_0_0 = blocks.pack_k_bits_bb(8)
         self.blocks_message_debug_0_0 = blocks.message_debug(True, gr.log_levels.info)
-        self.blocks_delay_0 = blocks.delay(gr.sizeof_char*1, 1000)
         self.analog_const_source_x_0 = analog.sig_source_b(0, analog.GR_CONST_WAVE, 0, 0, 49)
 
 
@@ -158,19 +155,17 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
         self.msg_connect((self.pdu_tagged_stream_to_pdu_0_0, 'pdus'), (self.blocks_message_debug_0_0, 'print'))
         self.msg_connect((self.pdu_tagged_stream_to_pdu_0_0, 'pdus'), (self.pdu_pdu_to_tagged_stream_0_0, 'pdus'))
         self.connect((self.analog_const_source_x_0, 0), (self.blocks_stream_to_tagged_stream_0_0_0, 0))
-        self.connect((self.blocks_delay_0, 0), (self.pdu_tagged_stream_to_pdu_0_0, 0))
         self.connect((self.blocks_pack_k_bits_bb_0_0_0, 0), (self.digital_crc32_bb_1, 0))
         self.connect((self.blocks_stream_to_tagged_stream_0_0, 0), (self.blocks_pack_k_bits_bb_0_0_0, 0))
         self.connect((self.blocks_stream_to_tagged_stream_0_0_0, 0), (self.digital_crc32_bb_0, 0))
         self.connect((self.blocks_tagged_stream_mux_0, 0), (self.digital_constellation_modulator_0, 0))
-        self.connect((self.blocks_tagged_stream_mux_0, 0), (self.epy_block_1_0_0_0, 0))
         self.connect((self.digital_constellation_decoder_cb_0, 0), (self.digital_correlate_access_code_xx_ts_1_0_0, 0))
         self.connect((self.digital_constellation_modulator_0, 0), (self.iio_pluto_sink_0, 0))
         self.connect((self.digital_correlate_access_code_xx_ts_1_0_0, 0), (self.blocks_stream_to_tagged_stream_0_0, 0))
         self.connect((self.digital_crc32_bb_0, 0), (self.blocks_tagged_stream_mux_0, 1))
         self.connect((self.digital_crc32_bb_0, 0), (self.digital_protocol_formatter_bb_0, 0))
         self.connect((self.digital_crc32_bb_0, 0), (self.epy_block_1_0_0_0_1, 0))
-        self.connect((self.digital_crc32_bb_1, 0), (self.blocks_delay_0, 0))
+        self.connect((self.digital_crc32_bb_1, 0), (self.pdu_tagged_stream_to_pdu_0_0, 0))
         self.connect((self.digital_pfb_clock_sync_xxx_0, 0), (self.digital_constellation_decoder_cb_0, 0))
         self.connect((self.digital_protocol_formatter_bb_0, 0), (self.blocks_tagged_stream_mux_0, 0))
         self.connect((self.iio_pluto_source_0, 0), (self.digital_pfb_clock_sync_xxx_0, 0))
@@ -179,7 +174,7 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "BPSK_test_02_4")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "BPSK_test_02_8")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -219,7 +214,6 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
 
     def set_samp_rate(self, samp_rate):
         self.samp_rate = samp_rate
-        self.epy_block_1_0_0_0.samp_rate = self.samp_rate
         self.epy_block_1_0_0_0_0.samp_rate = self.samp_rate
         self.epy_block_1_0_0_0_1.samp_rate = self.samp_rate
         self.iio_pluto_sink_0.set_samplerate(self.samp_rate)
@@ -264,7 +258,7 @@ class BPSK_test_02_4(gr.top_block, Qt.QWidget):
 
 
 
-def main(top_block_cls=BPSK_test_02_4, options=None):
+def main(top_block_cls=BPSK_test_02_8, options=None):
 
     qapp = Qt.QApplication(sys.argv)
 
