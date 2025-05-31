@@ -4,9 +4,7 @@ options:
     catch_exceptions: 'True'
     category: '[GRC Hier Blocks]'
     cmake_opt: ''
-    comment: 'https://wiki.gnuradio.org/index.php/Packet_Communications
-
-      Stable'
+    comment: ''
     copyright: mzemlo.pl@gmail.com
     description: ''
     gen_cmake: 'On'
@@ -53,7 +51,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [616, 8.0]
+    coordinate: [960, 16.0]
     rotation: 0
     state: enabled
 - name: bw
@@ -66,6 +64,30 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [440, 16.0]
+    rotation: 0
+    state: enabled
+- name: ctx_ip
+  id: variable
+  parameters:
+    comment: ''
+    value: '"ip:192.168.2.1"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [688, 16.0]
+    rotation: 0
+    state: enabled
+- name: ctx_usb
+  id: variable
+  parameters:
+    comment: ''
+    value: '"usb:"'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [816, 16.0]
     rotation: 0
     state: enabled
 - name: f_c
@@ -97,7 +119,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [480, 152.0]
+    coordinate: [184, 152.0]
     rotation: 0
     state: enabled
 - name: nfilts
@@ -110,6 +132,18 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [368, 16.0]
+    rotation: 0
+    state: enabled
+- name: rx_gain
+  id: variable
+  parameters:
+    comment: ''
+    value: '-3'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [608, 16.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -142,7 +176,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    const: '0x0A'
+    const: '0x0F'
     maxoutbuf: '0'
     minoutbuf: '0'
     type: byte
@@ -153,22 +187,6 @@ blocks:
     coordinate: [8, 272.0]
     rotation: 0
     state: enabled
-- name: blocks_unpack_k_bits_bb_0
-  id: blocks_unpack_k_bits_bb
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    k: '8'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [232, 424.0]
-    rotation: 0
-    state: disabled
 - name: digital_constellation_modulator_0
   id: digital_constellation_modulator
   parameters:
@@ -188,7 +206,87 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [472, 232.0]
+    coordinate: [176, 232.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_0_0
+  id: epy_block
+  parameters:
+    _source_code: "from gnuradio import gr\nimport numpy as np\nimport time\nimport\
+      \ os\n\nclass complex_sps_file_sink(gr.sync_block):\n    def __init__(self,\
+      \ samp_rate=32000, sps=2, filename=\"complex_log.csv\"):\n        gr.sync_block.__init__(self,\n\
+      \            name=\"Complex Sps File Sink\",\n            in_sig=[np.complex64],\n\
+      \            out_sig=None)\n        self.filename = filename\n        self.samp_rate\
+      \ = samp_rate\n        self.sps = sps\n        self.start_time = time.time()\n\
+      \        self.sample_index = 0  # licznik pr\xF3bek\n\n        file_exists =\
+      \ os.path.isfile(filename)\n        self.f = open(filename, \"w\", encoding=\"\
+      utf-8\")\n\n        if not file_exists or os.stat(filename).st_size == 0:\n\
+      \            self.f.write(\"timestamp;real;imag;symbol_index;samp_rate\\n\"\
+      )\n\n    def work(self, input_items, output_items):\n        elapsed = time.time()\
+      \ - self.start_time\n        for c in input_items[0]:\n            timestamp\
+      \ = elapsed\n            ts = f\"{timestamp:.6f}\".replace('.', ',')\n     \
+      \       re = f\"{c.real:.6f}\".replace('.', ',')\n            im = f\"{c.imag:.6f}\"\
+      .replace('.', ',')\n            symbol_idx = str(self.sample_index // self.sps)\n\
+      \            sr = f\"{self.samp_rate:.0f}\".replace('.', ',')\n\n          \
+      \  self.f.write(f\"{ts};{re};{im};{symbol_idx};{sr}\\n\")\n\n            elapsed\
+      \ += 1 / self.samp_rate\n            self.sample_index += 1\n\n        self.f.flush()\n\
+      \        return len(input_items[0])\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    filename: '"01_complex_tx_bpsk_mod_log.csv"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    sps: sps
+  states:
+    _io_cache: ('Complex Sps File Sink', 'complex_sps_file_sink', [('samp_rate', '32000'),
+      ('sps', '2'), ('filename', "'complex_log.csv'")], [('0', 'complex', 1)], [],
+      '', ['filename', 'samp_rate', 'sps'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [424, 488.0]
+    rotation: 0
+    state: enabled
+- name: epy_block_0_0_0
+  id: epy_block
+  parameters:
+    _source_code: "from gnuradio import gr\nimport numpy as np\nimport time\nimport\
+      \ os\n\nclass complex_sps_file_sink(gr.sync_block):\n    def __init__(self,\
+      \ samp_rate=32000, sps=2, filename=\"complex_log.csv\"):\n        gr.sync_block.__init__(self,\n\
+      \            name=\"Complex Sps File Sink\",\n            in_sig=[np.complex64],\n\
+      \            out_sig=None)\n        self.filename = filename\n        self.samp_rate\
+      \ = samp_rate\n        self.sps = sps\n        self.start_time = time.time()\n\
+      \        self.sample_index = 0  # licznik pr\xF3bek\n\n        file_exists =\
+      \ os.path.isfile(filename)\n        self.f = open(filename, \"w\", encoding=\"\
+      utf-8\")\n\n        if not file_exists or os.stat(filename).st_size == 0:\n\
+      \            self.f.write(\"timestamp;real;imag;symbol_index;samp_rate\\n\"\
+      )\n\n    def work(self, input_items, output_items):\n        elapsed = time.time()\
+      \ - self.start_time\n        for c in input_items[0]:\n            timestamp\
+      \ = elapsed\n            ts = f\"{timestamp:.6f}\".replace('.', ',')\n     \
+      \       re = f\"{c.real:.6f}\".replace('.', ',')\n            im = f\"{c.imag:.6f}\"\
+      .replace('.', ',')\n            symbol_idx = str(self.sample_index // self.sps)\n\
+      \            sr = f\"{self.samp_rate:.0f}\".replace('.', ',')\n\n          \
+      \  self.f.write(f\"{ts};{re};{im};{symbol_idx};{sr}\\n\")\n\n            elapsed\
+      \ += 1 / self.samp_rate\n            self.sample_index += 1\n\n        self.f.flush()\n\
+      \        return len(input_items[0])\n"
+    affinity: ''
+    alias: ''
+    comment: ''
+    filename: '"02_complex_rx_bpsk_mod_log.csv"'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samp_rate: samp_rate
+    sps: sps
+  states:
+    _io_cache: ('Complex Sps File Sink', 'complex_sps_file_sink', [('samp_rate', '32000'),
+      ('sps', '2'), ('filename', "'complex_log.csv'")], [('0', 'complex', 1)], [],
+      '', ['filename', 'samp_rate', 'sps'])
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [856, 392.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_sink_0
@@ -209,12 +307,43 @@ blocks:
     len_tag_key: ''
     samplerate: samp_rate
     type: fc32
-    uri: ip:192.168.2.1
+    uri: ctx_ip
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [720, 216.0]
+    coordinate: [424, 216.0]
+    rotation: 0
+    state: enabled
+- name: iio_pluto_source_0
+  id: iio_pluto_source
+  parameters:
+    affinity: ''
+    alias: ''
+    bandwidth: '20000000'
+    bbdc: 'True'
+    buffer_size: '32768'
+    comment: ''
+    filter: ''
+    filter_source: '''Auto'''
+    fpass: '0'
+    frequency: f_c
+    fstop: '0'
+    gain1: '''manual'''
+    len_tag_key: packet_len
+    manual_gain1: rx_gain
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    quadrature: 'True'
+    rfdc: 'True'
+    samplerate: samp_rate
+    type: fc32
+    uri: ctx_usb
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [624, 236.0]
     rotation: 0
     state: enabled
 - name: qtgui_const_sink_x_0
@@ -268,7 +397,7 @@ blocks:
     marker7: '0'
     marker8: '0'
     marker9: '0'
-    name: '""'
+    name: '"Constellation Modulator"'
     nconnections: '1'
     size: '1'
     style1: '0'
@@ -306,7 +435,99 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [720, 144.0]
+    coordinate: [424, 128.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_const_sink_x_0_0
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    grid: 'False'
+    gui_hint: ''
+    label1: ''
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    legend: 'True'
+    marker1: '0'
+    marker10: '0'
+    marker2: '0'
+    marker3: '0'
+    marker4: '0'
+    marker5: '0'
+    marker6: '0'
+    marker7: '0'
+    marker8: '0'
+    marker9: '0'
+    name: '"Pluto Source"'
+    nconnections: '1'
+    size: '1'
+    style1: '0'
+    style10: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '2'
+    xmin: '-2'
+    ymax: '2'
+    ymin: '-2'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [856, 304.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -359,7 +580,7 @@ blocks:
     legend: 'True'
     maxoutbuf: '0'
     minoutbuf: '0'
-    name: '""'
+    name: '"Constellation Modulator"'
     nconnections: '1'
     norm_window: 'False'
     showports: 'False'
@@ -387,17 +608,100 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [720, 384.0]
+    coordinate: [424, 384.0]
+    rotation: 0
+    state: enabled
+- name: qtgui_freq_sink_x_0_0
+  id: qtgui_freq_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    average: '1.0'
+    axislabels: 'True'
+    bw: samp_rate
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    ctrlpanel: 'False'
+    fc: f_c
+    fftsize: '1024'
+    freqhalf: 'True'
+    grid: 'False'
+    gui_hint: ''
+    label: Relative Gain
+    label1: ''
+    label10: ''''''
+    label2: ''''''
+    label3: ''''''
+    label4: ''''''
+    label5: ''''''
+    label6: ''''''
+    label7: ''''''
+    label8: ''''''
+    label9: ''''''
+    legend: 'True'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    name: '"Pluto Source"'
+    nconnections: '1'
+    norm_window: 'False'
+    showports: 'False'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_tag: '""'
+    type: complex
+    units: dB
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    wintype: window.WIN_BLACKMAN_hARRIS
+    ymax: '10'
+    ymin: '-140'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [856, 200.0]
     rotation: 0
     state: enabled
 
 connections:
-- [analog_const_source_x_0, '0', blocks_unpack_k_bits_bb_0, '0']
 - [analog_const_source_x_0, '0', digital_constellation_modulator_0, '0']
-- [blocks_unpack_k_bits_bb_0, '0', digital_constellation_modulator_0, '0']
+- [digital_constellation_modulator_0, '0', epy_block_0_0, '0']
 - [digital_constellation_modulator_0, '0', iio_pluto_sink_0, '0']
 - [digital_constellation_modulator_0, '0', qtgui_const_sink_x_0, '0']
 - [digital_constellation_modulator_0, '0', qtgui_freq_sink_x_0, '0']
+- [iio_pluto_source_0, '0', epy_block_0_0_0, '0']
+- [iio_pluto_source_0, '0', qtgui_const_sink_x_0_0, '0']
+- [iio_pluto_source_0, '0', qtgui_freq_sink_x_0_0, '0']
 
 metadata:
   file_format: 1
