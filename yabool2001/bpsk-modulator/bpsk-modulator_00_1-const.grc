@@ -41,24 +41,24 @@ blocks:
     label: Attenuation
     min_len: '200'
     orient: QtCore.Qt.Horizontal
-    rangeType: int
-    start: '10'
+    rangeType: float
+    start: '1.0'
     step: '1'
-    stop: '70'
-    value: '30'
+    stop: '70.0'
+    value: '1.1'
     widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [960, 16.0]
+    coordinate: [576, 224.0]
     rotation: 0
     state: enabled
 - name: bw
   id: variable
   parameters:
     comment: ''
-    value: '20000000'
+    value: '2000000'
   states:
     bus_sink: false
     bus_source: false
@@ -75,7 +75,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [688, 16.0]
+    coordinate: [680, 16.0]
     rotation: 0
     state: enabled
 - name: ctx_usb
@@ -87,7 +87,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [816, 16.0]
+    coordinate: [600, 16.0]
     rotation: 0
     state: enabled
 - name: f_c
@@ -138,12 +138,12 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '-3'
+    value: '0.1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [608, 16.0]
+    coordinate: [688, 368.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -286,7 +286,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [856, 392.0]
+    coordinate: [992, 392.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_sink_0
@@ -294,7 +294,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    attenuation1: '30'
+    attenuation1: att_range
     bandwidth: bw
     buffer_size: '32768'
     comment: ''
@@ -320,7 +320,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    bandwidth: '20000000'
+    bandwidth: bw
     bbdc: 'True'
     buffer_size: '32768'
     comment: ''
@@ -343,7 +343,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 236.0]
+    coordinate: [760, 236.0]
     rotation: 0
     state: enabled
 - name: qtgui_const_sink_x_0
@@ -527,7 +527,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [856, 304.0]
+    coordinate: [992, 304.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -689,7 +689,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [856, 200.0]
+    coordinate: [992, 200.0]
     rotation: 0
     state: enabled
 

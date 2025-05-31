@@ -70,20 +70,23 @@ class bpsk_modulator_00_1_const(gr.top_block, Qt.QWidget):
         ##################################################
         self.sps = sps = 4
         self.samp_rate = samp_rate = 521100
-        self.rx_gain = rx_gain = -3
+        self.rx_gain = rx_gain = 0.1
         self.nfilts = nfilts = 32
         self.my_constellation = my_constellation = digital.constellation_bpsk().base()
         self.my_constellation.set_npwr(1.0)
         self.f_c = f_c = 2900000000
         self.ctx_usb = ctx_usb = "usb:"
         self.ctx_ip = ctx_ip = "ip:192.168.2.1"
-        self.bw = bw = 20000000
-        self.att_range = att_range = 30
+        self.bw = bw = 2000000
+        self.att_range = att_range = 1.1
 
         ##################################################
         # Blocks
         ##################################################
 
+        self._att_range_range = qtgui.Range(1.0, 70.0, 1, 1.1, 200)
+        self._att_range_win = qtgui.RangeWidget(self._att_range_range, self.set_att_range, "Attenuation", "counter_slider", float, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._att_range_win)
         self.qtgui_freq_sink_x_0_0 = qtgui.freq_sink_c(
             1024, #size
             window.WIN_BLACKMAN_hARRIS, #wintype
@@ -265,7 +268,7 @@ class bpsk_modulator_00_1_const(gr.top_block, Qt.QWidget):
         self.iio_pluto_sink_0.set_bandwidth(bw)
         self.iio_pluto_sink_0.set_frequency(f_c)
         self.iio_pluto_sink_0.set_samplerate(samp_rate)
-        self.iio_pluto_sink_0.set_attenuation(0, 30)
+        self.iio_pluto_sink_0.set_attenuation(0, att_range)
         self.iio_pluto_sink_0.set_filter_params('Auto', '', 0, 0)
         self.epy_block_0_0_0 = epy_block_0_0_0.complex_sps_file_sink(samp_rate=samp_rate, sps=sps, filename="02_complex_rx_bpsk_mod_log.csv")
         self.epy_block_0_0 = epy_block_0_0.complex_sps_file_sink(samp_rate=samp_rate, sps=sps, filename="01_complex_tx_bpsk_mod_log.csv")
@@ -278,9 +281,6 @@ class bpsk_modulator_00_1_const(gr.top_block, Qt.QWidget):
             verbose=True,
             log=True,
             truncate=False)
-        self._att_range_range = qtgui.Range(10, 70, 1, 30, 200)
-        self._att_range_win = qtgui.RangeWidget(self._att_range_range, self.set_att_range, "Attenuation", "counter_slider", int, QtCore.Qt.Horizontal)
-        self.top_layout.addWidget(self._att_range_win)
         self.analog_const_source_x_0 = analog.sig_source_b(0, analog.GR_CONST_WAVE, 0, 0, 0x0F)
 
 
@@ -378,6 +378,7 @@ class bpsk_modulator_00_1_const(gr.top_block, Qt.QWidget):
 
     def set_att_range(self, att_range):
         self.att_range = att_range
+        self.iio_pluto_sink_0.set_attenuation(0,self.att_range)
 
 
 
