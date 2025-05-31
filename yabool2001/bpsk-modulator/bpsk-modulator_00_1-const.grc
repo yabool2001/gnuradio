@@ -45,7 +45,7 @@ blocks:
     start: '1.0'
     step: '1'
     stop: '70.0'
-    value: '1.1'
+    value: '1.2'
     widget: counter_slider
   states:
     bus_sink: false
@@ -58,7 +58,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '2000000'
+    value: '1000000'
   states:
     bus_sink: false
     bus_source: false
@@ -145,7 +145,7 @@ blocks:
     bus_structure: null
     coordinate: [688, 368.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: samp_rate
   id: variable
   parameters:
@@ -288,7 +288,7 @@ blocks:
     bus_structure: null
     coordinate: [992, 392.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: iio_pluto_sink_0
   id: iio_pluto_sink
   parameters:
@@ -345,7 +345,7 @@ blocks:
     bus_structure: null
     coordinate: [760, 236.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_const_sink_x_0
   id: qtgui_const_sink_x
   parameters:
@@ -529,7 +529,7 @@ blocks:
     bus_structure: null
     coordinate: [992, 304.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: qtgui_freq_sink_x_0
   id: qtgui_freq_sink_x
   parameters:
@@ -691,7 +691,7 @@ blocks:
     bus_structure: null
     coordinate: [992, 200.0]
     rotation: 0
-    state: enabled
+    state: disabled
 
 connections:
 - [analog_const_source_x_0, '0', digital_constellation_modulator_0, '0']
