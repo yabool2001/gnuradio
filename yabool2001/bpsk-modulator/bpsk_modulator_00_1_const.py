@@ -181,7 +181,7 @@ class bpsk_modulator_00_1_const(gr.top_block, Qt.QWidget):
         self._att_range_range = qtgui.Range(10, 70, 1, 30, 200)
         self._att_range_win = qtgui.RangeWidget(self._att_range_range, self.set_att_range, "Attenuation", "counter_slider", int, QtCore.Qt.Horizontal)
         self.top_layout.addWidget(self._att_range_win)
-        self.analog_const_source_x_0 = analog.sig_source_b(0, analog.GR_CONST_WAVE, 0, 0, 1)
+        self.analog_const_source_x_0 = analog.sig_source_b(0, analog.GR_CONST_WAVE, 0, 0, 0x0A)
 
 
         ##################################################

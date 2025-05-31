@@ -97,7 +97,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [192, 152.0]
+    coordinate: [480, 152.0]
     rotation: 0
     state: enabled
 - name: nfilts
@@ -142,7 +142,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    const: '1'
+    const: '0x0A'
     maxoutbuf: '0'
     minoutbuf: '0'
     type: byte
@@ -153,6 +153,22 @@ blocks:
     coordinate: [8, 272.0]
     rotation: 0
     state: enabled
+- name: blocks_unpack_k_bits_bb_0
+  id: blocks_unpack_k_bits_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    k: '8'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [232, 424.0]
+    rotation: 0
+    state: disabled
 - name: digital_constellation_modulator_0
   id: digital_constellation_modulator
   parameters:
@@ -172,7 +188,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [184, 232.0]
+    coordinate: [472, 232.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_sink_0
@@ -198,7 +214,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [432, 216.0]
+    coordinate: [720, 216.0]
     rotation: 0
     state: enabled
 - name: qtgui_const_sink_x_0
@@ -290,7 +306,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [432, 144.0]
+    coordinate: [720, 144.0]
     rotation: 0
     state: enabled
 - name: qtgui_freq_sink_x_0
@@ -371,12 +387,14 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [432, 384.0]
+    coordinate: [720, 384.0]
     rotation: 0
     state: enabled
 
 connections:
+- [analog_const_source_x_0, '0', blocks_unpack_k_bits_bb_0, '0']
 - [analog_const_source_x_0, '0', digital_constellation_modulator_0, '0']
+- [blocks_unpack_k_bits_bb_0, '0', digital_constellation_modulator_0, '0']
 - [digital_constellation_modulator_0, '0', iio_pluto_sink_0, '0']
 - [digital_constellation_modulator_0, '0', qtgui_const_sink_x_0, '0']
 - [digital_constellation_modulator_0, '0', qtgui_freq_sink_x_0, '0']
