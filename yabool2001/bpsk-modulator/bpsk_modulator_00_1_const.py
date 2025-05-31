@@ -176,7 +176,7 @@ class bpsk_modulator_00_1_const(gr.top_block, Qt.QWidget):
             pre_diff_code=True,
             excess_bw=0.35,
             verbose=True,
-            log=False,
+            log=True,
             truncate=False)
         self._att_range_range = qtgui.Range(10, 70, 1, 30, 200)
         self._att_range_win = qtgui.RangeWidget(self._att_range_range, self.set_att_range, "Attenuation", "counter_slider", int, QtCore.Qt.Horizontal)
