@@ -31,7 +31,7 @@ import threading
 
 
 
-class BPSK_test_02_3(gr.top_block, Qt.QWidget):
+class BPSK_test_02_1_1(gr.top_block, Qt.QWidget):
 
     def __init__(self):
         gr.top_block.__init__(self, "BPSK test 02 3", catch_exceptions=True)
@@ -54,7 +54,7 @@ class BPSK_test_02_3(gr.top_block, Qt.QWidget):
         self.top_grid_layout = Qt.QGridLayout()
         self.top_layout.addLayout(self.top_grid_layout)
 
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "BPSK_test_02_3")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "BPSK_test_02_1_1")
 
         try:
             geometry = self.settings.value("geometry")
@@ -225,7 +225,7 @@ class BPSK_test_02_3(gr.top_block, Qt.QWidget):
 
 
     def closeEvent(self, event):
-        self.settings = Qt.QSettings("gnuradio/flowgraphs", "BPSK_test_02_3")
+        self.settings = Qt.QSettings("gnuradio/flowgraphs", "BPSK_test_02_1_1")
         self.settings.setValue("geometry", self.saveGeometry())
         self.stop()
         self.wait()
@@ -291,7 +291,7 @@ class BPSK_test_02_3(gr.top_block, Qt.QWidget):
 
 
 
-def main(top_block_cls=BPSK_test_02_3, options=None):
+def main(top_block_cls=BPSK_test_02_1_1, options=None):
 
     qapp = Qt.QApplication(sys.argv)
 
