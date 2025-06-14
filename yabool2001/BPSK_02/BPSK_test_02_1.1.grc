@@ -34,23 +34,11 @@ options:
 
 blocks:
 - name: bw
-  id: variable
-  parameters:
-    comment: ''
-    value: '500000'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [632, 8.0]
-    rotation: 0
-    state: enabled
-- name: bw2
   id: variable_qtgui_range
   parameters:
     comment: ''
     gui_hint: ''
-    label: bw2
+    label: bw
     min_len: '200'
     orient: QtCore.Qt.Horizontal
     rangeType: int
@@ -63,31 +51,28 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [864, 8.0]
+    coordinate: [416, 8.0]
     rotation: 0
     state: enabled
 - name: f_c
-  id: variable
+  id: variable_qtgui_range
   parameters:
     comment: ''
+    gui_hint: ''
+    label: f_c
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '100000000'
+    step: '100000000'
+    stop: '6000000000'
     value: '2900000000'
+    widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
     coordinate: [528, 8.0]
-    rotation: 0
-    state: enabled
-- name: nfilts
-  id: variable
-  parameters:
-    comment: ''
-    value: '32'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [296, 8.0]
     rotation: 0
     state: enabled
 - name: pluto_context
@@ -99,19 +84,28 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [736, 8.0]
+    coordinate: [256, 8.0]
     rotation: 0
     state: enabled
 - name: samp_rate
-  id: variable
+  id: variable_qtgui_range
   parameters:
     comment: ''
-    value: int(bw*3)
+    gui_hint: ''
+    label: samp_rate
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: int
+    start: '65105'
+    step: '10000'
+    stop: '61440000'
+    value: '65105'
+    widget: counter_slider
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [400, 8.0]
+    coordinate: [648, 8.0]
     rotation: 0
     state: enabled
 - name: sps
@@ -123,7 +117,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [216, 8.0]
+    coordinate: [192, 8.0]
     rotation: 0
     state: enabled
 - name: variable_constellation_1
@@ -143,7 +137,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [320, 240.0]
+    coordinate: [240, 120.0]
     rotation: 0
     state: enabled
 - name: analog_const_source_x_0
@@ -160,7 +154,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [24, 400.0]
+    coordinate: [24, 224.0]
     rotation: 0
     state: enabled
 - name: digital_constellation_modulator_0_0
@@ -182,7 +176,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [296, 364.0]
+    coordinate: [232, 200.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_sink_0
@@ -191,8 +185,8 @@ blocks:
     affinity: ''
     alias: ''
     attenuation1: '10'
-    bandwidth: bw2
-    buffer_size: int(samp_rate/24)
+    bandwidth: bw
+    buffer_size: '32768'
     comment: ''
     cyclic: 'True'
     filter: ''
@@ -208,7 +202,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [680, 312.0]
+    coordinate: [504, 168.0]
     rotation: 0
     state: enabled
 - name: iio_pluto_source_0
@@ -216,7 +210,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    bandwidth: bw2
+    bandwidth: bw
     bbdc: 'True'
     buffer_size: '32768'
     comment: ''
@@ -239,7 +233,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [64, 772.0]
+    coordinate: [24, 324.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0
@@ -297,7 +291,7 @@ blocks:
     marker9: '-1'
     name: '"Rx"'
     nconnections: '1'
-    size: '137'
+    size: '256'
     srate: samp_rate
     stemplot: 'False'
     style1: '1'
@@ -336,7 +330,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [384, 824.0]
+    coordinate: [256, 376.0]
     rotation: 0
     state: enabled
 - name: qtgui_time_sink_x_0_0
@@ -354,7 +348,7 @@ blocks:
     alpha7: '1.0'
     alpha8: '1.0'
     alpha9: '1.0'
-    autoscale: 'False'
+    autoscale: 'True'
     axislabels: 'True'
     color1: blue
     color10: dark blue
@@ -394,7 +388,7 @@ blocks:
     marker9: '-1'
     name: '"Tx"'
     nconnections: '1'
-    size: '1024'
+    size: '256'
     srate: samp_rate
     stemplot: 'False'
     style1: '1'
@@ -433,7 +427,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [584, 592.0]
+    coordinate: [504, 336.0]
     rotation: 0
     state: enabled
 
