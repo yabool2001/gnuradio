@@ -73,14 +73,17 @@ class BPSK_test_02_1_1(gr.top_block, Qt.QWidget):
         self.sps = sps = 4
         self.samp_rate = samp_rate = int(bw*3)
         self.pluto_context = pluto_context = "usb:"
-        self.nop = nop = 16
         self.nfilts = nfilts = 32
         self.f_c = f_c = 2900000000
+        self.bw2 = bw2 = 1000000
 
         ##################################################
         # Blocks
         ##################################################
 
+        self._bw2_range = qtgui.Range(1000000, 50000000, 1000000, 1000000, 200)
+        self._bw2_win = qtgui.RangeWidget(self._bw2_range, self.set_bw2, "bw2", "counter_slider", int, QtCore.Qt.Horizontal)
+        self.top_layout.addWidget(self._bw2_win)
         self.qtgui_time_sink_x_0_0 = qtgui.time_sink_c(
             1024, #size
             samp_rate, #samp_rate
@@ -183,9 +186,6 @@ class BPSK_test_02_1_1(gr.top_block, Qt.QWidget):
 
         self._qtgui_time_sink_x_0_win = sip.wrapinstance(self.qtgui_time_sink_x_0.qwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_time_sink_x_0_win)
-        self._nop_range = qtgui.Range(0, 1024, 1, 16, 200)
-        self._nop_win = qtgui.RangeWidget(self._nop_range, self.set_nop, "nop", "counter_slider", int, QtCore.Qt.Horizontal)
-        self.top_layout.addWidget(self._nop_win)
         self.iio_pluto_source_0 = iio.fmcomms2_source_fc32(pluto_context if pluto_context else iio.get_pluto_uri(), [True, True], 32768)
         self.iio_pluto_source_0.set_len_tag_key('packet_len')
         self.iio_pluto_source_0.set_frequency(f_c)
@@ -198,7 +198,7 @@ class BPSK_test_02_1_1(gr.top_block, Qt.QWidget):
         self.iio_pluto_source_0.set_filter_params('Auto', '', 0, 0)
         self.iio_pluto_sink_0 = iio.fmcomms2_sink_fc32(pluto_context if pluto_context else iio.get_pluto_uri(), [True, True], (int(samp_rate/24)), True)
         self.iio_pluto_sink_0.set_len_tag_key('')
-        self.iio_pluto_sink_0.set_bandwidth(bw)
+        self.iio_pluto_sink_0.set_bandwidth(bw2)
         self.iio_pluto_sink_0.set_frequency(f_c)
         self.iio_pluto_sink_0.set_samplerate(samp_rate)
         self.iio_pluto_sink_0.set_attenuation(0, 10)
@@ -238,7 +238,6 @@ class BPSK_test_02_1_1(gr.top_block, Qt.QWidget):
     def set_bw(self, bw):
         self.bw = bw
         self.set_samp_rate(int(self.bw*3))
-        self.iio_pluto_sink_0.set_bandwidth(self.bw)
 
     def get_variable_constellation_1(self):
         return self.variable_constellation_1
@@ -268,12 +267,6 @@ class BPSK_test_02_1_1(gr.top_block, Qt.QWidget):
     def set_pluto_context(self, pluto_context):
         self.pluto_context = pluto_context
 
-    def get_nop(self):
-        return self.nop
-
-    def set_nop(self, nop):
-        self.nop = nop
-
     def get_nfilts(self):
         return self.nfilts
 
@@ -287,6 +280,13 @@ class BPSK_test_02_1_1(gr.top_block, Qt.QWidget):
         self.f_c = f_c
         self.iio_pluto_sink_0.set_frequency(self.f_c)
         self.iio_pluto_source_0.set_frequency(self.f_c)
+
+    def get_bw2(self):
+        return self.bw2
+
+    def set_bw2(self, bw2):
+        self.bw2 = bw2
+        self.iio_pluto_sink_0.set_bandwidth(self.bw2)
 
 
 
